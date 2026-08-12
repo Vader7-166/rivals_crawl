@@ -1,0 +1,28 @@
+[project]
+name = "crawl-rivals"
+version = "0.1.0"
+description = "Crawl du lieu san pham tu website doi thu (nhieu tang: structured data -> CSS fallback -> LLM)"
+requires-python = ">=3.11"
+dependencies = [
+    "playwright>=1.45",
+    "requests>=2.31",
+    "extruct>=0.18",
+    "beautifulsoup4>=4.12",
+    "lxml>=5.2",
+    "openpyxl>=3.1",
+    "python-dotenv>=1.0",
+    "google-genai>=0.3",
+    "openai>=1.40",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

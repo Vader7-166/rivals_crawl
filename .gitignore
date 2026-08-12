@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# Bi mat - KHONG BAO GIO commit credentials
+.env
+secrets/
+
+# Du lieu - dataset nguon va dataset crawl ra deu khong thuoc ve git
+dataset/
+output/
+
+# Cache noi bo (site-probing results, v.v.)
+.cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
