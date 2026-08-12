@@ -7,6 +7,7 @@ cho phan logic rieng cua TLC (tim URL san pham thuoc 1 category cu the).
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from typing import Optional, Sequence
 from urllib.parse import urlparse
 
@@ -16,7 +17,7 @@ from .llm.extractor import extract_tags_from_html
 from .llm.provider import LLMProvider, LLMProviderError
 from .llm.validate import ExtractionValidationError
 from .llm.html_cleaner import extract_spec_text
-from .record import CrawlStatus, ProductRecord
+from .record import CrawlStatus, ProductRecord, write_records_to_excel
 
 logger = logging.getLogger(__name__)
 
@@ -27,12 +28,24 @@ def crawl_product_urls(
     fetcher: StealthFetcher,
     llm_provider: LLMProvider,
     existing: Optional[dict[str, ProductRecord]] = None,
+    checkpoint_path: Optional[Path] = None,
+    checkpoint_every: int = 15,
 ) -> list[ProductRecord]:
     """Crawl danh sach URL san pham. Neu `existing` duoc truyen vao (tu
     excel_reader.load_existing_records), cac URL da co ban ghi trang thai OK
-    se duoc tai su dung thay vi crawl lai (crawl-lai-co-chon-loc, task 2.4/8.6)."""
+    se duoc tai su dung thay vi crawl lai (crawl-lai-co-chon-loc, task 2.4/8.6).
+
+    Neu `checkpoint_path` duoc truyen, ket qua tam thoi duoc ghi ra file .xlsx
+    do sau moi `checkpoint_every` san pham MOI crawl (khong tinh cac ban ghi
+    tai su dung tu `existing`) - moi mot pipeline chay lau (hang chuc phut cho
+    ca category) co the bi ngat giua chung boi tien trinh ben ngoai (mat
+    dien/timeout/kill), va vi ghi Excel von chi xay ra 1 lan o cuoi nen tung
+    bi mat toan bo tien do da crawl. Checkpoint bien "chay lai tu dau" thanh
+    "chay lai tiep tuc" nho co che crawl-lai-co-chon-loc da co san.
+    """
     existing = existing or {}
     records: list[ProductRecord] = []
+    newly_crawled = 0
 
     for index, url in enumerate(urls, start=1):
         prior = existing.get(url)
@@ -42,6 +55,11 @@ def crawl_product_urls(
 
         record = _crawl_single_product(url, fallback_product_id=str(index), fetcher=fetcher, llm_provider=llm_provider)
         records.append(record)
+        newly_crawled += 1
+
+        if checkpoint_path is not None and newly_crawled % checkpoint_every == 0:
+            logger.info("Checkpoint: đã crawl mới %d sản phẩm, ghi tạm ra %s", newly_crawled, checkpoint_path)
+            write_records_to_excel(records, checkpoint_path)
 
     return records
 

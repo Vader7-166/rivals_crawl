@@ -17,8 +17,12 @@ from __future__ import annotations
 from bs4 import BeautifulSoup
 
 _STRIP_TAGS = (
-    "script", "style", "nav", "aside", "footer", "header", "noscript", "svg", "form", "iframe",
+    "script", "style", "nav", "aside", "footer", "header", "noscript", "svg", "iframe",
 )
+# LUU Y: KHONG strip the <form> - ASP.NET WebForms (case Roman.vn) boc TOAN
+# BO trang trong 1 <form id="form1"> duy nhat, khong chi cac form nho (tim
+# kiem/lien he) nhu gia dinh ban dau. Strip form o day tung xoa sach hoan
+# toan noi dung trang tren Roman (bao gom ca bang thong so ky thuat that).
 
 
 def _cell_lines(cell) -> list[str]:

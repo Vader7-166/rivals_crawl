@@ -82,8 +82,16 @@ def main() -> None:
             )
 
         # Task 8.3: chay end-to-end fetch -> tang 1 -> tang 1.5 -> tang 2.
+        # checkpoint_path=OUTPUT_PATH: neu tien trinh bi ngat giua chung (da
+        # tung gap khi chay thuc te), lan chay lai se doc duoc phan da crawl
+        # va chi crawl tiep phan con thieu thay vi lam lai tu dau.
         records = crawl_product_urls(
-            category_urls, fetcher=fetcher, llm_provider=llm_provider, existing=existing
+            category_urls,
+            fetcher=fetcher,
+            llm_provider=llm_provider,
+            existing=existing,
+            checkpoint_path=OUTPUT_PATH,
+            checkpoint_every=5,
         )
 
     # Task 8.4: xuat Excel, xac nhan so dong khop so san pham tren site.
