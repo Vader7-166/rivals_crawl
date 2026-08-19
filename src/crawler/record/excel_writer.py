@@ -1,13 +1,23 @@
 """Ghi danh sach ProductRecord ra 1 file .xlsx rieng cho 1 site. Task 2.3.
 
-Cot mo phong sat sheet "2. LED Downlight" cua product_Metadata (1).xlsx (da bo
-"Gia doi chieu"). Field trang thai crawl noi bo (crawl_status/crawl_error)
-KHONG duoc xuat ra cot Excel nao - dung de dam bao khong lam lech khuon cot
-tham chieu (xem specs/product-record-schema/spec.md).
+Cau truc file bam theo chinh product_Metadata (1).xlsx: MOT file cho ca site,
+chia thanh NHIEU SHEET, moi sheet la 1 loai san pham. Loai san pham lay tu
+`category 1` cua chinh site nguon (khong anh xa sang taxonomy khac - xem spec
+product-record-schema, muc "Category giu nguyen theo site nguon").
+
+Moi sheet ghi DU 20 cot cua sheet "2. LED Downlight" trong file tham chieu,
+dung ten va dung thu tu. Cot nao site doi thu khong co du lieu tuong duong thi
+o do de RONG - khong duoc bo cot ra khoi file, vi khuon cot lech thi ben nhan
+phai can chinh tay truoc khi ghep vao file tham chieu.
+
+Field trang thai crawl noi bo (crawl_status/crawl_error) van KHONG xuat ra cot
+Excel nao - do la du lieu van hanh, khong thuoc khuon tham chieu (xem
+specs/product-record-schema/spec.md).
 """
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Iterable
 
@@ -16,10 +26,20 @@ from openpyxl import Workbook
 from .price import LIEN_HE
 from .schema import COLUMNS, ProductRecord
 
-SHEET_NAME = "Products"
+# Sheet cho cac ban ghi khong xac dinh duoc loai (category 1 rong - thuong la
+# ban ghi fetch loi). Gom rieng thay vi vut di de con crawl lai duoc.
+UNGROUPED_SHEET = "Chưa phân loại"
+
+# Excel: ten sheet toi da 31 ky tu va cam : \ / ? * [ ]
+_INVALID_SHEET_CHARS = re.compile(r"[:\\/?*\[\]]")
+_MAX_SHEET_NAME = 31
 
 
-def _cell_value_for(record: ProductRecord, field_name: str):
+def _cell_value_for(record: ProductRecord, field_name: str, row_number: int):
+    if field_name == "stt":
+        # So thu tu la thuoc tinh cua DONG chu khong phai cua san pham: neu ban
+        # ghi chua co thi danh theo vi tri dong de cot khong bao gio thung.
+        return record.stt if record.stt is not None else row_number
     if field_name == "tags":
         return json.dumps(record.tags, ensure_ascii=False) if record.tags else None
     if field_name == "gia":
@@ -28,30 +48,94 @@ def _cell_value_for(record: ProductRecord, field_name: str):
     return getattr(record, field_name)
 
 
+def _shorten(name: str) -> str:
+    """Cat ten cho vua gioi han cua Excel, giu CA DAU LAN DUOI.
+
+    Cat cut duoi (`name[:31]`) la cach lam mat thong tin nhat voi chinh du lieu
+    TLC: "Đèn LED âm trần thế hệ mới Eyecare Pro / Standard / Premium" chi khac
+    nhau o DUOI, cat cut duoi thi ca 3 loai ra cung 1 ten
+    "Đèn LED âm trần thế hệ mới Eyec" roi phai de nhau bang hau to " (2)",
+    " (3)" - nguoi mo file khong con biet sheet nao la loai nao.
+    """
+    if len(name) <= _MAX_SHEET_NAME:
+        return name
+    head = _MAX_SHEET_NAME // 2
+    tail = _MAX_SHEET_NAME - head - 1  # 1 ky tu danh cho dau "…"
+    return name[:head] + "…" + name[-tail:]
+
+
+def _sheet_name(raw: str, taken: set[str]) -> str:
+    """Ten sheet hop le, duy nhat, giu duoc cang nhieu ten goc cang tot."""
+    name = _shorten(_INVALID_SHEET_CHARS.sub("-", raw).strip() or UNGROUPED_SHEET)
+    if name not in taken:
+        return name
+    # Van trung sau khi cat giua (2 category giong nhau ca dau lan duoi): danh
+    # so de khong nhom nao bi de len nhom khac va mat sach du lieu.
+    for suffix_index in range(2, 100):
+        suffix = f" ({suffix_index})"
+        candidate = name[: _MAX_SHEET_NAME - len(suffix)] + suffix
+        if candidate not in taken:
+            return candidate
+    raise ValueError(f"Khong sinh duoc ten sheet duy nhat cho '{raw}'")
+
+
+def group_records_by_type(records: Iterable[ProductRecord]) -> dict[str, list[ProductRecord]]:
+    """Gom ban ghi theo loai san pham (`category 1` cua site nguon).
+
+    Giu THU TU XUAT HIEN dau tien cua moi loai thay vi sap xep A-Z: thu tu do
+    phan anh thu tu duyet danh muc cua site, on dinh giua cac lan chay va de
+    doi chieu voi site hon la thu tu bang chu cai.
+    """
+    grouped: dict[str, list[ProductRecord]] = {}
+    for record in records:
+        key = (record.category_1 or "").strip() or UNGROUPED_SHEET
+        grouped.setdefault(key, []).append(record)
+    # Nhom "chua phan loai" luon xuong cuoi file - do la phan can review, khong
+    # nen chen giua cac sheet du lieu that.
+    if UNGROUPED_SHEET in grouped and len(grouped) > 1:
+        grouped[UNGROUPED_SHEET] = grouped.pop(UNGROUPED_SHEET)
+    return grouped
+
+
 def write_records_to_excel(records: Iterable[ProductRecord], output_path: str | Path) -> Path:
+    """Ghi toan bo ban ghi cua 1 site ra 1 file .xlsx, moi loai san pham 1 sheet."""
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    wb = Workbook()
-    ws = wb.active
-    ws.title = SHEET_NAME
-
+    grouped = group_records_by_type(records)
     headers = [header for header, _ in COLUMNS]
-    ws.append(headers)
 
-    row_count = 0
-    for record in records:
-        row = [_cell_value_for(record, field_name) for _, field_name in COLUMNS]
-        ws.append(row)
-        row_count += 1
+    wb = Workbook()
+    wb.remove(wb.active)  # bo sheet mac dinh, chi giu sheet do minh tao
 
-    for col_idx, header in enumerate(headers, start=1):
-        ws.column_dimensions[ws.cell(row=1, column=col_idx).column_letter].width = max(
-            12, min(60, len(header) + 4)
-        )
+    taken: set[str] = set()
+    for group_name, group_records in grouped.items():
+        name = _sheet_name(group_name, taken)
+        taken.add(name)
+
+        ws = wb.create_sheet(title=name)
+        ws.append(headers)
+        # STT dem lai tu 1 trong TUNG sheet - giong file tham chieu, moi sheet
+        # la 1 bang doc lap.
+        for row_number, record in enumerate(group_records, start=1):
+            ws.append(
+                [
+                    _cell_value_for(record, field_name, row_number)
+                    for _, field_name in COLUMNS
+                ]
+            )
+
+        for col_idx, header in enumerate(headers, start=1):
+            ws.column_dimensions[ws.cell(row=1, column=col_idx).column_letter].width = max(
+                12, min(60, len(header) + 4)
+            )
+
+    if not wb.sheetnames:  # khong co ban ghi nao - van tao file co khuon cot
+        ws = wb.create_sheet(title=UNGROUPED_SHEET)
+        ws.append(headers)
 
     wb.save(output_path)
     return output_path
 
 
-__all__ = ["write_records_to_excel", "LIEN_HE"]
+__all__ = ["write_records_to_excel", "group_records_by_type", "UNGROUPED_SHEET", "LIEN_HE"]

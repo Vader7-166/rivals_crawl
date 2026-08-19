@@ -15,6 +15,7 @@ canh bao (khong co kha nang chong fingerprint nhu thiet ke yeu cau).
 from __future__ import annotations
 
 import logging
+import threading
 import time
 from dataclasses import dataclass
 from typing import Optional, Sequence
@@ -46,6 +47,39 @@ class StealthFetcher:
         self._config = config
         self._playwright = None
         self._browser = None
+        # Tu lui (adaptive cooldown): crawl nhanh het muc khi server con khoe,
+        # tu dong gian ra khi no bat dau tu choi. Can thiet vi tran cua site
+        # doi thu KHONG biet truoc va thay doi theo tai cua ho - da gap that:
+        # sau nhieu dot fetch lien tiep, tlclighting.com.vn bat dau tra ve
+        # ERR_CONNECTION_REFUSED va timeout 30s.
+        self._throttle_lock = threading.Lock()
+        self._last_fetch_at = 0.0
+        self._cooldown = 0.0
+
+    def _wait_turn(self) -> None:
+        """Giu khoang cach toi thieu + cooldown hien tai giua 2 lan fetch."""
+        with self._throttle_lock:
+            gap = self._config.min_interval_seconds + self._cooldown
+            if gap > 0:
+                delay = self._last_fetch_at + gap - time.monotonic()
+                if delay > 0:
+                    time.sleep(delay)
+            self._last_fetch_at = time.monotonic()
+
+    def _note_failure(self) -> None:
+        """Server tu choi -> gian nhip gap doi (toi da max_cooldown)."""
+        with self._throttle_lock:
+            self._cooldown = min(
+                max(self._cooldown * 2, 1.0), self._config.max_cooldown_seconds
+            )
+            logger.info("Server phản ứng chậm/từ chối - giãn nhịp fetch lên %.1fs", self._cooldown)
+
+    def _note_success(self) -> None:
+        """Fetch tot tro lai -> thu nhip dan (khong reset ngay ve 0 de tranh
+        dao dong nhanh - chay lai vao tran roi lai bi tu choi)."""
+        with self._throttle_lock:
+            if self._cooldown:
+                self._cooldown = self._cooldown / 2 if self._cooldown > 0.25 else 0.0
 
     def __enter__(self) -> "StealthFetcher":
         self._playwright = sync_playwright().start()
@@ -95,6 +129,7 @@ class StealthFetcher:
         for attempt in range(max_retries + 1):
             context = None
             try:
+                self._wait_turn()
                 context, page = self._new_page()
                 response = page.goto(url, wait_until="domcontentloaded")
                 status = response.status if response else None
@@ -102,6 +137,7 @@ class StealthFetcher:
                 if status in _BOT_BLOCK_STATUSES and attempt < max_retries:
                     last_error = f"HTTP {status} (nghi bi chan bot), thu lai..."
                     logger.info("%s -> %s, retry lan %s", url, status, attempt + 1)
+                    self._note_failure()
                     context.close()
                     time.sleep(1.5 * (attempt + 1))
                     continue
@@ -124,10 +160,15 @@ class StealthFetcher:
                 context.close()
 
                 ok = status is None or status < 400
+                if ok:
+                    self._note_success()
                 return FetchResult(url=url, final_url=final_url, status=status, html=html, ok=ok)
 
             except PlaywrightError as exc:
+                # Timeout / ERR_CONNECTION_REFUSED deu roi vao day - day chinh
+                # la tin hieu "dang cham tran cua server ho".
                 last_error = str(exc)
+                self._note_failure()
                 if context is not None:
                     context.close()
                 if attempt < max_retries:

@@ -7,6 +7,7 @@ prober.py) vi do moi la "noi dung trang" theo dung nghia cua stealth-fetch spec.
 """
 from __future__ import annotations
 
+import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from typing import Optional
@@ -17,6 +18,14 @@ from ..config import FETCH
 from .robots import get_sitemap_urls_from_robots
 
 COMMON_SITEMAP_PATHS = ("/sitemap_index.xml", "/sitemap.xml", "/product-sitemap.xml")
+
+# Sub-sitemap cua TAXONOMY san pham, khong phai cua san pham. WooCommerce dat
+# ten taxonomy theo tien to `product_` (product_cat, product_tag, product_brand,
+# product_shipping_class) nen chung deu lot qua bo loc "co chu product" o duoi
+# neu khong loai rieng - case TLC: product_cat-sitemap.xml keo them 73 trang
+# danh muc `/danh-muc/...` vao danh sach "URL san pham", lam crawler ton luot
+# fetch + goi LLM cho trang khong phai san pham va sinh ra ban ghi rong.
+_TAXONOMY_SITEMAP = re.compile(r"product_[a-z_]+-sitemap", re.IGNORECASE)
 
 _REQUEST_HEADERS = {
     "User-Agent": FETCH.default_user_agent,
@@ -86,7 +95,10 @@ def resolve_sitemap_entries(
         # sitemap_index.xml -> post-sitemap.xml + page-sitemap.xml +
         # product-sitemap.xml, chi cai cuoi la san pham). Neu khong sub-sitemap
         # nao ghi ro "product", giu nguyen hanh vi cu (giai ma tat ca).
-        product_like = [u for u in child_locs if "product" in u.lower()]
+        product_like = [
+            u for u in child_locs
+            if "product" in u.lower() and not _TAXONOMY_SITEMAP.search(u)
+        ]
         targets = product_like or child_locs
         for child_url in targets:
             entries.extend(resolve_sitemap_entries(child_url, timeout=timeout, _depth=_depth + 1))
