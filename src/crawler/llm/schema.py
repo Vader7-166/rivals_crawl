@@ -45,9 +45,15 @@ Nhiệm vụ:
 màu, kích thước, CRI, IP, bảo hành, góc chiếu, v.v.) thành các cặp \
 key-value trong "tags". Tên key đặt bằng tiếng Việt không dấu, snake_case, \
 dựa theo chính tên thuộc tính xuất hiện trong nội dung nguồn - KHÔNG ép theo \
-1 danh sách cố định, mỗi sản phẩm có thể có số thuộc tính khác nhau. Giữ \
-nguyên định dạng số liệu/đơn vị như trong nguồn (vd "12W", "150-265V").
-3. Không bịa thêm thuộc tính không xuất hiện trong nội dung nguồn.
+1 danh sách cố định, mỗi sản phẩm có thể có số thuộc tính khác nhau.
+3. QUAN TRỌNG - quy tắc bỏ dấu CHỈ áp dụng cho TÊN KEY. Phần GIÁ TRỊ phải \
+sao chép nguyên văn như trong nội dung nguồn, GIỮ NGUYÊN dấu tiếng Việt và \
+nguyên định dạng số liệu/đơn vị. Ví dụ đúng: {{"anh_sang": "3 màu", \
+"bao_hanh": "24 tháng", "cong_suat": "12W"}}. Ví dụ SAI (đã bỏ dấu ở giá \
+trị): {{"anh_sang": "3 mau", "bao_hanh": "24 thang"}}.
+4. Không đưa tên sản phẩm vào "tags" (đã có trường riêng), chỉ đưa thông số \
+kỹ thuật.
+5. Không bịa thêm thuộc tính không xuất hiện trong nội dung nguồn.
 
 Chỉ trả về DUY NHẤT 1 đối tượng JSON đúng hình dạng sau, không giải thích thêm:
 {{"ma_san_pham": "<string hoặc null>", "tags": {{"<key>": "<value>", ...}}}}
