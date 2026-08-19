@@ -1,0 +1,60 @@
+name: CI
+
+# Chay moi lan push (moi nhanh) va moi pull request.
+on:
+  push:
+  pull_request:
+
+# Push lien tiep vao cung 1 nhanh thi huy lan chay cu - khong xep hang cho
+# nhung ket qua da lac hau.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      # KHONG chay `playwright install`: bo test khong mo browser that (tang
+      # fetch duoc thay bang fetcher gia - xem tests/test_pipeline_checkpoint.py),
+      # nen tai ~150MB Chromium moi lan push la ton thoi gian ma khong kiem
+      # them duoc gi.
+      - name: Cai dependency
+        run: pip install -e ".[dev]"
+
+      # Cac script trong scripts/ la entry point chinh nhung khong nam trong
+      # bo test. Compile de bat loi cu phap truoc khi no chi lo ra luc chay that.
+      - name: Kiem tra cu phap scripts/
+        run: python -m compileall -q scripts/
+
+      - name: Chay test
+        run: pytest -q
+
+  secrets-guard:
+    name: Khong lo credentials
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Repo nay co .env that va service-account JSON cua Vertex AI o may local.
+      # Ca hai deu nam trong .gitignore, nhung `git add -f` hoac 1 lan sua
+      # .gitignore nham la du de day credentials len GitHub - va da len thi coi
+      # nhu lo, xoa commit sau khong cuu duoc. Chan ngay o CI.
+      - name: Chan .env / secrets/ bi commit
+        run: |
+          leaked=$(git ls-files -- .env 'secrets/**' '**/*service-account*.json' || true)
+          if [ -n "$leaked" ]; then
+            echo "::error::Credentials bị commit vào repo:"
+            echo "$leaked"
+            exit 1
+          fi
+          echo "OK - khong co credentials nao trong git."
