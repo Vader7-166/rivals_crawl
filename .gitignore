@@ -11,8 +11,8 @@ venv/
 secrets/
 
 # Du lieu - dataset nguon va dataset crawl ra deu khong thuoc ve git
-dataset/
-output/
+datasets/
+
 
 # Cache noi bo (site-probing results, v.v.)
 .cache/
