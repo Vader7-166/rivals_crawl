@@ -12,11 +12,12 @@ from __future__ import annotations
 
 import logging
 import sys
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from crawler.config import OUTPUT  # noqa: E402
+from crawler.config import CRAWL, OUTPUT  # noqa: E402
 from crawler.fetch import StealthFetcher  # noqa: E402
 from crawler.llm import LLMProviderError, build_default_llm_provider  # noqa: E402
 from crawler.pipeline import crawl_product_urls  # noqa: E402
@@ -70,21 +71,28 @@ def main() -> None:
                     unmatched[:5],
                 )
 
-        # Task 2.4/8.6: doc file .xlsx da co (neu co) de crawl-lai-co-chon-loc,
-        # chi crawl lai ban ghi loi/thieu field thay vi toan bo category.
-        existing = load_existing_records(OUTPUT_PATH)
-        if existing:
-            to_retry = records_needing_recrawl(existing)
-            logger.info(
-                "Tìm thấy dataset trước đó: %d bản ghi, %d cần crawl lại (lỗi/thiếu field)",
-                len(existing),
-                len(to_retry),
-            )
+    # Browser dung cho probing/phan trang o tren da duoc dong (ra khoi `with`)
+    # truoc khi crawl_product_urls tu mo pool browser rieng cua no - tranh giu
+    # thua 1 browser ~450MB khong dung toi trong suot qua trinh crawl.
 
-        # Task 8.3: chay end-to-end fetch -> tang 1 -> tang 1.5 -> tang 2.
-        records = crawl_product_urls(
-            category_urls, fetcher=fetcher, llm_provider=llm_provider, existing=existing
+    # Task 2.4/8.6: doc file .xlsx da co (neu co) de crawl-lai-co-chon-loc,
+    # chi crawl lai ban ghi loi/thieu field thay vi toan bo category.
+    existing = load_existing_records(OUTPUT_PATH)
+    if existing:
+        to_retry = records_needing_recrawl(existing)
+        logger.info(
+            "Tìm thấy dataset trước đó: %d bản ghi, %d cần crawl lại (lỗi/thiếu field)",
+            len(existing),
+            len(to_retry),
         )
+
+    # Task 8.3: chay end-to-end fetch -> tang 1 -> tang 1.5 -> tang 2.
+    # Song song hoa theo CRAWL_WORKERS (mac dinh 4).
+    started = time.time()
+    records = crawl_product_urls(
+        category_urls, llm_provider=llm_provider, existing=existing, workers=CRAWL.workers
+    )
+    elapsed = time.time() - started
 
     # Task 8.4: xuat Excel, xac nhan so dong khop so san pham tren site.
     write_records_to_excel(records, OUTPUT_PATH)
@@ -95,6 +103,12 @@ def main() -> None:
         OUTPUT_PATH,
         ok,
         len(records) - ok,
+    )
+    logger.info(
+        "Thời gian crawl: %.1f phút (%d luồng, %.1fs/sản phẩm)",
+        elapsed / 60,
+        CRAWL.workers,
+        elapsed / max(1, len(records)),
     )
     if len(records) != len(category_urls):
         logger.warning(
