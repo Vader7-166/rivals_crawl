@@ -10,9 +10,9 @@ site nào ở bất kỳ khâu nào. Khảo sát 3 site thật cho thấy:
 |---|---|---|---|
 | Nền tảng | WordPress + WooCommerce | ASP.NET WebForms | CMS tự viết |
 | Structured data | JSON-LD `Product` | **Không có gì** | Microdata `Product` |
-| Bảng thông số | Lộn xộn, gộp trong 1 `<td>` | `<table>` sạch | **Rỗng** — chỉ có sau khi JS chạy |
-| Sitemap | `product-sitemap.xml` mới | Cũ từ 2021, thiếu SP | Sitemap động theo content-type |
-| Bẫy cấu trúc | Không | Danh mục cha là landing rỗng | Không |
+| Bảng thông số | Lộn xộn, gộp trong 1 `<td>` | `<table>` sạch | **Không có `<table>` nào** — `<label>`/`<span>`, rỗng cho tới khi JS chạy |
+| Sitemap | `product-sitemap.xml` mới | Cũ từ 2021, thiếu SP | Sitemap động theo content-type, **XML sai chuẩn** |
+| Bẫy cấu trúc | Không | Danh mục cha là landing rỗng | 2 domain song song + khối "sản phẩm liên quan" dùng chung bố cục với thông số |
 | Chặn bot | WAF trả 406 nếu UA đơn giản | Không | Không |
 
 Vì vậy hệ thống **không** viết một bộ config riêng cho từng site. Thay vào đó
@@ -48,6 +48,9 @@ tốn kém hơn (LLM) cho phần dữ liệu mà tầng trước không lấy đ
    │   Tầng 1.5 ── CSS selector fallback theo domain               │
    │      │        → chỉ vá field còn thiếu sau tầng 1             │
    │      ▼                                                        │
+   │   Tầng 1.6 ── mục "Ưu điểm" trong cụm mô tả                   │
+   │      │        → tóm tắt (gạch đầu dòng) + toàn văn            │
+   │      ▼                                                        │
    │   Tầng 2  ── LLM (Vertex AI → DeepSeek)                       │
    │               → Tags (JSON) từ bảng thông số kỹ thuật tự do   │
    └──────────────────────────┬────────────────────────────────────┘
@@ -76,9 +79,7 @@ Chạy **một lần** cho mỗi domain, kết quả được cache lại.
    `/sitemap_index.xml`, `/sitemap.xml`, `/product-sitemap.xml`.
 3. **Giải đệ quy sitemap index** thành danh sách URL phẳng. Nếu gặp sitemap
    index, **ưu tiên sub-sitemap có chữ "product" trong tên**, **trừ sitemap của
-   taxonomy sản phẩm** (`product_cat`, `product_tag`, `product_brand`… —
-   WooCommerce đặt tên taxonomy theo tiền tố `product_`). Đây là bài học thực tế
-   từ TLC, phải học **hai lần**:
+   taxonomy sản phẩm**. Đây là bài học thực tế từ TLC, phải học **hai lần**:
    - `sitemap_index.xml` gồm `post-sitemap.xml` + `page-sitemap.xml` +
      `product-sitemap.xml`, nếu gộp hết sẽ lẫn cả bài blog và trang tĩnh.
    - Nhưng lọc "có chữ product" thôi thì vẫn kéo theo `product_cat-sitemap.xml`
@@ -86,16 +87,43 @@ Chạy **một lần** cho mỗi domain, kết quả được cache lại.
      (559 thay vì 486). Trang danh mục không có JSON-LD Product nên tốn lượt
      fetch + gọi LLM để rồi sinh ra bản ghi rỗng. Sau khi loại taxonomy:
      **486 URL = 485 sản phẩm + 1 trang `/shop/`**, độ tin cậy 100%.
-4. **Chấm điểm độ tin cậy** (`prober.py`): lấy mẫu ngẫu nhiên N URL (mặc định
+
+   Bộ lọc taxonomy có **hai nhánh** vì hai site đặt tên hoàn toàn khác nhau:
+   WooCommerce dùng tiền tố (`product_cat`, `product_tag`, `product_brand`…),
+   còn CMS sinh sitemap động theo content-type thì dùng hậu tố Group/Category
+   (KingLED: `sitemap.xml?page=ProductGroup` — **138 trang danh mục** — nằm
+   ngay cạnh `sitemap.xml?page=Product` — 557 sản phẩm — trong cùng 1 index).
+
+   > Với KingLED, việc lọc này **không sửa lại được ở bước sau**: URL sản phẩm
+   > và URL danh mục đều phẳng (`https://kingled.com.vn/<slug>`), sản phẩm
+   > `den-panel-hop-onyx-48w-60x60cm` nằm cạnh danh mục `am-tran-downlight`,
+   > không có dấu hiệu nào trong URL để phân biệt. TLC thì lọc lại được bằng
+   > `/san-pham/`. Nên với site kiểu này, **phân tách của sitemap là căn cứ duy
+   > nhất**.
+
+4. **Parse khoan dung với XML sai chuẩn.** Sitemap thật ngoài đời không phải
+   lúc nào cũng hợp lệ: `kingled.com.vn/sitemap.xml?page=Product` nhúng URL ảnh
+   có dấu `&` chưa escape (`...&refer=http___imgse...`), `ElementTree` báo
+   "not well-formed" ngay ký tự đó và **vứt cả 557 sản phẩm**. Hậu quả không
+   phải là báo lỗi mà là **âm thầm sai**: site tụt xuống nhánh menu-crawl và
+   trả về 0 URL, trong khi sitemap của nó hoàn toàn đủ dữ liệu.
+
+   Nên `_parse_sitemap_xml` thử `ElementTree` trước (nghiêm ngặt, rẻ), hỏng thì
+   parse lại bằng parser `recover=True` của lxml. Cả hai nhánh đều phải kiểm
+   tra **tag gốc** là `sitemapindex`/`urlset` — một trang HTML 200 hợp lệ (site
+   trả về ở path sitemap không tồn tại) vẫn parse thành cây XML bình thường với
+   tag gốc `html`, "parse được" không đồng nghĩa với "là sitemap".
+
+5. **Chấm điểm độ tin cậy** (`prober.py`): lấy mẫu ngẫu nhiên N URL (mặc định
    10), fetch từng URL và chạy qua bộ phát hiện trang sản phẩm. Đạt **≥ 80%**
    thì sitemap được chấp nhận làm nguồn chính.
    `lastmod` **không** được dùng làm tiêu chí quyết định — đó là giá trị site tự
    khai báo, không đảm bảo URL còn hợp lệ (case Roman: sitemap trả HTTP 200
    bình thường nhưng thiếu hẳn sản phẩm đang bán).
-5. **Fallback crawl menu** (`menu_crawl.py`) nếu không có sitemap đáng tin cậy:
+6. **Fallback crawl menu** (`menu_crawl.py`) nếu không có sitemap đáng tin cậy:
    duyệt link trong menu điều hướng để tìm trang danh mục ứng viên, rồi lọc
    từng trang qua bộ phát hiện lưới sản phẩm.
-6. **Cache kết quả** (`cache.py`) theo domain, TTL 30 ngày, lưu ở `.cache/probe/`.
+7. **Cache kết quả** (`cache.py`) theo domain, TTL 30 ngày, lưu ở `.cache/probe/`.
 
 ### Bộ phát hiện trang sản phẩm (`detection.py`)
 
@@ -161,8 +189,14 @@ Ba việc lớp này lo:
    User-Agent quá đơn giản.
 2. **Chờ nội dung render bằng JS:** tham số `click_selectors` (bấm vào tab trước
    khi đọc HTML) và `wait_selector` (đợi selector xuất hiện). Cần cho case
-   KingLED — bảng "Thông số kỹ thuật" rỗng trong HTML tĩnh, chỉ được JS điền vào
-   sau khi trang tải xong.
+   KingLED — khối "Thông số kỹ thuật" **có mặt nhưng rỗng** trong HTML tĩnh, chỉ
+   được JS điền vào sau khi trang tải xong. Đo trên trang thật:
+   `div.property` tồn tại ở cả hai bản, nhưng bản `requests` có **0 dòng** còn
+   bản qua browser có **16 dòng**.
+
+   Tùy chọn fetch là **dữ liệu theo domain** (`sites/registry.py`), truyền
+   xuống qua `crawl_product_urls(..., fetch_options=...)` — pipeline không tự
+   đoán site nào cần chờ gì, và site cần chờ cũng không phải viết code riêng.
 3. **Retry khi bị chặn:** gặp HTTP 403/406/429 thì đợi rồi thử lại (mặc định 2
    lần) trước khi coi là fetch thất bại.
 
@@ -233,6 +267,167 @@ DOMAIN_FALLBACK_RULES = {
 Chỉ thêm entry khi đã khảo sát và xác nhận tầng 1 không đủ cho chính domain đó —
 không đoán trước cho site chưa khảo sát.
 
+Module này còn giữ hai registry cùng tinh thần "chỉ ghi domain đã khảo sát":
+
+**`DOMAIN_SPEC_ROOT_SELECTORS` — khoanh vùng khối thông số.** Cần cho site không
+dùng `<table>` (xem tầng 2 / `html_cleaner`).
+
+**`DOMAIN_PLACEHOLDER_PRICES` — giá trị "chỗ trống" mà site dùng thay cho giá.**
+KingLED trả `<meta itemprop="price" content="0">` cho sản phẩm không niêm yết
+giá, và trang của chúng **không render khối giá nào cả**. Ba cách xử lý, chỉ một
+cách đúng:
+
+| Cách | Vấn đề |
+|---|---|
+| Ghi `0` vào cột Giá | Người đọc hiểu là **miễn phí** — sai hẳn ý của nguồn |
+| Ép thành `"Liên hệ"` | **Tự đặt lời vào miệng site** — trang không hề nói vậy |
+| Coi như **chưa phân giải** (`None`) | Đúng: tầng 1.5 được quyền đọc lại giá từ DOM; không có thì để trống và bản ghi tự rơi xuống `partial-missing-fields` để người review nhìn thấy |
+
+Thứ tự này quan trọng: `apply_css_fallback` chỉ vá field **còn thiếu**, mà `0.0`
+không phải giá trị thiếu — nên phải quy `0.0` về `None` **trước** khi vào tầng
+1.5, nếu không selector đọc giá hiển thị sẽ không bao giờ được chạy.
+
+> `normalize_price` cố tình **ném lỗi** thay vì đoán bừa khi gặp chuỗi lạ. Ở
+> tầng 1.5 lỗi đó được bắt lại và bỏ qua field: một trang dị dạng không được
+> phép giết cả đợt crawl vài trăm sản phẩm. Tinh thần "không đoán bừa" giữ
+> nguyên — field vẫn để trống và bản ghi vẫn bị gắn cờ.
+
+---
+
+## Tầng 1.6 — Mục "Ưu điểm" trong cụm mô tả
+
+**Code:** `src/crawler/extraction/advantages.py`
+
+Điền 2 cột `Tóm tắt ưu điểm, tính năng` và `Nội dung Ưu điểm SP`. Đây là dữ liệu
+**có thật** trên trang nhưng từng bị bỏ qua hoàn toàn — khác hẳn `Mã SAP` hay
+`VD HDSD` (site thật sự không có gì tương đương).
+
+Định dạng bám theo chính khuôn tham chiếu (`product_Metadata (1).xlsx`): mỗi
+gạch đầu dòng một dòng ở cột tóm tắt, toàn văn mục ở cột nội dung.
+
+### Tìm theo từ khoá là ngõ cụt — đây là bằng chứng
+
+Cách hiển nhiên là tìm heading chứa chữ "ưu điểm". Cách đó **đã cài và đã bỏ**,
+vì trên trang thật mục này gần như không bao giờ tự xưng tên:
+
+| Trang thật | Tiêu đề mục ưu điểm |
+|---|---|
+| `tlc/…-am-tran-eyecare-10w` | "4. **Ưu điểm** của Âm Trần Eyecare…" ← ca duy nhất khớp từ khoá |
+| `kingled/…` (phần lớn) | "Đặc điểm nổi bật" |
+| `roman/plp102` | "Đặc điểm nổi bật của…" |
+| `tlc/…-phich-cam-chiu-tai` | "Tại sao nên sử dụng phích cắm cái chịu tải" |
+| `tlc/…-cob-mo-hong` | **không có tiêu đề nào cả** — chỉ một `<ul>` trần |
+
+Ném cả trang cho LLM thì đọc được hết, nhưng đắt và chậm gấp nhiều lần cho một
+việc mà cấu trúc HTML đã nói gần đủ. Nên tầng 1.6 làm ngược lại: **gom ứng viên
+thật rộng bằng cấu trúc, rồi chấm điểm chọn một.**
+
+### Ba nguồn ứng viên, một thang điểm
+
+```
+(1) heading có tiêu đề mang tín hiệu DƯƠNG   ── ưu điểm/đặc điểm/nổi bật/lợi ích/
+                                                tại sao/vì sao/tính năng/ưu việt
+(2) heading mà LLM chỉ tới (trường muc_uu_diem) ── "la bàn", xem bên dưới
+(3) CỤM ĐỀ MỤC: dãy ≥2 heading anh em cùng cấp ── cứu ca không có tiêu đề
+                                                             │
+                          tất cả ứng viên ─────────────► chấm điểm ─► lấy cao nhất
+```
+
+Điểm: `+100` tiêu đề dương · `+60` được LLM trỏ tới · `+10 × min(số gạch đầu
+dòng, 8)` · `+ độ dài text / 100`. Hai trường hợp **loại thẳng** trước khi chấm:
+mục **rỗng** (chỉ có dòng tiêu đề) và tiêu đề mang **tín hiệu âm** (thông số /
+ứng dụng / hướng dẫn / bảo hành / so sánh / sản phẩm tương tự…).
+
+Ba site, ba hình dạng khác hẳn nhau, cùng một đoạn code:
+
+| | Gạch đầu dòng là gì | Vào bằng nguồn nào |
+|---|---|---|
+| TLC | `<li>` với nhãn trong `<strong>` | (1) tiêu đề dương |
+| KingLED | `<h3>` con (`1.1 Tiết kiệm điện năng`…) | (1) hoặc (3) tuỳ trang |
+| Roman | `<h3>` con dưới "Đặc điểm nổi bật của…" | (1) |
+| TLC COB | `<li>` không có tiêu đề nào phía trên | (3) cụm đề mục |
+
+### Nhánh "cụm đề mục" — đánh đổi đã cân nhắc, không phải sơ suất
+
+Nhánh (3) **suy đoán theo hình dạng**, không có tín hiệu nào xác nhận đó đúng là
+mục ưu điểm. Nó là nhánh duy nhất cứu được các trang không đặt tiêu đề, nhưng
+cũng là nhánh duy nhất có thể ghi nhầm dữ liệu vào đúng cột mang tên "Ưu điểm".
+Ba lớp chặn đang có: **≥2 đề mục ngang cấp** theo sau, không đề mục nào mang tín
+hiệu âm, và **tiêu đề mẹ** cao cấp hơn cũng không mang tín hiệu âm (cụm bắt đầu
+từ đề mục con đầu tiên nên tín hiệu âm hay nằm ở tiêu đề mẹ — ca thật:
+`kingled/den-led-op-tran-30w` vớ phải "Chiếu sáng văn phòng / Chiếu sáng nhà ở",
+bản thân vô hại, nhưng mẹ chúng là "**Ứng dụng** của…").
+
+Giá phải trả, **đo trên toàn bộ 360 ô đã điền của KingLED**: 3 ô vớ phải danh
+sách phụ kiện (`Bộ nguồn / Thanh nhôm / Phụ kiện lắp ráp`, cùng một mục dùng
+chung cho 3 dòng Đèn Led Dán) + 3 ô chỉ có một dòng vô nghĩa → **6/360 = 1,7%**.
+Đổi lại độ phủ **+7,3 điểm** (58,3% → 65,6%).
+
+> Con số 1,7% này là **chặn dưới**: nó dò bằng bộ từ khoá các dạng sai đã biết,
+> không phải soi từng ô so với trang gốc. 10 ô lấy ngẫu nhiên soi tay thì cả 10
+> đều đúng.
+>
+> **Đừng đo tỷ lệ sai trên mẫu chọn tay các ca khó.** Bản đầu tiên của tài liệu
+> này ghi "~15% ô sai" — suy từ 20 trang được chọn riêng vì có hình dạng cụm.
+> Mẫu thiên lệch thổi tỷ lệ lỗi lên gần **mười lần**.
+
+Muốn tắt nhánh này: xoá đúng dòng `offer(heading, nodes, is_cluster=True)` trong
+`extract_advantages`. Độ phủ tụt về mức tiêu đề-dương thuần.
+
+### KingLED không phải ngoại lệ
+
+Độ phủ của KingLED thấp hơn hẳn TLC nên câu hỏi tự nhiên là "có phải riêng site
+này bố cục dị không?". Đo mẫu ngẫu nhiên trên cả 3 site (giai đoạn **trước** khi
+bật nhánh cụm):
+
+| Site | Mẫu tìm được mục | Ghi chú |
+|---|---:|---|
+| TLC | 10/10 | gần như trang nào cũng có tiêu đề đàng hoàng |
+| Roman | 4/7 | **cả 3 ca trượt đều có nội dung thật**, ở dạng cụm không tiêu đề |
+| KingLED | 58–60% toàn site | phần trượt phần lớn là phụ kiện / hàng công nghiệp |
+
+Kết luận: hình dạng "cụm đề mục không tiêu đề" xuất hiện ở **cả ba** site, không
+phải nét riêng của KingLED — đó là lý do nhánh (3) được bật thay vì bị coi là
+cách chữa cháy cho một site. Phần độ phủ còn thiếu của KingLED chủ yếu là các
+sản phẩm **thật sự không có mục ưu điểm** trên trang (phụ kiện: thanh ray, khớp
+nối, bộ nguồn), tức để trống mới đúng.
+
+> Cỡ mẫu nhỏ (7–10 trang/site) — dùng để trả lời câu hỏi định tính "hình dạng
+> này có phổ biến không", **không** dùng làm tỷ lệ độ phủ.
+
+### "La bàn" LLM — hỏi vị trí, không hỏi nội dung
+
+Tầng 2 trả thêm trường `muc_uu_diem`: **một dòng tiêu đề** của mục ưu điểm, chép
+nguyên văn. Không phải nội dung — nội dung vẫn do code cắt từ HTML. Lý do: LLM
+nhận diện "đây là mục ưu điểm" tốt hơn mọi luật từ vựng, nhưng nếu để nó **viết**
+hai cột thì không còn cách nào phân biệt chép và bịa. Hỏi vị trí thì câu trả lời
+luôn đối chiếu được với chính HTML.
+
+La bàn cũng chỉ là ứng viên `+60` điểm chứ không phải lệnh, vì **nó chỉ sai được**:
+trang KingLED nào cũng có nhãn tab `<h3>ưu điểm sản phẩm</h3>` nằm cạnh "Mô tả
+sản phẩm", và cả LLM lẫn luật từ khoá đều bám vào đó — trong khi phần lớn trang
+để tab đó **rỗng**, nội dung thật nằm dưới các đề mục không mang dấu hiệu gì.
+Luật loại-mục-rỗng vô hiệu hoá cái bẫy này.
+
+### Ba chi tiết cắt HTML, mỗi cái là một bẫy đã thấy
+
+1. **Dừng theo CẤP heading, không dừng ở thẻ `<h>` bất kỳ.** Mục của KingLED là
+   `<h2>` và bên trong có 8 `<h3>` con — dừng ở `<h3>` đầu tiên thì cắt mất gần
+   hết mục.
+
+2. **Heading không phải lúc nào cũng có anh em.** Có trang bọc riêng heading
+   trong một `<div>` → 0 thẻ anh em, phải leo lên thẻ cha rồi mới lấy. Có trang
+   để heading phẳng cùng cấp với nội dung → phải nới điều kiện dừng.
+
+3. **Bỏ số thứ tự mục và dòng bán chéo,** nhưng đừng bỏ quá tay: cắt tiền tố số
+   kiểu ngây thơ biến `"2 dải LED to bản"` thành `"dải LED to bản"`. Chỉ cắt khi
+   có dấu phân cách (`1.` `1)`) hoặc số nhiều cấp (`1.1`).
+
+> Chữ **"đ"/"Đ" là ký tự riêng** (U+0111/U+0110), NFD không tách được thành
+> `d` + dấu. Bỏ dấu kiểu thông thường thì "ưu điểm" ra "uu điem" — vẫn còn chữ
+> đ và regex không khớp. Phải thay tay. Bug này từng làm cả 3 site trả về rỗng
+> **mà không báo lỗi gì**.
+
 ---
 
 ## Tầng 2 — LLM normalization
@@ -267,6 +462,39 @@ Có hai hàm phục vụ hai mục đích khác nhau, **không dùng chung outpu
 
 Riêng bảng thông số kiểu TLC — hai cột nhưng label/value gộp lộn xộn bằng `<br>`
 trong cùng một `<td>` — được tách theo số dòng đối xứng giữa 2 ô.
+
+**Không phải site nào cũng có `<table>`.** KingLED không có **một thẻ `<table>`
+nào** trên cả trang; thông số nằm ở bố cục
+`<label>Công Suất</label><span>: 12w</span>` trong các `<div>` lồng nhau. Vì vậy
+hai hàm trên còn đọc được cặp "label: value" — nhưng **chỉ trong phạm vi
+`spec_root_selector`** đăng ký theo domain, và phạm vi ở đây là **bắt buộc chứ
+không phải tùy chọn**:
+
+> Chính bố cục `<label>`/`<span>` đó được KingLED **dùng lại cho khối "sản phẩm
+> liên quan"** ở cuối trang. Một trang sản phẩm đếm được **38–107 thẻ `<label>`**,
+> trong đó chỉ 10–16 cái đầu là của sản phẩm đang xem; số còn lại là
+> "Mã SP / Công Suất / Quang Thông…" của **8 sản phẩm khác**. Quét cả trang sẽ
+> ghi thông số của sản phẩm khác vào bản ghi này — đúng nghĩa bịa dữ liệu, và
+> **không phát hiện được khi review** vì mọi giá trị đều "có thật trên trang",
+> kể cả thước đo groundedness cũng chấm là đạt.
+>
+> `div.property[data-id="Property"]` khoanh đúng khối của sản phẩm đang xem (đó
+> là tab "Thông số kỹ thuật" của chính nó). Selector không khớp node nào thì trả
+> về rỗng — trang không đúng khuôn đã khảo sát thì để trống cho bản ghi bị gắn
+> cờ, còn hơn đoán bừa.
+
+Hai chi tiết nhỏ nhưng cần thiết ở bố cục này:
+
+- Thuộc tính nhiều giá trị được site tách thành nhiều `<a>` riêng
+  (`Ánh Sáng: <a>Trắng</a><a>Trung tính</a><a>Vàng</a>`) — nối bằng **dấu phẩy**
+  chứ không phải dấu cách, vì "Trắng Trung tính Vàng" đọc ra như một giá trị
+  liền khúc và LLM rất dễ hiểu sai.
+- `<label>` của ô nhập liệu (form "Đăng ký tư vấn": Họ tên*, Số điện thoại*…)
+  bị loại — không phải thông số kỹ thuật.
+
+Với `clean_html_for_llm`, các dòng thông số được đặt **lên đầu** prompt. Khối
+thông số của KingLED nằm gần **cuối** trang (trong popup tab), giữ thứ tự tự
+nhiên thì nó bị cắt mất bởi giới hạn 12.000 ký tự và tầng 2 không còn gì để đọc.
 
 **2. Gọi LLM** (`provider.py`, `vertex_provider.py`, `deepseek_provider.py`) —
 một interface chung `generate_json(prompt, json_schema)`:
@@ -318,8 +546,7 @@ tham chiếu.
 Cột nào site đối thủ không có dữ liệu tương đương thì **để ô trống chứ không bỏ
 cột** — khuôn cột lệch thì bên nhận phải căn chỉnh tay trước khi ghép vào file
 tham chiếu. Hiện luôn trống với TLC: `Mã SAP`, `Giá đối chiếu`,
-`Link mua hàng online`, `Tóm tắt TSKT`, `Tóm tắt ưu điểm, tính năng`,
-`Link file HDSD`, `VD HDSD`, `Nội dung Ưu điểm SP`.
+`Link mua hàng online`, `Tóm tắt TSKT`, `Link file HDSD`, `VD HDSD`.
 
 Tên cột được chép **nguyên văn** từ hàng header của sheet tham chiếu, kể cả
 khoảng trắng thừa (`' category 1 '`, `'Thông số kỹ thuật '`) để header so khớp
@@ -532,17 +759,133 @@ thiệt vì mức trước vừa vét quota.
 
 ---
 
+## Chạy toàn site KingLED
+
+```bash
+.venv/bin/python scripts/crawl_site.py https://kingled.com.vn
+```
+
+Số liệu lần chạy thật **21/08/2026** (chạy lại sau khi bật nhánh cụm ở tầng
+1.6), `kingled.com.vn`, Vertex AI `gemini-2.5-flash`:
+
+| | Kết quả | Lần 20/08 |
+|---|---:|---:|
+| URL sản phẩm (sitemap `?page=Product`) | 557 mục → **549 URL riêng biệt** | = |
+| Bản ghi ghi ra | 549 (**24 sheet** theo loại sản phẩm) | = |
+| Thời gian | **65,5 phút** (7,16 s/sản phẩm, 4 luồng) | 65,8 phút |
+| Fetch lỗi / LLM lỗi | **0 / 0** | 0 / 0 |
+| Trạng thái OK | 403/549 (**73,4%**) | 404/549 |
+| Tag trung bình | 9,2/sản phẩm (5.078 giá trị) | 9,6 (5.252) |
+| `Tóm tắt ưu điểm, tính năng` có dữ liệu | **65,6%** (360/549) | 58,3% |
+| `Nội dung Ưu điểm SP` có dữ liệu | **68,1%** (374/549) | 60,5% |
+
+Hai lần chạy lệch nhau ~170 giá trị tag (9,6 → 9,2) dù prompt, model và trang
+nguồn đều không đổi — đó là **dao động giữa các lần gọi LLM**, không phải hồi
+quy. Đừng dùng chênh lệch cỡ này để nghiệm thu bất cứ thay đổi nào.
+
+Chuyện đáng ghi của lần chạy này: `429 RESOURCE_EXHAUSTED` từ Vertex AI nổ 27
+lần, cơ chế thử lại nuốt hết; **2 lần** phải rơi hẳn xuống DeepSeek (`Connection
+reset by peer`) và cả 2 đều trả về bình thường. Đường dự phòng nhiều provider đã
+chứng minh có tác dụng trong chạy thật, không chỉ trong test.
+
+> **Đợt chạy 20/08 chết giữa chừng ở sản phẩm 80/549** (phiên làm việc đứt, log
+> dừng không có dòng kết thúc). Chạy lại chỉ tái sử dụng được **58/80** bản ghi
+> cũ — 22 cái còn lại mang cờ `partial-missing-fields` nên vào lại hàng đợi. Cơ
+> chế checkpoint đã làm đúng việc của nó: không mất gì, chỉ tốn thêm ~3 phút.
+
+**146 bản ghi "cần review" hầu hết KHÔNG phải lỗi crawl.** 142/146 thiếu **đúng
+một** cột `Giá`, và đó là do site không niêm yết giá cho nhóm phụ kiện / một số
+dòng đèn — đã kiểm chứng bằng **đường độc lập với pipeline** (quét text đã render
+tìm số tiền + đọc lại `meta itemprop="price"`) trên 12 mẫu ngẫu nhiên: **12/12**
+đều không có khối `div.price`, không có chuỗi tiền nào, `meta price=0`.
+
+4 bản ghi còn lại cũng đã soi tay và đều đúng với nguồn:
+
+| Sản phẩm | Thiếu | Vì sao đúng |
+|---|---|---|
+| `phu-kien-lap-rap` | mã SP + giá | trang không có mã SP |
+| `dieu-khien-smart-9-kenh` | tags | bảng thông số chỉ đúng 1 dòng "Mã SP" |
+| `den-led-gan-tuong-gmd-f328` | giá + tags | khối thông số **rỗng** trên chính site (fetch lại 2 lần đều rỗng — không phải đua tranh với JS) |
+| `khop-noi-2-thanh-ray-chu-l` | tags | phụ kiện cơ khí, không có thông số điện |
+
+> **Hệ quả cần biết:** 144 bản ghi thiếu `Giá` sẽ là ứng viên crawl lại ở **mọi
+> lần chạy sau**, dù kết quả không bao giờ đổi. Xem [todo.md](todo.md) mục 2.
+
+### Bẫy "khối sản phẩm liên quan" — và giới hạn của thước đo groundedness
+
+Khoanh vùng `spec_root_selector` cứu được cột `Thông số kỹ thuật` nhưng **không**
+cứu cột `Tags`: `clean_html_for_llm` có chủ đích kèm cả text mô tả, và phần đó
+mang theo thông số của các sản phẩm liên quan. Đo được trên `bo-nguon-150w`:
+khối thông số riêng chỉ 4 dòng và **không có dòng bảo hành**, thế mà bản ghi vẫn
+ra `bao_hanh="Đổi mới 2 năm"` — nhặt từ một phụ kiện ở cuối trang (phần text đưa
+cho LLM chứa thêm 5 "Mã SP" + 5 "Bảo Hành" của phụ kiện khác).
+
+Trang **ngắn** mới là trang nguy hiểm: trang dài thì giới hạn 12.000 ký tự tự nó
+đã cắt mất khối liên quan, còn trang thông số thưa — đúng loại cần tầng 2 nhất —
+thì khối đó lọt trọn vào prompt.
+
+Sau khi gỡ `div.item`: `"Bảo Hành"` 5 lần → **0**, thông số của chính sản phẩm
+còn nguyên.
+
+> **Đừng dùng tỷ lệ "tag có căn cứ" để nghiệm thu sửa lỗi này.** So sánh 2 lần
+> chạy trên **cùng 240 URL**: 94,7% → 94,1% — gần như không đổi, dù lỗi đã được
+> sửa thật. Lý do: thước đo đối chiếu với *bảng thông số*, mà phần lớn giá trị
+> "không có căn cứ" lại là thuộc tính **thật nhưng chỉ được nói trong phần mô
+> tả** (IP44, CRI, quang hiệu…). Nó đo "giá trị nằm ngoài bảng thông số", không
+> đo "giá trị của sản phẩm khác". Muốn nghiệm thu thì phải soi đúng trang đã lỗi.
+
 ## Thêm một site đối thủ mới
+
+**Không thêm file .py nào cả.** Mặc định là chạy thẳng:
+
+```bash
+.venv/bin/python scripts/crawl_site.py https://<domain-doi-thu>
+.venv/bin/python scripts/crawl_site.py https://<domain-doi-thu> --limit 15
+```
+
+Script này dùng chung cho mọi site: site-probing tìm nguồn URL sản phẩm, tầng 1
+đọc structured data, tầng 2 chuẩn hoá thông số, kết quả ra
+`output/<domain>.xlsx`. Nếu đo trên trang thật mà thấy thiếu, phần riêng của
+site được khai là **một dòng dữ liệu** trong registry theo domain, không phải
+một module:
+
+| Registry | Trả lời câu hỏi | Ví dụ |
+|---|---|---|
+| `sites/registry.py` | Tìm và tải trang sản phẩm thế nào | `product_url_pattern` (TLC), `wait_selector` (KingLED) |
+| `extraction/css_fallback.py` | Đọc nội dung một trang đã tải thế nào | `DOMAIN_FALLBACK_RULES` (Roman), `DOMAIN_SPEC_ROOT_SELECTORS` + `DOMAIN_PLACEHOLDER_PRICES` (KingLED) |
+
+> `sites/tlc.py` **không** phải khuôn mẫu để nhân bản cho site mới: đó là logic
+> phân trang qua **một category cụ thể** phục vụ bản pilot, không phải cấu hình
+> để crawl toàn site. Script `crawl_tlc_all.py` cũ đã bị xoá vì trùng hoàn toàn
+> với `crawl_site.py` — bộ dữ liệu `output/tlclighting_all.xlsx` dựng lại bằng:
+>
+> ```bash
+> .venv/bin/python scripts/crawl_site.py https://tlclighting.com.vn \
+>     --output output/tlclighting_all.xlsx
+> ```
 
 Kiến trúc được thiết kế để **không phải sửa tầng 1/1.5/2**. Việc cần làm:
 
+0. **Xác nhận đúng domain trước đã.** KingLED có **hai site cùng sống**:
+   `kingled.vn` là site giới thiệu — "trang sản phẩm" của nó thực chất là trang
+   dòng sản phẩm, và structured data trên đó là 25 block
+   `schema.org/SomeProducts` mô tả **menu danh mục** (`price=0`, `sku` rỗng) chứ
+   không phải sản phẩm đang xem. Crawl nhầm domain đó ra **123 bản ghi rỗng mà
+   không báo lỗi gì**. Catalogue thật nằm ở `kingled.com.vn`: 557 sản phẩm,
+   microdata `schema.org/Product` đầy đủ. Bài kiểm tra rẻ nhất: mở 1 trang sản
+   phẩm bất kỳ, xem tầng 1 có trả về đúng tên + giá + mã của **chính sản phẩm
+   đó** không.
 1. Chạy site-probing cho domain mới → xác định nguồn URL sản phẩm.
 2. Kiểm tra tầng 1 có lấy đủ field không. Nếu thiếu, thêm vài `SelectorRule` vào
    `DOMAIN_FALLBACK_RULES` cho domain đó (tầng 1.5).
-3. Nếu trang cần JS mới hiện thông số (case KingLED), truyền `click_selectors` /
-   `wait_selector` khi gọi `fetcher.fetch()`.
-4. Viết script entry point tương tự `scripts/crawl_tlc_downlight.py` để lấy danh
-   sách URL theo category của site đó.
+3. Nếu trang cần JS mới hiện thông số (case KingLED), thêm `wait_selector` vào
+   `SITE_PROFILES`.
+4. Nếu site không trình bày thông số bằng `<table>` (case KingLED), đăng ký
+   `DOMAIN_SPEC_ROOT_SELECTORS` — và **kiểm tra selector đó không bao trùm khối
+   "sản phẩm liên quan"**.
+5. Chạy thử `--limit` nhỏ (10–15 sản phẩm) rồi soi bằng
+   `scripts/report_crawl.py` **trước khi** chạy cả site — lỗi khoanh vùng sai
+   chỉ lộ ra khi nhìn dữ liệu, không lộ ra qua tỷ lệ lỗi.
 
 Tầng 2 (LLM) không cần đụng tới — prompt và schema đã là tổng quát.
 
@@ -563,10 +906,23 @@ cần credential):
 | `test_structured_data.py` | JSON-LD (TLC), Microdata (KingLED), fallback OpenGraph (Roman) |
 | `test_price.py` | Giá tri-state: số / "Liên hệ" / null |
 | `test_llm_fallback.py` | Chuyển provider khi provider chính lỗi (dùng provider giả) |
+| `test_html_cleaner.py` | Field "Thông số kỹ thuật" sạch: bảng TLC, bảng Roman sống sót qua strip `<form>`, và bố cục `<label>`/`<span>` của KingLED **không lẫn sản phẩm liên quan** |
+| `test_sitemap.py` | Chọn đúng sub-sitemap sản phẩm (2 kiểu đặt tên taxonomy) + phục hồi sitemap XML sai chuẩn mà vẫn từ chối trang HTML |
+| `test_advantages.py` | Mục "Ưu điểm" trên các hình dạng khác nhau (TLC `<li>`, KingLED/Roman `<h3>`, cụm đề mục không có tiêu đề) + không lấy nhầm chữ "ưu điểm" trong mega-menu, nhãn tab rỗng, cụm dưới tiêu đề mẹ mang tín hiệu âm |
+| `test_prompt.py` | Prompt tầng 2 nêu đủ cơ chế chống bịa, và ngoặc trong ví dụ JSON không bị nhân đôi |
+| `test_validate.py` | Loại giá trị không có trong nguồn, nhưng KHÔNG xoá nhầm giá trị chỉ đổi cách trình bày |
+| `test_site_registry.py` | Domain **chưa đăng ký** vẫn crawl được bằng hành vi mặc định — tính chất giữ cho "thêm đối thủ mới" không đẻ thêm file .py |
+| `test_pipeline_checkpoint.py` | Ghi tạm **giữa chừng** đợt crawl, không phải ở những giây cuối |
 
 Fixture `tlc_blog_post.html` và `tlc_static_page.html` là 2 trang thật lấy từ
 chính `post-sitemap.xml` / `page-sitemap.xml` của TLC — dùng làm mẫu "rác" đại
 diện cho thứ lọt vào sitemap, để chỉnh ngưỡng của bộ phát hiện trang sản phẩm.
+
+Có **hai** fixture KingLED và chúng không thay thế nhau:
+`kingled_product.html` là bản HTML tĩnh (dùng cho test structured data), còn
+`kingled_product_rendered.html` là **cùng trang đó sau khi JS chạy** — chỉ bản
+sau mới có nội dung trong khối thông số, và chỉ bản sau mới thể hiện được bẫy
+"sản phẩm liên quan dùng chung bố cục".
 
 > **Chưa có test cho:** (a) bản ghi lỗi tầng 2 bị gắn cờ và sống sót qua vòng
 > ghi/đọc Excel, (b) bộ phát hiện từ chối 2 fixture "rác" ở trên. Cả hai hành vi
