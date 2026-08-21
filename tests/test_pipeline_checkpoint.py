@@ -3,6 +3,7 @@
 Khong dung mang: fetcher gia tra ve ket qua fetch that bai nen pipeline di
 thang toi nhanh tao ban ghi loi - du de kiem tra vong lap va nhip ghi file.
 """
+import time
 from dataclasses import dataclass
 from typing import Optional
 
@@ -24,7 +25,7 @@ class _FakeFetcher:
     def __init__(self):
         self.calls = 0
 
-    def fetch(self, url):
+    def fetch(self, url, **kwargs):
         self.calls += 1
         return _FailedFetch()
 
@@ -73,3 +74,42 @@ def test_reused_records_do_not_cost_a_fetch(tmp_path):
         URLS, llm_provider=object(), fetcher=fetcher, existing={URLS[0]: prior}, workers=1,
     )
     assert fetcher.calls == len(URLS) - 1
+
+
+class _SlowFetcher(_FakeFetcher):
+    """Ghi lai xem file checkpoint DA ton tai chua tai moi lan fetch."""
+
+    def __init__(self, path):
+        super().__init__()
+        self._path = path
+        self.checkpoint_existed_at_fetch: list[bool] = []
+
+    def fetch(self, url, **kwargs):
+        # Nhuong luot cho worker pool chay - khong co no thi phep do "da ghi
+        # tam chua" phu thuoc vao thoi diem scheduler nha luong.
+        time.sleep(0.05)
+        self.checkpoint_existed_at_fetch.append(self._path.exists())
+        return super().fetch(url)
+
+
+def test_checkpoint_is_written_while_fetching_is_still_going(tmp_path):
+    """Regression: ban dau phan thu hoach ket qua nam SAU ca vong lap fetch,
+    nen checkpoint chi chay o nhung giay cuoi cung cua ca dot - dung luc no vo
+    dung. Lan chay TLC 485 san pham khong he co 1 dong "Checkpoint" nao trong
+    log vi ly do nay, va dot KingLED 549 san pham (~70 phut) cung se chay suot
+    ma khong ghi ra gi neu khong sua.
+
+    Do dung tinh chat can co: den luot fetch cuoi cung thi file checkpoint
+    PHAI da ton tai roi.
+    """
+    path = tmp_path / "out.xlsx"
+    fetcher = _SlowFetcher(path)
+
+    crawl_product_urls(
+        URLS, llm_provider=object(), fetcher=fetcher, workers=4,
+        checkpoint_path=path, checkpoint_every=4,
+    )
+
+    assert fetcher.checkpoint_existed_at_fetch[-1], (
+        "hết vòng fetch mà vẫn chưa ghi tạm lần nào - checkpoint vô dụng"
+    )

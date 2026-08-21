@@ -7,25 +7,41 @@ prober.py) vi do moi la "noi dung trang" theo dung nghia cua stealth-fetch spec.
 """
 from __future__ import annotations
 
+import logging
 import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from typing import Optional
 
 import requests
+from lxml import etree
 
 from ..config import FETCH
 from .robots import get_sitemap_urls_from_robots
 
+logger = logging.getLogger(__name__)
+
 COMMON_SITEMAP_PATHS = ("/sitemap_index.xml", "/sitemap.xml", "/product-sitemap.xml")
 
-# Sub-sitemap cua TAXONOMY san pham, khong phai cua san pham. WooCommerce dat
-# ten taxonomy theo tien to `product_` (product_cat, product_tag, product_brand,
-# product_shipping_class) nen chung deu lot qua bo loc "co chu product" o duoi
-# neu khong loai rieng - case TLC: product_cat-sitemap.xml keo them 73 trang
-# danh muc `/danh-muc/...` vao danh sach "URL san pham", lam crawler ton luot
-# fetch + goi LLM cho trang khong phai san pham va sinh ra ban ghi rong.
-_TAXONOMY_SITEMAP = re.compile(r"product_[a-z_]+-sitemap", re.IGNORECASE)
+# Sub-sitemap cua TAXONOMY san pham, khong phai cua san pham. Chung deu lot qua
+# bo loc "co chu product" o duoi neu khong loai rieng, va hau qua giong nhau o
+# moi site: crawler ton luot fetch + goi LLM cho trang danh muc de roi sinh ra
+# ban ghi rong. Da gap 2 cach dat ten khac han nhau, nen day la 2 nhanh regex:
+#
+#   1. WooCommerce dat ten taxonomy theo tien to `product_` (product_cat,
+#      product_tag, product_brand, product_shipping_class) - case TLC:
+#      product_cat-sitemap.xml keo them 73 trang `/danh-muc/...`.
+#   2. Sitemap dong theo content-type dat ten taxonomy bang hau to Group/
+#      Category - case KingLED: `sitemap.xml?page=ProductGroup` (138 trang
+#      danh muc) nam ngay canh `sitemap.xml?page=Product` (557 san pham) trong
+#      cung 1 sitemap index. O day URL san pham va URL danh muc DEU phang
+#      (`https://kingled.com.vn/<slug>`) nen khong the loc lai bang pattern
+#      duong dan nhu cach TLC lam - phan tach cua sitemap la can cu duy nhat.
+_TAXONOMY_SITEMAP = re.compile(
+    r"product_[a-z_]+-sitemap"
+    r"|product[-_]?(group|categor(y|ies)|cat|tag|brand)s?\b",
+    re.IGNORECASE,
+)
 
 _REQUEST_HEADERS = {
     "User-Agent": FETCH.default_user_agent,
@@ -54,8 +70,49 @@ def discover_sitemap_candidates(base_url: str) -> list[str]:
     return ordered
 
 
-def _local_tag(tag: str) -> str:
+def _local_tag(tag) -> str:
+    """Ten the bo namespace. Nhan ca element cua lxml, noi `.tag` cua comment /
+    processing-instruction la 1 callable chu khong phai chuoi."""
+    if not isinstance(tag, str):
+        return ""
     return tag.rsplit("}", 1)[-1] if "}" in tag else tag
+
+
+def _is_sitemap_root(root) -> bool:
+    """Trang HTML hop le van parse duoc thanh cay XML (root tag `html`) - phai
+    kiem tra tag goc chu khong chi kiem tra "co parse duoc khong"."""
+    return root is not None and _local_tag(root.tag) in ("sitemapindex", "urlset")
+
+
+def _parse_sitemap_xml(content: bytes):
+    """Parse XML sitemap, khoan dung voi XML sai chuan.
+
+    Uu tien ElementTree (nghiem ngat, va tra ve None cho trang HTML 200 gia -
+    hanh vi can giu). Nhung sitemap that ngoai doi khong phai luc nao cung hop
+    le: `kingled.com.vn/sitemap.xml?page=Product` nhung 557 san pham lai chen
+    URL anh chua dau `&` chua escape (`...&refer=http___imgse...`) -> ET bao
+    "not well-formed" ngay ky tu do va CA sitemap bi vut di, ket qua la site
+    tut xuong nhanh menu-crawl du sitemap cua no hoan toan dung du lieu.
+    Vi vay khi ET that bai thi thu lai bang parser recover cua lxml, no bo qua
+    dung cho hong va giu nguyen phan con lai.
+    """
+    try:
+        root = ET.fromstring(content)
+    except ET.ParseError:
+        root = None
+    if _is_sitemap_root(root):
+        return root
+
+    try:
+        recovered = etree.fromstring(
+            content, parser=etree.XMLParser(recover=True, huge_tree=True)
+        )
+    except etree.XMLSyntaxError:
+        return None
+    if not _is_sitemap_root(recovered):
+        return None
+    logger.info("Sitemap XML sai chuan, đã parse lại ở chế độ recover")
+    return recovered
 
 
 def resolve_sitemap_entries(
@@ -76,9 +133,8 @@ def resolve_sitemap_entries(
     if resp.status_code != 200:
         return []
 
-    try:
-        root = ET.fromstring(resp.content)
-    except ET.ParseError:
+    root = _parse_sitemap_xml(resp.content)
+    if root is None:
         return []
 
     root_tag = _local_tag(root.tag)
