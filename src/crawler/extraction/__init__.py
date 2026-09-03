@@ -1,4 +1,11 @@
-from .advantages import extract_advantages
+from .advantages import (
+    NGUON_CUM,
+    NGUON_KHONG_CO,
+    NGUON_LA_BAN,
+    NGUON_TU_KHOA,
+    Advantages,
+    extract_advantages,
+)
 from .css_fallback import (
     DOMAIN_FALLBACK_RULES,
     DOMAIN_NOISE_SELECTORS,
@@ -14,6 +21,11 @@ from .structured_data import StructuredDataResult, extract_structured_data
 
 __all__ = [
     "extract_advantages",
+    "Advantages",
+    "NGUON_TU_KHOA",
+    "NGUON_LA_BAN",
+    "NGUON_CUM",
+    "NGUON_KHONG_CO",
     "StructuredDataResult",
     "extract_structured_data",
     "DOMAIN_FALLBACK_RULES",

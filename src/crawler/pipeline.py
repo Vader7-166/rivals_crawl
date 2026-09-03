@@ -28,8 +28,16 @@ from .llm.provider import LLMProvider, LLMProviderError
 from .llm.validate import ExtractionValidationError
 from .llm.html_cleaner import extract_spec_text
 from .record import CrawlStatus, ProductRecord, write_records_to_excel
+from .store import CrawlStore
 
 logger = logging.getLogger(__name__)
+
+# Phien ban cua BO TRICH XUAT (tang 1 + 1.5 + 1.6 + 2), ghi kem moi ban ghi
+# trong kho du lieu. PHAI tang khi doi hanh vi trich xuat - do la thu cho phep
+# so hai lan chay tren cung mot snapshot de biet mot chinh sua va duoc may o va
+# lam hong may o (scripts/diff_extractions.py). Khong tang thi hai lan chay lan
+# vao nhau va phep so mat y nghia.
+EXTRACTOR_VERSION = "v1"
 
 
 def crawl_product_urls(
@@ -42,16 +50,24 @@ def crawl_product_urls(
     checkpoint_path: Optional[Path] = None,
     checkpoint_every: int = 15,
     fetch_options: Optional[dict] = None,
+    store: Optional[CrawlStore] = None,
+    extractor_version: str = EXTRACTOR_VERSION,
 ) -> list[ProductRecord]:
-    """Crawl danh sach URL san pham. Neu `existing` duoc truyen vao (tu
-    excel_reader.load_existing_records), cac URL da co ban ghi trang thai OK
-    se duoc tai su dung thay vi crawl lai (crawl-lai-co-chon-loc, task 2.4/8.6).
+    """Crawl danh sach URL san pham, tai su dung ban ghi da OK thay vi crawl
+    lai (crawl-lai-co-chon-loc).
+
+    Trang thai lay tu `store` neu co; `existing` chi de ghi de tuong minh (test,
+    hoac goi tu code chua dung kho du lieu).
 
     `workers` > 1 thi fetch van TUAN TU (1 browser duy nhat) nhung phan xu ly
     tang 1/1.5/2 chay song song va chong len phan fetch - xem _crawl_pipelined
     de biet vi sao KHONG song song hoa phan fetch.
 
-    Neu `checkpoint_path` duoc truyen, ket qua tam thoi duoc ghi ra file .xlsx
+    `checkpoint_path` CHI con tac dung khi KHONG co `store` (duong chay cu).
+    Co kho du lieu thi moi ban ghi duoc commit ngay khi xong - diem khoi phuc
+    day hon, va viec ghi Excel lui han ve buoc ket xuat cuoi.
+
+    Neu `checkpoint_path` duoc truyen (va khong co store), ket qua tam duoc ghi ra .xlsx
     do sau moi `checkpoint_every` san pham MOI crawl (khong tinh cac ban ghi
     tai su dung tu `existing`) - moi mot pipeline chay lau (hang chuc phut cho
     ca category, ~35 phut cho ca site) co the bi ngat giua chung boi tien trinh
@@ -63,10 +79,27 @@ def crawl_product_urls(
     `fetch_options` duoc truyen thang cho `fetcher.fetch()` (vd `wait_selector`
     / `click_selectors` cho site chi render thong so sau khi JS chay - case
     KingLED). De rong thi fetch mac dinh nhu cu.
+
+    `store` (tuy chon) la kho du lieu: HTML duoc luu NGAY SAU khi fetch, ket qua
+    trich xuat luu sau do kem `extractor_version`. Ca hai deu ghi tu DUY NHAT
+    main thread - worker chi tinh toan roi tra ban ghi ve. De None thi pipeline
+    chay y nhu truoc khi co kho du lieu.
     """
-    existing = existing or {}
     fetch_options = fetch_options or {}
     workers = CRAWL.workers if workers is None else workers
+    # Nguon trang thai la KHO DU LIEU, khong con la file .xlsx doc nguoc. Khac
+    # biet quan trong: khong phu thuoc vao su ton tai cua file nao ca, nen cai
+    # bay cu ("xoa file .xlsx truoc khi chay lai, neu khong se khong co gi thay
+    # doi" - docs/todo.md) bien mat. `existing` van nhan duoc de goi tu code cu
+    # / test khong co kho van chay.
+    if existing is None and store is not None and urls:
+        # Gom theo MOI domain co mat chu khong chi domain cua URL dau: mot lan
+        # chay thuong chi nham 1 site, nhung gia dinh do khong duoc phep im
+        # lang - danh sach lai domain thi cac URL con lai se bi crawl lai het.
+        existing = {}
+        for site in {urlparse(u).netloc for u in urls}:
+            existing.update(store.current_records(site))
+    existing = existing or {}
 
     # Tach truoc: ban ghi da OK thi khong ton fetch lan goi LLM nao.
     results: list[Optional[ProductRecord]] = [None] * len(urls)
@@ -79,6 +112,12 @@ def crawl_product_urls(
             todo.append((index, url))
 
     def checkpoint(newly_crawled: int) -> None:
+        # Co kho du lieu thi KHONG ghi tam ra .xlsx nua: moi ban ghi da duoc
+        # commit ngay khi xong, tuc diem khoi phuc day hon han (tung ban ghi so
+        # voi moi 40 ban). Ghi Excel gio chi con la buoc KET XUAT o cuoi
+        # (store/export.py), khong con la co che chong mat tien do.
+        if store is not None:
+            return
         if checkpoint_path is None or newly_crawled % checkpoint_every:
             return
         logger.info(
@@ -100,15 +139,24 @@ def crawl_product_urls(
         try:
             if workers > 1:
                 _crawl_pipelined(
-                    todo, results, fetcher, llm_provider, workers, checkpoint, fetch_options
+                    todo, results, fetcher, llm_provider, workers, checkpoint,
+                    fetch_options, store, extractor_version,
                 )
             else:
                 for done, (index, url) in enumerate(todo, start=1):
-                    results[index] = _crawl_single_product(
-                        url, fallback_product_id=str(index + 1),
-                        fetcher=fetcher, llm_provider=llm_provider,
-                        fetch_options=fetch_options,
+                    fetch_result = fetcher.fetch(url, **fetch_options)
+                    # Luu HTML TRUOC khi trich xuat: tang 2 no loi hay tien
+                    # trinh bi kill giua chung thi trang van con de chay lai.
+                    snapshot_id = store.save_snapshot(url, fetch_result) if store else None
+                    record = _build_record(
+                        url, fetch_result, str(index + 1), llm_provider
                     )
+                    results[index] = record
+                    if store is not None:
+                        store.save_extraction(
+                            record, snapshot_id=snapshot_id,
+                            extractor_version=extractor_version,
+                        )
                     checkpoint(done)
         finally:
             if owned is not None:
@@ -125,6 +173,8 @@ def _crawl_pipelined(
     workers: int,
     checkpoint: Callable[[int], None],
     fetch_options: dict,
+    store: Optional[CrawlStore] = None,
+    extractor_version: str = EXTRACTOR_VERSION,
 ) -> None:
     """Fetch TUAN TU (1 browser) nhung xu ly SONG SONG, 2 phan chong len nhau.
 
@@ -147,6 +197,7 @@ def _crawl_pipelined(
     """
     with ThreadPoolExecutor(max_workers=workers) as pool:
         futures = []
+        snapshot_ids: list[Optional[int]] = []  # song song voi `futures`
         collected = 0  # so future da thu hoach, cung la so dem cho checkpoint
 
         def harvest(block: bool) -> None:
@@ -160,6 +211,14 @@ def _crawl_pipelined(
             while collected < len(futures) and (block or futures[collected].done()):
                 index, record = futures[collected].result()
                 results[index] = record
+                # Diem ghi DON LUONG: harvest() chi chay tren main thread. Ghi
+                # tu trong worker se cho nhieu luong cung dung mot ket noi
+                # SQLite - vua sai vua de dinh `database is locked`.
+                if store is not None:
+                    store.save_extraction(
+                        record, snapshot_id=snapshot_ids[collected],
+                        extractor_version=extractor_version,
+                    )
                 collected += 1
                 checkpoint(collected)
 
@@ -167,6 +226,10 @@ def _crawl_pipelined(
             # Chi buoc nay chiem main thread; submit() tra ve ngay lap tuc nen
             # vong lap chay tiep sang URL ke tiep trong khi worker dang xu ly.
             fetch_result = fetcher.fetch(url, **fetch_options)
+            # Van la main thread -> ghi kho du lieu duoc. Luu HTML ngay bay gio,
+            # truoc khi day sang worker: fetch da ton thoi gian roi, khong duoc
+            # phep mat no chi vi tang 2 no loi o buoc sau.
+            snapshot_ids.append(store.save_snapshot(url, fetch_result) if store else None)
             futures.append(
                 pool.submit(
                     _record_from_fetch, index, url, fetch_result,
@@ -184,19 +247,6 @@ def _crawl_pipelined(
             harvest(block=False)
 
         harvest(block=True)
-
-
-def _crawl_single_product(
-    url: str,
-    *,
-    fallback_product_id: str,
-    fetcher: StealthFetcher,
-    llm_provider: LLMProvider,
-    fetch_options: Optional[dict] = None,
-) -> ProductRecord:
-    """Duong chay tuan tu: fetch roi xu ly ngay trong cung 1 luong."""
-    fetch_result = fetcher.fetch(url, **(fetch_options or {}))
-    return _build_record(url, fetch_result, fallback_product_id, llm_provider)
 
 
 def _record_from_fetch(
@@ -259,11 +309,76 @@ def _build_record(
             noise_selector=noise_selector,
         )
         tags = extraction.tags
-        ma_san_pham = ma_san_pham or extraction.ma_san_pham
+        ma_san_pham_llm = extraction.ma_san_pham
         advantage_anchor = extraction.muc_uu_diem
     except (LLMProviderError, ExtractionValidationError) as exc:
         logger.warning("Tầng 2 (LLM) thất bại cho %s: %s", url, exc)
+        ma_san_pham_llm = None
         llm_error = str(exc)
+
+    return _assemble_record(
+        url, html, fallback_product_id,
+        structured=structured, gia=gia, ma_san_pham=ma_san_pham,
+        noise_selector=noise_selector, spec_root_selector=spec_root_selector,
+        tags=tags, ma_san_pham_llm=ma_san_pham_llm, anchor=advantage_anchor,
+        llm_error=llm_error,
+    )
+
+
+def rebuild_record_from_html(
+    url: str,
+    html: str,
+    fallback_product_id: str,
+    *,
+    tags: Optional[dict] = None,
+    ma_san_pham_llm: Optional[str] = None,
+    anchor: Optional[str] = None,
+) -> ProductRecord:
+    """Chay lai tang 1 / 1.5 / 1.6 tren HTML da luu, KHONG goi LLM.
+
+    Ket qua tang 2 (`tags`, `ma_san_pham_llm`, `anchor`) duoc TRUYEN VAO tu lan
+    trich xuat truoc da luu trong kho - chung la dau ra cua mot lan goi mang da
+    tra tien roi, khong co ly do goi lai. Do that: 549 trang trong 203 giay
+    (370 ms/trang), so voi ~35 phut cua mot luot crawl lai.
+    """
+    domain = urlparse(url).netloc
+    spec_root_selector = get_spec_root_selector(domain)
+    noise_selector = get_noise_selector(domain)
+    structured = extract_structured_data(html, url)
+
+    gia_tang1 = None if is_placeholder_price(domain, structured.gia) else structured.gia
+    patched = apply_css_fallback(
+        html, {"gia": gia_tang1, "ma_san_pham": structured.ma_san_pham}, domain
+    )
+    return _assemble_record(
+        url, html, fallback_product_id,
+        structured=structured,
+        gia=patched.get("gia", gia_tang1),
+        ma_san_pham=patched.get("ma_san_pham") or structured.ma_san_pham,
+        noise_selector=noise_selector, spec_root_selector=spec_root_selector,
+        tags=tags or {}, ma_san_pham_llm=ma_san_pham_llm, anchor=anchor,
+        llm_error=None,
+    )
+
+
+def _assemble_record(
+    url: str,
+    html: str,
+    fallback_product_id: str,
+    *,
+    structured,
+    gia,
+    ma_san_pham: Optional[str],
+    noise_selector: Optional[str],
+    spec_root_selector: Optional[str],
+    tags: dict,
+    ma_san_pham_llm: Optional[str],
+    anchor: Optional[str],
+    llm_error: Optional[str],
+) -> ProductRecord:
+    """Phan SAU tang 2: tang 1.6 + dung ban ghi. Dung chung cho ca duong crawl
+    that lan duong chay lai tren snapshot, de hai duong khong the lech nhau."""
+    ma_san_pham = ma_san_pham or ma_san_pham_llm
 
     # Cum mo ta san pham -> 2 cot "Ưu điểm" cua khuon tham chieu. Co che tong
     # quat cho moi site (tim heading chua chu "ưu điểm"), khong co config rieng
@@ -272,8 +387,8 @@ def _build_record(
     # khong bat duoc (tieu de muc nay khong co chuan nao: "Đặc điểm nổi bật",
     # "Lợi ích khi sử dụng", "Tại sao nên dùng...", hoac khong co tieu de).
     # Khong ton them request nao - dung ket qua cua chinh loi goi tang 2 o tren.
-    tom_tat_uu_diem, noi_dung_uu_diem = extract_advantages(
-        html, noise_selector=noise_selector, anchor=advantage_anchor
+    advantages = extract_advantages(
+        html, noise_selector=noise_selector, anchor=anchor
     )
 
     record = ProductRecord(
@@ -287,8 +402,10 @@ def _build_record(
         gia=gia,
         link_san_pham=url,
         link_anh_san_pham=structured.link_anh_san_pham,
-        tom_tat_uu_diem_tinh_nang=tom_tat_uu_diem,
-        noi_dung_uu_diem_sp=noi_dung_uu_diem,
+        tom_tat_uu_diem_tinh_nang=advantages.tom_tat,
+        noi_dung_uu_diem_sp=advantages.noi_dung,
+        uu_diem_nguon=advantages.nguon,
+        uu_diem_la_ban=anchor,
         thong_so_ky_thuat=extract_spec_text(
             html, spec_root_selector=spec_root_selector, noise_selector=noise_selector
         ) or None,

@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from openpyxl import load_workbook  # noqa: E402
 
-from crawler.record import COLUMNS, load_existing_records  # noqa: E402
+from crawler.record import COLUMNS, import_legacy_xlsx  # noqa: E402
 from crawler.record.price import LIEN_HE  # noqa: E402
 
 DEFAULT_PATH = Path("output/tlclighting_all.xlsx")
@@ -57,7 +57,7 @@ def main() -> None:
 
     wb = load_workbook(path, read_only=True)
     sheets = {name: wb[name].max_row - 1 for name in wb.sheetnames}
-    records = list(load_existing_records(path).values())
+    records = list(import_legacy_xlsx(path).values())
     total = len(records)
 
     print(f"FILE: {path}   ({total} bản ghi, {len(sheets)} sheet)\n")

@@ -7,7 +7,7 @@ from crawler.record import (
     COLUMNS,
     UNGROUPED_SHEET,
     ProductRecord,
-    load_existing_records,
+    import_legacy_xlsx,
     write_records_to_excel,
 )
 from crawler.record.price import LIEN_HE
@@ -112,7 +112,7 @@ def test_round_trip_through_all_sheets(tmp_path):
     ]
     path = write_records_to_excel(records, tmp_path / "out.xlsx")
 
-    back = load_existing_records(path)
+    back = import_legacy_xlsx(path)
     # Doc gop het cac sheet lai - ben goi chi tra cuu theo URL, khong quan tam
     # ban ghi nam sheet nao.
     assert set(back) == {"https://x/1", "https://x/2", "https://x/3"}
@@ -145,6 +145,6 @@ def test_old_file_with_fewer_columns_is_still_readable(tmp_path):
     path = tmp_path / "old.xlsx"
     wb.save(path)
 
-    back = load_existing_records(path)
+    back = import_legacy_xlsx(path)
     assert back["https://x/1"].crawl_status.value == "ok"
     assert back["https://x/1"].gia_doi_chieu is None

@@ -31,15 +31,17 @@ Kết quả trên `kingled.com.vn` (549 sản phẩm, chạy 21/08/2026):
 
 Đợt 21/08 **chỉ chạy KingLED** (site có nhiều ô trống nhất). Hai site còn lại:
 
-- `output/tlclighting_all.xlsx` (485 sản phẩm) đang là kết quả của bản tầng 1.6
-  **chưa bật nhánh cụm** → 2 cột ưu điểm còn thiếu ở các trang không có tiêu đề
-  mục. Chạy lại ~35 phút.
+- ~~`output/tlclighting_all.xlsx` (485 sản phẩm) là kết quả của bản chưa bật
+  nhánh cụm~~ — **đã crawl lại 03/09/2026** (32,8 phút, 4,05 s/SP) vào
+  `output/tlclighting.com.vn.xlsx` + kho dữ liệu. Độ phủ 2 cột ưu điểm:
+  **98,1%** (`anchor` 366 / `keyword` 109 / `cluster` 1 / không tìm thấy 9).
 - **Roman chưa từng crawl toàn site.** Mới chỉ dùng làm fixture cho test.
 
-> Xoá file .xlsx trước khi chạy lại, **nếu không sẽ không có gì thay đổi**: 2 cột
-> ưu điểm không nằm trong `REQUIRED_FIELDS`, nên bản ghi cũ vẫn mang trạng thái
-> OK và được tái sử dụng nguyên vẹn. Đây là hành vi đúng của cơ chế crawl lại có
-> chọn lọc, chỉ là dễ quên.
+> ~~Xoá file .xlsx trước khi chạy lại, nếu không sẽ không có gì thay đổi~~ —
+> **cái bẫy này đã biến mất** cùng change `product-database`. Trạng thái không
+> còn nằm trong file .xlsx mà trong kho dữ liệu, và muốn chạy lại bộ trích xuất
+> trên dữ liệu cũ thì dùng `scripts/reextract.py` — không crawl lại, không phụ
+> thuộc file .xlsx nào.
 
 ---
 
@@ -54,6 +56,24 @@ Kết quả trên `kingled.com.vn` (549 sản phẩm, chạy 21/08/2026):
   việc chúng bị crawl lại ở các lần chạy sau.
 - Chưa có test cho: bản ghi lỗi tầng 2 sống sót qua vòng ghi/đọc Excel, và bộ
   phát hiện từ chối 2 fixture "rác" của TLC.
+- **Tiêu đề mục nằm trong `<p>` thì bắt trượt.** `extract_advantages` chỉ khớp
+  trên thẻ heading (`h1`-`h4`) — có chủ đích, vì tìm trên text thô sẽ rơi vào
+  mega-menu. Nhưng TLC có trang viết tiêu đề mục bằng `<p>`:
+  `den-led-am-tran-khoi-duc-5w-ba-mau` có `<p>4. Ưu điểm đèn LED âm trần khối
+  đúc 5W</p>` và bị bỏ qua hoàn toàn.
+
+  **Đo trên 485 trang TLC:** 9 trang bị báo "không tìm thấy", trong đó **1 là
+  bắt trượt kiểu này, 8 là site thật sự không có mục** (để trống mới đúng). Tức
+  lớp này nhỏ trên TLC — nhưng chưa đo trên KingLED/Roman.
+
+  Hướng khả dĩ: nhận `<p>`/`<div>` ngắn (<100 ký tự) mang tín hiệu dương **và**
+  có số thứ tự mở đầu (`4. `) làm ứng viên tiêu đề mục. Ràng buộc "có đánh số"
+  là thứ giữ cho nó không khớp bừa vào câu văn trong đoạn mô tả.
+
+  Cách kiểm chứng giờ đã rẻ: sửa xong chạy `scripts/reextract.py` +
+  `scripts/diff_extractions.py` trên 485 snapshot đã lưu — biết ngay vá được
+  mấy ô và làm hỏng mấy ô, không phải crawl lại.
+
 - 6/360 ô "Tóm tắt ưu điểm" của KingLED là mục lấy nhầm (danh sách phụ kiện,
   hoặc mục quá mỏng chỉ 1 dòng). Đã chấp nhận đánh đổi để lấy độ phủ — xem
   [pipeline.md](pipeline.md) mục "Nhánh cụm đề mục". Nếu sau này muốn siết,

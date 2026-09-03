@@ -1,4 +1,11 @@
-"""Doc lai file .xlsx da co cua 1 site de phuc vu crawl lai co chon loc. Task 2.4.
+"""Doc lai file .xlsx da xuat truoc day de NHAP vao kho du lieu.
+
+Truoc day day la nguon trang thai cua co che crawl-lai-co-chon-loc; vai tro do
+nay thuoc ve kho du lieu (`store.CrawlStore.current_records`), von khong phu
+thuoc vao su ton tai cua file .xlsx nao. Ham o day doi ten tu
+`load_existing_records` thanh `import_legacy_xlsx` chinh de khong con doc nhu
+mot API trang thai dung chung - no la duong DI MOT CHIEU tu dinh dang cu vao
+kho.
 
 Vi field trang thai crawl khong duoc luu trong file Excel (xem excel_writer),
 trang thai duoc SUY RA LAI khi doc: ban ghi thieu 1 trong cac field bat buoc
@@ -6,20 +13,25 @@ trang thai duoc SUY RA LAI khi doc: ban ghi thieu 1 trong cac field bat buoc
 fetch hay thieu field khi trich xuat.
 
 Cot duoc ghep theo TEN header (da strip) chu khong theo vi tri - xem chu thich
-trong load_existing_records.
+trong import_legacy_xlsx.
 """
 from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Iterable
 
 from openpyxl import load_workbook
 
+from .excel_writer import REVIEW_SHEET
 from .price import normalize_price
 from .schema import COLUMNS, ProductRecord
 
 
-def load_existing_records(input_path: str | Path) -> dict[str, ProductRecord]:
+def import_legacy_xlsx(
+    input_path: str | Path,
+    skip_sheets: Iterable[str] | None = None,
+) -> dict[str, ProductRecord]:
     """Doc file .xlsx da co, tra ve map link_san_pham -> ProductRecord (da
     recompute_status()). Tra ve dict rong neu file chua ton tai.
 
@@ -33,8 +45,19 @@ def load_existing_records(input_path: str | Path) -> dict[str, ProductRecord]:
 
     wb = load_workbook(input_path, read_only=True, data_only=True)
 
+    # Sheet canh bao bi bo qua MAC DINH: no do chinh buoc ket xuat sinh ra,
+    # khong chua san pham, va khong co cot `Product_ID` nen doc vao se lam
+    # ProductRecord no thang. Bat moi ben goi tu nho la mot cai bay khong can
+    # thiet. `skip_sheets` de them ten khac.
+    skip = {REVIEW_SHEET} | set(skip_sheets or ())
     records: dict[str, ProductRecord] = {}
     for sheet_name in wb.sheetnames:
+        # Sheet canh bao (do buoc ket xuat sinh ra) KHONG chua san pham - doc no
+        # vao day se bien cac dong "viec can lam" thanh ban ghi san pham. Ham
+        # nay gop PHANG moi sheet theo URL nen khong co ranh gioi nao khac de
+        # phan biet, phai loai bang ten.
+        if sheet_name in skip:
+            continue
         _read_sheet_into(wb[sheet_name], records)
     return records
 
@@ -88,4 +111,4 @@ def records_needing_recrawl(records: dict[str, ProductRecord]) -> list[ProductRe
     return [r for r in records.values() if r.crawl_status != CrawlStatus.OK]
 
 
-__all__ = ["load_existing_records", "records_needing_recrawl"]
+__all__ = ["import_legacy_xlsx", "records_needing_recrawl"]

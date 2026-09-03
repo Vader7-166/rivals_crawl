@@ -175,6 +175,23 @@ def clean_html_for_llm(
     return combined[:max_chars]
 
 
+def page_text(html: str, max_chars: int | None = None) -> str:
+    """Toan van text cua trang, da bo cac khoi khong phai noi dung.
+
+    Dung cho sheet canh bao cua file xuat ra: nguoi xu ly tay can DOC de tim
+    muc uu diem roi copy, va HTML tho thi khong doc bang mat duoc. Do that tren
+    fixture, text sau khi don gon hon HTML mot bac lon:
+        kingled 146.199 -> 16.582 | tlc 217.007 -> 9.472 | roman 544.985 -> 6.244
+    tuc lot thoai mai vao gioi han 32.767 ky tu cua mot o Excel, trong khi HTML
+    thi khong (xem _fit_cell trong record/excel_writer.py).
+    """
+    soup = BeautifulSoup(html, "lxml")
+    for tag in soup(_STRIP_TAGS):
+        tag.decompose()
+    text = (soup.body or soup).get_text("\n", strip=True)
+    return text[:max_chars] if max_chars else text
+
+
 def extract_spec_text(
     html: str,
     max_chars: int = 3000,

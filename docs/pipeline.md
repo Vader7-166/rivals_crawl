@@ -528,6 +528,76 @@ tham chiếu.
 
 ---
 
+## Kho dữ liệu (crawl.db)
+
+**Code:** `src/crawler/store/`
+
+Nguồn sự thật của dự án. File `.xlsx` **không còn là nơi lưu trữ** — nó là bản
+kết xuất ở bước cuối.
+
+Ba bảng, tách **hai lịch sử khác bản chất**:
+
+```
+      đối thủ đổi trang                      MÌNH đổi code
+            │                                      │
+            ▼                                      ▼
+   ┌──────────────────┐                  ┌────────────────────┐
+   │  page_snapshots  │  1:N             │    extractions     │
+   │  1 dòng / FETCH  │─────────────────▶│  1 dòng / TRÍCH    │
+   │  html_gz (zlib)  │                  │  extractor_version │
+   └──────────────────┘                  └────────────────────┘
+                                                   │ 1:N
+                                          ┌────────────────────┐
+                                          │   product_tags     │
+                                          └────────────────────┘
+```
+
+Gộp chung vào một bảng ghi đè thì khi một giá trị khác đi so với lần trước,
+**không phân biệt được** *"đối thủ hạ giá"* với *"mình vừa sửa parser"*. Tách ra
+thì phân biệt được ngay: snapshot đổi → họ đổi; snapshot y nguyên mà extraction
+đổi → mình đổi.
+
+`products` là một **VIEW** ("bản trích xuất mới nhất trên snapshot mới nhất mỗi
+URL"), không phải bảng — view luôn đúng theo định nghĩa, không lệch được với
+bảng nguồn.
+
+### HTML được lưu cho MỌI trang
+
+Không chỉ trang trích xuất hỏng. Lý do: ô **sai mà tưởng đúng** không tự khai
+báo — pipeline coi nó là thành công nên sẽ không lưu HTML, tức đúng ca cần soi
+nhất lại là ca không có dữ liệu để soi. Tỉ lệ nén zlib đo thật: 8,8× (KingLED) /
+4,8× (TLC) / 3,9× (Roman) → ~32 MB cho 1034 sản phẩm đã có.
+
+### Sửa bộ trích xuất mà không phải crawl lại
+
+```bash
+python scripts/reextract.py kingled.com.vn --version v2
+python scripts/diff_extractions.py kingled.com.vn v1 v2
+```
+
+`reextract` chạy lại tầng 1/1.5/1.6 trên HTML đã lưu — **0 request mạng, 0 quota
+LLM**: kết quả tầng 2 (`tags`, `ma_san_pham`, và **la bàn** `uu_diem_la_ban`)
+được mang theo từ lần trích xuất trước. Đo thật: **549 trang trong 203 giây**
+(370 ms/trang) so với ~35 phút của một lượt crawl lại — 10×.
+
+> Vì sao phải lưu cả la bàn chứ không chỉ `uu_diem_nguon`: nhánh `anchor` chỉ
+> tìm được mục nhờ một dòng do tầng 2 chỉ ra. Không lưu lại thì mỗi lần chạy lại
+> đều mất sạch nhánh đó, và `diff_extractions` báo hồi quy **giả** ở mọi ô vốn
+> tìm thấy nhờ la bàn.
+
+`diff_extractions` trả lời câu hỏi trước đây không trả lời được: một chỉnh sửa
+**vá được mấy ô và làm hỏng mấy ô**.
+
+### Nguồn gốc trích xuất
+
+Cột `uu_diem_nguon` ghi lại **đường nào** định vị được mục ưu điểm:
+`keyword` / `anchor` / `cluster` / `none`. Thông tin này trước đây bị vứt đi
+ngay sau khi chấm điểm. Giữ lại thì món nợ kỹ thuật có ý thức ở nhánh cụm
+(6/360 ô lấy nhầm của KingLED) trở thành một câu truy vấn thay vì một buổi mở
+tay 360 ô.
+
+---
+
 ## Bản ghi sản phẩm & output
 
 **Code:** `src/crawler/record/`
@@ -913,6 +983,10 @@ cần credential):
 | `test_validate.py` | Loại giá trị không có trong nguồn, nhưng KHÔNG xoá nhầm giá trị chỉ đổi cách trình bày |
 | `test_site_registry.py` | Domain **chưa đăng ký** vẫn crawl được bằng hành vi mặc định — tính chất giữ cho "thêm đối thủ mới" không đẻ thêm file .py |
 | `test_pipeline_checkpoint.py` | Ghi tạm **giữa chừng** đợt crawl, không phải ở những giây cuối |
+| `test_store_db.py` | Nén/giải nén HTML, và VIEW `products` chọn đúng bản mới nhất khi snapshot/extraction đan xen |
+| `test_store_pipeline.py` | Snapshot ghi **trước** khi trích xuất; nhiều worker cùng xong không mất bản ghi, không `database is locked` |
+| `test_reextract.py` | Chạy lại trên HTML đã lưu **không chạm mạng**; la bàn sống sót qua lần chạy lại (có test đối chứng khi không lưu la bàn) |
+| `test_store_export.py` | Khuôn 20 cột không đổi, sheet cảnh báo tách riêng, và **không ô nào bị cắt âm thầm** ở giới hạn 32.767 ký tự của Excel |
 
 Fixture `tlc_blog_post.html` và `tlc_static_page.html` là 2 trang thật lấy từ
 chính `post-sitemap.xml` / `page-sitemap.xml` của TLC — dùng làm mẫu "rác" đại

@@ -24,7 +24,7 @@ from crawler.pipeline import crawl_product_urls  # noqa: E402
 from crawler.probing import ProbeCache, probe_domain  # noqa: E402
 from crawler.record import (  # noqa: E402
     CrawlStatus,
-    load_existing_records,
+    import_legacy_xlsx,
     records_needing_recrawl,
     write_records_to_excel,
 )
@@ -77,7 +77,7 @@ def main() -> None:
 
     # Task 2.4/8.6: doc file .xlsx da co (neu co) de crawl-lai-co-chon-loc,
     # chi crawl lai ban ghi loi/thieu field thay vi toan bo category.
-    existing = load_existing_records(OUTPUT_PATH)
+    existing = import_legacy_xlsx(OUTPUT_PATH)
     if existing:
         to_retry = records_needing_recrawl(existing)
         logger.info(

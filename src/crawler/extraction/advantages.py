@@ -18,9 +18,33 @@ from __future__ import annotations
 
 import re
 import unicodedata
-from typing import Optional
+from typing import NamedTuple, Optional
 
 from bs4 import BeautifulSoup
+
+
+class Advantages(NamedTuple):
+    """Ket qua trich muc uu diem, kem DUONG NAO da dinh vi duoc no.
+
+    `nguon` khong phai du lieu san pham ma la du lieu ve chinh lan trich xuat:
+    ba duong dinh vi co do tin cay RAT khac nhau (xem docstring
+    extract_advantages), va truoc day thong tin do bi vut di ngay sau khi cham
+    diem xong. Giu lai thi cau hoi "o nao dang dang ngo" tra loi duoc bang mot
+    cau truy van thay vi mot buoi mo tay tung o - do that: 6/360 o cua KingLED
+    la muc lay nham, va con so 6 do co duoc bang cach mo tay.
+    """
+
+    tom_tat: Optional[str]
+    noi_dung: Optional[str]
+    nguon: str
+
+
+# Ba duong dinh vi + truong hop khong tim thay. Ghi vao cot `uu_diem_nguon`
+# cua kho du lieu.
+NGUON_TU_KHOA = "keyword"   # tieu de muc mang tin hieu duong
+NGUON_LA_BAN = "anchor"     # mot dong do tang 2 (LLM) chi ra
+NGUON_CUM = "cluster"       # cum de muc ngang cap, khong co tieu de muc
+NGUON_KHONG_CO = "none"     # khong duong nao dinh vi duoc
 
 _HEADINGS = ("h1", "h2", "h3", "h4")
 
@@ -219,6 +243,18 @@ def _locate_by_anchor(soup, anchor: str) -> tuple:
     if len(key) < 6:  # qua ngan -> khop bua bai
         return None, []
 
+    # La ban tro nham vao muc mang tin hieu am thi BO HAN, dung di theo.
+    # Khong bo o day thi hai duong du phong ben duoi (khop <li>, khop <p>) tra
+    # ve heading=None, ma luat chan tin hieu am trong _score_candidate lai co
+    # dieu kien `heading is not None` - tuc la lot sach.
+    # Do that tren tlclighting.com.vn: LLM tro vao dong "Thông số kỹ thuật:"
+    # nam trong mot <p>, code lay <p> do + 4 the ke tiep, va CA BANG THONG SO
+    # duoc ghi vao cot "Nội dung Ưu điểm SP" (3 san pham: nano-cob-gold,
+    # den-exit-2-mat, highlight-smart-76w). Bo la ban di thi cac ung vien khac
+    # van con nguyen - chi mat diem cong +60, khong mat kha nang tim thay muc.
+    if _NEGATIVE_TITLE.search(_strip_accents(anchor)):
+        return None, []
+
     for heading in soup.find_all(_HEADINGS):
         if key in _norm(heading.get_text(" ", strip=True)):
             nodes = _section_nodes(heading)
@@ -391,8 +427,9 @@ def extract_advantages(
     html: str,
     noise_selector: Optional[str] = None,
     anchor: Optional[str] = None,
-) -> tuple[Optional[str], Optional[str]]:
-    """Tra ve (tom_tat_uu_diem, noi_dung_uu_diem). None neu trang khong co muc do.
+) -> Advantages:
+    """Tra ve (tom_tat, noi_dung, nguon). Hai gia tri dau None neu trang khong
+    co muc do; `nguon` khi do la NGUON_KHONG_CO.
 
     KHONG tin tieu de dau tien tim thay. Gom TAT CA ung vien roi cham diem, vi
     3 cach dinh vi deu tung dan sai o cho khac nhau tren trang that:
@@ -418,14 +455,14 @@ def extract_advantages(
         for node in soup.select(noise_selector):
             node.decompose()
 
-    candidates = []  # (diem, heading, nodes)
+    candidates = []  # (diem, heading, nodes, nguon)
 
-    def offer(heading, nodes, from_anchor=False, is_cluster=False):
+    def offer(heading, nodes, source, from_anchor=False, is_cluster=False):
         if not nodes:
             return
         score = _score_candidate(heading, nodes, from_anchor, is_cluster)
         if score is not None:
-            candidates.append((score, heading, nodes))
+            candidates.append((score, heading, nodes, source))
 
     # CHI khop tren THE HEADING. Tren trang TLC, chu "ưu điểm" xuat hien 4 lan
     # theo thu tu tai lieu: mo ta blog trong mega-menu -> muc luc tu dong ->
@@ -436,20 +473,26 @@ def extract_advantages(
         # rieng chu "ưu điểm". An toan la nho khau LOAI (ung vien rong / tin
         # hieu am) chu khong nho khau tim hep.
         if _POSITIVE_TITLE.search(_strip_accents(heading.get_text(" ", strip=True))):
-            offer(heading, _section_nodes(heading))
+            offer(heading, _section_nodes(heading), NGUON_TU_KHOA)
 
     if anchor:
         anchor_heading, anchor_nodes = _locate_by_anchor(soup, anchor)
-        offer(anchor_heading, anchor_nodes, from_anchor=True)
+        offer(anchor_heading, anchor_nodes, NGUON_LA_BAN, from_anchor=True)
 
     for heading, nodes in _heading_clusters(soup):
-        offer(heading, nodes, is_cluster=True)
+        offer(heading, nodes, NGUON_CUM, is_cluster=True)
 
     if not candidates:
-        return None, None
+        return Advantages(None, None, NGUON_KHONG_CO)
 
-    _, heading, nodes = max(candidates, key=lambda c: c[0])
-    return _assemble(heading, nodes)
+    _, heading, nodes, source = max(candidates, key=lambda c: c[0])
+    tom_tat, noi_dung = _assemble(heading, nodes)
+    # `_assemble` van co the tra ve rong (muc chi co dong tieu de). Khong ghi ra
+    # gi thi nguon phai la KHONG_CO, khong phai nhanh da thang - neu khong,
+    # cot `uu_diem_nguon` se bao la tim thay trong khi hai cot kia trong.
+    if tom_tat is None and noi_dung is None:
+        return Advantages(None, None, NGUON_KHONG_CO)
+    return Advantages(tom_tat, noi_dung, source)
 
 
 def _assemble(heading, nodes: list):

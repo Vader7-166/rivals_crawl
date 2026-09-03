@@ -34,10 +34,11 @@ from crawler.probing import ProbeCache, probe_domain  # noqa: E402
 from crawler.record import (  # noqa: E402
     CrawlStatus,
     group_records_by_type,
-    load_existing_records,
+    import_legacy_xlsx,
     write_records_to_excel,
 )
 from crawler.sites import get_profile, select_product_urls  # noqa: E402
+from crawler.store import CrawlStore, connect  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger("crawl_site")
@@ -61,6 +62,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--refresh-probe", action="store_true",
         help="Bỏ qua cache site-probing và dò lại từ đầu",
+    )
+    parser.add_argument(
+        "--db", type=Path, default=None,
+        help="Đường dẫn kho dữ liệu (mặc định theo CRAWL_DB_PATH). HTML và kết "
+             "quả trích xuất được ghi vào đây SONG SONG với file .xlsx.",
+    )
+    parser.add_argument(
+        "--no-store", action="store_true",
+        help="Không ghi kho dữ liệu, chỉ ghi .xlsx như trước khi có kho",
     )
     return parser.parse_args()
 
@@ -105,20 +115,43 @@ def main() -> None:
     if profile.fetch_options:
         logger.info("Tuỳ chọn fetch riêng của domain: %s", profile.fetch_options)
 
-    existing = load_existing_records(output_path)
+    # GHI HAI ĐƯỜNG trong giai đoạn chuyển tiếp: kho dữ liệu (mới) và file
+    # .xlsx (cũ). Chủ đích là để đối chiếu - file sinh từ kho phải khớp từng ô
+    # với file sinh theo đường cũ trước khi bỏ đường cũ đi (design.md,
+    # Migration Plan bước 3).
+    conn = None if args.no_store else connect(args.db)
+    store = CrawlStore(conn) if conn is not None else None
+    if store is not None:
+        store.ensure_site(base_url, base_url)
+        da_co = store.current_records(domain)
+        if da_co:
+            logger.info(
+                "Kho dữ liệu đã có %d bản ghi của %s (bản ghi OK sẽ không crawl lại)",
+                len(da_co), domain,
+            )
+
+    # Co kho -> pipeline tu lay trang thai tu do. Khong co kho (--no-store) thi
+    # van doc nguoc .xlsx nhu duong cu, de co che crawl-lai-co-chon-loc khong
+    # bien mat am tham cung voi cai co.
+    existing = None if store is not None else import_legacy_xlsx(output_path)
     if existing:
         logger.info("Dataset trước đó: %d bản ghi (bản ghi OK sẽ không crawl lại)", len(existing))
 
     started = time.time()
-    records = crawl_product_urls(
-        product_urls,
-        llm_provider=llm_provider,
-        existing=existing,
-        workers=CRAWL.workers,
-        checkpoint_path=output_path,
-        checkpoint_every=CHECKPOINT_EVERY,
-        fetch_options=profile.fetch_options,
-    )
+    try:
+        records = crawl_product_urls(
+            product_urls,
+            llm_provider=llm_provider,
+            existing=existing,
+            workers=CRAWL.workers,
+            checkpoint_path=output_path,
+            checkpoint_every=CHECKPOINT_EVERY,
+            fetch_options=profile.fetch_options,
+            store=store,
+        )
+    finally:
+        if conn is not None:
+            conn.close()
     elapsed = time.time() - started
 
     write_records_to_excel(records, output_path)

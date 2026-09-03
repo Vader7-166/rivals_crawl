@@ -120,6 +120,14 @@ class ProductRecord:
     # Noi bo, khong xuat ra Excel.
     crawl_status: CrawlStatus = CrawlStatus.OK
     crawl_error: Optional[str] = None
+    # Duong nao dinh vi duoc muc uu diem ('keyword'/'anchor'/'cluster'/'none')
+    # - xem extraction/advantages.py. Di theo cung duong voi crawl_status: du
+    # lieu VAN HANH, khong thuoc khuon tham chieu nen khong co cot Excel, nhung
+    # duoc luu vao kho du lieu va dung lam cot "ly do" cua sheet canh bao.
+    uu_diem_nguon: str = "none"
+    # Dong ma tang 2 (LLM) chi ra de dinh vi muc uu diem. Luu lai de chay lai
+    # trich xuat tren HTML da co ma khong phai goi LLM lan nua.
+    uu_diem_la_ban: Optional[str] = None
 
     def missing_required_fields(self) -> list[str]:
         missing = []

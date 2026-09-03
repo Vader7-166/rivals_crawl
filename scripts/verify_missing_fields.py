@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from bs4 import BeautifulSoup  # noqa: E402
 
 from crawler.fetch import StealthFetcher  # noqa: E402
-from crawler.record import load_existing_records  # noqa: E402
+from crawler.record import import_legacy_xlsx  # noqa: E402
 
 DEFAULT_PATH = Path("output/tlclighting_all.xlsx")
 
@@ -159,7 +159,7 @@ CHECKS = {
 
 def main() -> None:
     path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_PATH
-    records = load_existing_records(path)
+    records = import_legacy_xlsx(path)
     flagged = [r for r in records.values() if r.missing_required_fields()]
     print(f"Kiểm định {len(flagged)} sản phẩm bị gắn cờ trong {path}\n")
 

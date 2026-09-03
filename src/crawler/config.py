@@ -113,9 +113,24 @@ class OutputConfig:
     output_dir: Path = Path(os.environ.get("OUTPUT_DIR", "./output"))
 
 
+@dataclass(frozen=True)
+class StoreConfig:
+    """Kho du lieu crawl (SQLite, 1 file).
+
+    Uoc luong dung luong tu do that: 549 SP KingLED ~9,3MB + 485 SP TLC ~22,8MB
+    -> ~32MB cho 2 site da co, ~100MB neu tinh ca Roman. File nay KHONG nam
+    trong git (xem .gitignore) - dung lai duoc tu output/*.xlsx.
+    """
+
+    db_path: Path = Path(os.environ.get("CRAWL_DB_PATH", "./crawl.db"))
+    # Cho bao lau khi file dang bi khoa boi mot lan ghi khac truoc khi bao loi.
+    busy_timeout_seconds: float = _env_float("CRAWL_DB_BUSY_TIMEOUT", 30.0)
+
+
 VERTEX = VertexConfig()
 DEEPSEEK = DeepSeekConfig()
 FETCH = FetchConfig()
 PROBING = ProbingConfig()
 CRAWL = CrawlConfig()
 OUTPUT = OutputConfig()
+STORE = StoreConfig()

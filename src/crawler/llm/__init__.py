@@ -1,7 +1,7 @@
 from .deepseek_provider import DeepSeekProvider
 from .extractor import extract_tags_from_html
 from .fallback import FallbackLLMProvider, build_default_llm_provider
-from .html_cleaner import clean_html_for_llm
+from .html_cleaner import clean_html_for_llm, page_text
 from .provider import LLMProvider, LLMProviderError
 from .schema import EXTRACTION_JSON_SCHEMA, ExtractionOutput, build_prompt
 from .validate import ExtractionValidationError, parse_and_validate
@@ -20,5 +20,6 @@ __all__ = [
     "ExtractionValidationError",
     "parse_and_validate",
     "clean_html_for_llm",
+    "page_text",
     "extract_tags_from_html",
 ]
