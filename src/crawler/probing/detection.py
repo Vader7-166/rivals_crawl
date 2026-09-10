@@ -35,6 +35,49 @@ CARD_LINK_THRESHOLD = 30
 _PRICE_AMOUNT_RE = re.compile(
     r"\d[\d.,]*\s*(?:vnđ|vnd|đồng|₫|đ)(?![A-Za-zÀ-ỹ])", re.I
 )
+# TEN CAC TRUONG THONG SO cua mot bo den. Trang san pham liet ke nhieu truong;
+# trang danh muc / landing thi khong.
+#
+# Day la thu duy nhat tach duoc hai loai o nhanh khong-sitemap, sau khi da do
+# va LOAI bon ung cu vien khac tren trang that:
+#   - gia:        Roman in gia len tung the hang o trang danh muc (aptomat.html
+#                 do duoc 12 so tien), con san pham VNE lai ghi "Liên hệ" -> 0.
+#   - so the anh: san pham Roman co bang "san pham lien quan" nen do duoc 26-37
+#                 the, xap xi trang danh muc.
+#   - og:type:    Roman de `article` cho MOI trang.
+#   - so trang tro toi: do duoc danh muc 1-2, san pham 1 - trung nhau.
+#   - tieu de "Thông số kỹ thuật": san pham VNE co bang thong so nhung KHONG co
+#                 dong tieu de nao.
+#
+# Do tren 13 fixture that + 5 trang that (Roman, VNE): trang san pham dat 5-10
+# truong, trang danh muc / landing dat 1-4.
+#
+# Moi truong mang them BAN TIENG ANH. Ly do do duoc: panasonic.net ban tieng
+# Viet van ghi bang thong so bang tieng Anh ("Power Input | 75W", "System Lumen
+# Output | 10710 lm", "Lifetime | 50000H") - regex tieng Viet chi khop 1/11
+# truong nen tang do coi MOI trang san pham Panasonic la khong phai san pham,
+# va ca site tra ve 0 URL sau khi fetch 107 trang.
+#
+# Cac ban tieng Anh deu la cum HAI TU dac thu bang thong so ("power input",
+# "beam angle", "lamp base"), khong phai tu don pho thong - de trang danh muc
+# khong vo tinh dat nguong chi vi noi ve den.
+_SPEC_FIELD_RES = tuple(
+    re.compile(pattern, re.I)
+    for pattern in (
+        r"c[ôo]ng su[âấ]t|power input|wattage",
+        r"quang th[ôo]ng|lumen output|luminous flux",
+        r"[đd]i[eệ]n [áa]p|power voltage",
+        r"nhi[eệ]t [đd][ộo] m[àa]u|\bcct\b|colou?r temperature",
+        r"ho[àa]n m[àa]u|cri",
+        r"tu[ổo]i th[ọo]|lifetime|life ?span",
+        r"ch[ỉi] s[ốo] ip|ip\d\d|ip code",
+        r"k[íi]ch th[ưu][ớơ]c|dimensions",
+        r"b[ảa]o h[àa]nh|warranty",
+        r"đui|lamp base",
+        r"g[óo]c chi[ếe]u|beam angle",
+    )
+)
+
 _PRODUCT_JSONLD_RE = re.compile(r'"@type"\s*:\s*"Product"')
 _PRODUCT_MICRODATA_RE = re.compile(r'itemtype=["\']https?://schema\.org/Product["\']', re.I)
 _PAGINATION_RE = re.compile(
@@ -49,6 +92,7 @@ class PageSignals:
     product_structured_data_count: int
     card_link_count: int
     has_pagination: bool
+    spec_field_count: int = 0
 
     @property
     def looks_like_single_product_page(self) -> bool:
@@ -100,6 +144,7 @@ def analyze_page(html: str) -> PageSignals:
         ),
         card_link_count=len(card_hrefs),
         has_pagination=bool(_PAGINATION_RE.search(html)),
+        spec_field_count=sum(1 for rx in _SPEC_FIELD_RES if rx.search(text)),
     )
 
 

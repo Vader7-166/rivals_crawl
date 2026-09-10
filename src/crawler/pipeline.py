@@ -17,7 +17,9 @@ from .config import CRAWL
 from .extraction import (
     apply_css_fallback,
     extract_advantages,
+    extract_categories,
     extract_structured_data,
+    get_description_selector,
     get_noise_selector,
     get_spec_root_selector,
     is_placeholder_price,
@@ -37,7 +39,13 @@ logger = logging.getLogger(__name__)
 # so hai lan chay tren cung mot snapshot de biet mot chinh sua va duoc may o va
 # lam hong may o (scripts/diff_extractions.py). Khong tang thi hai lan chay lan
 # vao nhau va phep so mat y nghia.
-EXTRACTOR_VERSION = "v1"
+# v2 -> v3: cho `ten_san_pham` di qua tang 1.5 (truoc day lay thang tu tang 1,
+# nen site khong co structured data va khong co OpenGraph thi mat ten).
+# v1 -> v2: them danh muc doc tu DOM (DOMAIN_CATEGORY_SELECTORS), cot Gia doi
+# chieu, va cho tang 1.5 va duoc ca `link_anh_san_pham`; doc duoc cap thong so
+# co nhan la <strong> thay vi <label>; sua ranh gioi muc "Uu diem" khi mot the
+# BOC de muc ke tiep thay vi LA de muc ke tiep.
+EXTRACTOR_VERSION = "v3"
 
 
 def crawl_product_urls(
@@ -293,7 +301,18 @@ def _build_record(
 
     patched = apply_css_fallback(
         html,
-        {"gia": gia_tang1, "ma_san_pham": structured.ma_san_pham},
+        {
+            "gia": gia_tang1,
+            "gia_doi_chieu": None,
+            "ma_san_pham": structured.ma_san_pham,
+            "link_anh_san_pham": structured.link_anh_san_pham,
+            # Ten san pham cung phai di qua tang 1.5. Truoc day khong: no lay
+            # thang tu tang 1, nen site nao khong co structured data VA khong
+            # phat OpenGraph thi mat ten du ten hien ro trong <h1> - do tren
+            # vne-led.vn, 120/120 ban ghi mat ten vi dung ly do do. Ten con la
+            # dau vao cua tang 2, nen mat no lam hong ca viec chuan hoa tags.
+            "ten_san_pham": structured.ten_san_pham,
+        },
         domain,
     )
     gia = patched.get("gia", gia_tang1)
@@ -304,7 +323,7 @@ def _build_record(
     llm_error: Optional[str] = None
     try:
         extraction = extract_tags_from_html(
-            structured.ten_san_pham or "", html, llm_provider,
+            patched.get("ten_san_pham") or "", html, llm_provider,
             spec_root_selector=spec_root_selector,
             noise_selector=noise_selector,
         )
@@ -318,7 +337,11 @@ def _build_record(
 
     return _assemble_record(
         url, html, fallback_product_id,
-        structured=structured, gia=gia, ma_san_pham=ma_san_pham,
+        structured=structured, gia=gia,
+        gia_doi_chieu=patched.get("gia_doi_chieu"),
+        link_anh_san_pham=patched.get("link_anh_san_pham"),
+        ma_san_pham=ma_san_pham,
+        ten_san_pham=patched.get("ten_san_pham") or structured.ten_san_pham,
         noise_selector=noise_selector, spec_root_selector=spec_root_selector,
         tags=tags, ma_san_pham_llm=ma_san_pham_llm, anchor=advantage_anchor,
         llm_error=llm_error,
@@ -348,13 +371,29 @@ def rebuild_record_from_html(
 
     gia_tang1 = None if is_placeholder_price(domain, structured.gia) else structured.gia
     patched = apply_css_fallback(
-        html, {"gia": gia_tang1, "ma_san_pham": structured.ma_san_pham}, domain
+        html,
+        {
+            "gia": gia_tang1,
+            "gia_doi_chieu": None,
+            "ma_san_pham": structured.ma_san_pham,
+            "link_anh_san_pham": structured.link_anh_san_pham,
+            # Ten san pham cung phai di qua tang 1.5. Truoc day khong: no lay
+            # thang tu tang 1, nen site nao khong co structured data VA khong
+            # phat OpenGraph thi mat ten du ten hien ro trong <h1> - do tren
+            # vne-led.vn, 120/120 ban ghi mat ten vi dung ly do do. Ten con la
+            # dau vao cua tang 2, nen mat no lam hong ca viec chuan hoa tags.
+            "ten_san_pham": structured.ten_san_pham,
+        },
+        domain,
     )
     return _assemble_record(
         url, html, fallback_product_id,
         structured=structured,
         gia=patched.get("gia", gia_tang1),
+        gia_doi_chieu=patched.get("gia_doi_chieu"),
+        link_anh_san_pham=patched.get("link_anh_san_pham"),
         ma_san_pham=patched.get("ma_san_pham") or structured.ma_san_pham,
+        ten_san_pham=patched.get("ten_san_pham") or structured.ten_san_pham,
         noise_selector=noise_selector, spec_root_selector=spec_root_selector,
         tags=tags or {}, ma_san_pham_llm=ma_san_pham_llm, anchor=anchor,
         llm_error=None,
@@ -368,7 +407,10 @@ def _assemble_record(
     *,
     structured,
     gia,
+    gia_doi_chieu,
+    link_anh_san_pham: Optional[str],
     ma_san_pham: Optional[str],
+    ten_san_pham: Optional[str],
     noise_selector: Optional[str],
     spec_root_selector: Optional[str],
     tags: dict,
@@ -380,6 +422,15 @@ def _assemble_record(
     that lan duong chay lai tren snapshot, de hai duong khong the lech nhau."""
     ma_san_pham = ma_san_pham or ma_san_pham_llm
 
+    # Danh muc: breadcrumb cua structured data la mac dinh, nhung domain co
+    # dang ky selector danh muc thi selector THANG - viec dang ky chinh la ket
+    # luan "breadcrumb cua site nay sai/vang" (xem DOMAIN_CATEGORY_SELECTORS).
+    cat_1, cat_2, cat_3 = extract_categories(html, urlparse(url).netloc)
+    if cat_1 is None:
+        cat_1, cat_2, cat_3 = (
+            structured.category_1, structured.category_2, structured.category_3,
+        )
+
     # Cum mo ta san pham -> 2 cot "Ưu điểm" cua khuon tham chieu. Co che tong
     # quat cho moi site (tim heading chua chu "ưu điểm"), khong co config rieng
     # theo domain - xem extraction/advantages.py.
@@ -388,20 +439,26 @@ def _assemble_record(
     # "Lợi ích khi sử dụng", "Tại sao nên dùng...", hoac khong co tieu de).
     # Khong ton them request nao - dung ket qua cua chinh loi goi tang 2 o tren.
     advantages = extract_advantages(
-        html, noise_selector=noise_selector, anchor=anchor
+        html,
+        noise_selector=noise_selector,
+        anchor=anchor,
+        # Duong cuoi khi trang khong co MUC uu diem nao: lay ca khoi mo ta cua
+        # site. Chi bat cho domain da dang ky - xem DOMAIN_DESCRIPTION_SELECTORS.
+        description_selector=get_description_selector(urlparse(url).netloc),
     )
 
     record = ProductRecord(
         product_id=structured.raw_id or fallback_product_id,
-        ten_san_pham=structured.ten_san_pham,
+        ten_san_pham=ten_san_pham,
         ma_san_pham=ma_san_pham,
-        category_1=structured.category_1,
-        category_2=structured.category_2,
-        category_3=structured.category_3,
+        category_1=cat_1,
+        category_2=cat_2,
+        category_3=cat_3,
         tags=tags,
         gia=gia,
+        gia_doi_chieu=gia_doi_chieu,
         link_san_pham=url,
-        link_anh_san_pham=structured.link_anh_san_pham,
+        link_anh_san_pham=link_anh_san_pham,
         tom_tat_uu_diem_tinh_nang=advantages.tom_tat,
         noi_dung_uu_diem_sp=advantages.noi_dung,
         uu_diem_nguon=advantages.nguon,

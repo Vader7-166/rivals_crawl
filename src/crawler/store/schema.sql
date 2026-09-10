@@ -157,3 +157,53 @@ SELECT * FROM (
     FROM extractions e
 )
 WHERE rn = 1;
+
+
+-- CHI MUC DANH MUC (tang 0.5, capability `category-index`).
+--
+-- KHAC BAN CHAT voi ba bang tren: day la CACHE DAN XUAT, khong phai lich su.
+-- Xoa sach hai bang nay roi dung lai tu site doi thu se ra ket qua nhu cu, va
+-- khong mat mot du lieu nao do nguoi nhap - vi khong co du lieu nao do nguoi
+-- nhap ca. Do la quyet dinh trung tam cua change `crawl-control-web`: anh xa
+-- nganh hang KHONG duoc phep tro thanh mot bang phai bao tri (xem design.md
+-- muc 1).
+--
+-- Chung ton tai de tra loi mot cau hoi ma truoc day khong tra loi duoc:
+-- "URL nay thuoc danh muc nao?" TRUOC khi ton mot luot fetch cho chinh no.
+
+-- 1 dong = 1 trang danh muc da duyet.
+--
+-- `ok = 0` (fetch hong) PHAI phan biet duoc voi `ok = 1` ma khong canh nao
+-- trong `category_products`: cai dau la "chua biet gi ve danh muc nay", cai sau
+-- la "danh muc that su rong". Gop lam mot thi mot danh muc chet mang bi doc
+-- thanh mot danh muc khong co hang.
+CREATE TABLE IF NOT EXISTS category_pages (
+    domain        TEXT    NOT NULL REFERENCES sites(domain),
+    url           TEXT    NOT NULL,
+    name          TEXT,                       -- lay tu <h1>/<title> cua trang
+    indexed_at    TEXT    NOT NULL,           -- ISO-8601 UTC
+    pages_fetched INTEGER NOT NULL DEFAULT 0, -- ke ca trang con cua phan trang
+    ok            INTEGER NOT NULL DEFAULT 1,
+    error         TEXT,
+    PRIMARY KEY (domain, url)
+);
+
+CREATE INDEX IF NOT EXISTS idx_category_pages_domain ON category_pages (domain);
+
+
+-- 1 dong = 1 canh (danh muc <-> san pham).
+--
+-- Mot san pham thuoc nhieu danh muc la chuyen BINH THUONG tren site that, nen
+-- khoa chinh gom ca hai dau - khong canh nao ghi de canh nao.
+CREATE TABLE IF NOT EXISTS category_products (
+    domain       TEXT NOT NULL REFERENCES sites(domain),
+    category_url TEXT NOT NULL,
+    -- URL NGUYEN VAN nhu sitemap cong bo, KHONG chuan hoa dau `/` cuoi - cung
+    -- quy uoc voi `page_snapshots.url` va `extractions.url`, de join duoc.
+    product_url  TEXT NOT NULL,
+    PRIMARY KEY (domain, category_url, product_url),
+    FOREIGN KEY (domain, category_url) REFERENCES category_pages (domain, url) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_category_products_url ON category_products (product_url);
+CREATE INDEX IF NOT EXISTS idx_category_products_cat ON category_products (domain, category_url);

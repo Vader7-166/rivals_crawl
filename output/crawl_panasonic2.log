@@ -1,0 +1,48 @@
+2026-09-07 21:31:24,224 WARNING crawler.fetch.stealth_fetch: CLOAKBROWSER_EXECUTABLE_PATH chua duoc cau hinh - dang fallback ve Chromium mac dinh cua Playwright (khong co stealth fingerprinting).
+2026-09-07 21:31:26,022 INFO crawler.probing.prober: Khong tim thay sitemap dang tin cay cho panasonic.net, fallback menu crawl
+2026-09-07 21:31:59,151 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 1.0s
+2026-09-07 21:32:44,973 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 1.0s
+2026-09-07 21:33:42,939 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 1.0s
+2026-09-07 21:33:44,778 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 2.0s
+2026-09-07 21:33:48,124 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 4.0s
+2026-09-07 21:34:08,302 INFO crawler.probing.product_discovery: Hinh dang /*: 2 ung vien, mau 0/2 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:34:10,289 INFO crawler.probing.product_discovery: Hinh dang /electricworks/activities/*: 2 ung vien, mau 0/2 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:34:10,289 INFO crawler.probing.product_discovery: Hinh dang /electricworks/activities/*.html: 2 ung vien, mau 0/2 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:34:10,289 INFO crawler.probing.product_discovery: Hinh dang /electricworks/exhibition/*: 1 ung vien, mau 0/1 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:34:11,492 INFO crawler.probing.product_discovery: Hinh dang /electricworks/exhibition/singapore/*.html: 1 ung vien, mau 0/1 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:34:16,024 INFO crawler.probing.product_discovery: Hinh dang /electricworks/job-references/*: 26 ung vien, mau 0/5 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:34:27,572 INFO crawler.probing.product_discovery: Hinh dang /electricworks/lighting/*: 7 ung vien, mau 0/5 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:34:27,965 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 1.0s
+2026-09-07 21:34:30,143 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 2.0s
+2026-09-07 21:34:33,698 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 4.0s
+2026-09-07 21:34:37,821 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 8.0s
+2026-09-07 21:34:45,457 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 15.0s
+2026-09-07 21:35:00,660 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 15.0s
+2026-09-07 21:35:15,489 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 15.0s
+2026-09-07 21:35:30,574 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 15.0s
+2026-09-07 21:35:45,559 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 15.0s
+2026-09-07 21:36:00,518 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 15.0s
+2026-09-07 21:36:17,854 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 15.0s
+2026-09-07 21:36:30,513 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 15.0s
+2026-09-07 21:36:45,928 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 15.0s
+2026-09-07 21:37:00,568 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 15.0s
+2026-09-07 21:37:15,830 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 15.0s
+2026-09-07 21:37:15,839 INFO crawler.probing.product_discovery: Hinh dang /electricworks/lighting/case/*: 7 ung vien, mau 0/5 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:38:00,218 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 15.0s
+2026-09-07 21:38:03,282 INFO crawler.probing.product_discovery: Hinh dang /electricworks/lighting/en_id/*: 1 ung vien, mau 0/1 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:38:11,024 INFO crawler.probing.product_discovery: Hinh dang /electricworks/lighting/en_id/products/*.php: 1 ung vien, mau 0/1 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:38:15,017 INFO crawler.probing.product_discovery: Hinh dang /electricworks/lighting/en_id/tips/note/*: 1 ung vien, mau 0/1 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:38:45,099 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 3.8s
+2026-09-07 21:38:53,369 INFO crawler.probing.product_discovery: Hinh dang /electricworks/lighting/en_id/tips/pro/*: 3 ung vien, mau 0/3 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:38:53,369 INFO crawler.probing.product_discovery: Hinh dang /electricworks/lighting/vn/*: 1 ung vien, mau 0/1 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:38:53,369 INFO crawler.probing.product_discovery: Hinh dang /electricworks/lighting/vn/case/*: 2 ung vien, mau 0/2 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:38:53,369 INFO crawler.probing.product_discovery: Hinh dang /electricworks/lighting/vn/products/*.php: 1 ung vien, mau 0/1 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:39:04,535 INFO crawler.probing.product_discovery: Hinh dang /electricworks/lighting/vn/products/*.php?lay3: 32 ung vien, mau 5/5 la san pham -> nhan-ca-nhom (32 URL)
+2026-09-07 21:39:04,536 INFO crawler.probing.product_discovery: Hinh dang /electricworks/lighting/vn/tips/note/*: 1 ung vien, mau 1/1 la san pham -> nhan-ca-nhom (1 URL)
+2026-09-07 21:39:04,536 INFO crawler.probing.product_discovery: Hinh dang /electricworks/lighting/vn/tips/pro/*: 3 ung vien, mau 0/3 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:39:34,596 INFO crawler.fetch.stealth_fetch: Server phản ứng chậm/từ chối - giãn nhịp fetch lên 1.0s
+2026-09-07 21:39:41,585 INFO crawler.probing.product_discovery: Hinh dang /electricworks/solutions/*.html: 4 ung vien, mau 0/4 la san pham -> loai-ca-nhom (0 URL)
+2026-09-07 21:39:41,585 INFO crawler.probing.prober: Do khong-sitemap panasonic.net: 1 trang danh muc, 33 URL san pham, 88 trang da fetch
+2026-09-07 21:39:41,587 INFO crawl_site: Site probing: strategy=menu_crawl reliability=None sitemap=None
+2026-09-07 21:39:41,587 INFO crawl_site: Bỏ 33 mục trong sitemap (trùng lặp / không phải trang sản phẩm)
+2026-09-07 21:39:41,637 ERROR crawl_site: Probe không trả về URL sản phẩm nào cho panasonic.net - dừng. Kiểm tra site có sitemap không, hoặc chạy lại với --refresh-probe.

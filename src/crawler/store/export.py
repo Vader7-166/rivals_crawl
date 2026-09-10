@@ -12,11 +12,13 @@ San pham can nguoi xu ly tay xuat hien o CA HAI cho:
 from __future__ import annotations
 
 import logging
+import os
 import re
 import unicodedata
 from pathlib import Path
 from typing import Optional
 
+from ..config import OUTPUT
 from ..llm.html_cleaner import page_text
 from ..record import ProductRecord, write_records_to_excel
 from .crawl_store import IMPORTED_VERSION, CrawlStore
@@ -66,10 +68,13 @@ def export_domain(
 ) -> tuple[Path, int]:
     """Ghi file .xlsx cho 1 domain. Tra ve (duong dan file, so dong canh bao).
 
-    `html_dir` mac dinh la `<ten file>_html/` canh chinh file .xlsx.
+    `html_dir` mac dinh la `<OUTPUT.html_dir>/<ten file>_html/` - THU MUC RIENG,
+    khong nam canh file .xlsx. Do tren 12 site: dong HTML nay nang 244 MB, gap
+    hon 100 lan tong so file .xlsx; de chung mot cho thi thu muc ket qua khong
+    con mo ra doc duoc.
     """
     output_path = Path(output_path)
-    html_dir = html_dir or output_path.with_name(output_path.stem + "_html")
+    html_dir = html_dir or (OUTPUT.html_dir / (output_path.stem + "_html"))
 
     # `current_records` tra ve theo thu tu chen (= thu tu crawl); giu nguyen
     # thay vi sap xep lai, de file sinh ra khop tung o voi duong ghi cu.
@@ -97,7 +102,14 @@ def export_domain(
         html_dir.mkdir(parents=True, exist_ok=True)
         html_file = html_dir / f"{_slug(url)}.html"
         html_file.write_text(html, encoding="utf-8")
-        review_rows.append([url, reason, text, str(html_file.relative_to(output_path.parent))])
+        # `os.path.relpath` chu khong phai `Path.relative_to`: thu muc HTML gio
+        # nam NGOAI thu muc .xlsx, va `relative_to` nem loi khi duong dan khong
+        # phai con chau. Ket qua la duong dan kieu `../html/<domain>_html/x.html`
+        # - van mo duoc bang cach bam tu chinh file .xlsx.
+        review_rows.append([
+            url, reason, text,
+            os.path.relpath(html_file.resolve(), output_path.parent.resolve()),
+        ])
 
     write_records_to_excel(ordered, output_path, review_rows=review_rows)
     logger.info(

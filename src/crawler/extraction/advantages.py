@@ -44,9 +44,46 @@ class Advantages(NamedTuple):
 NGUON_TU_KHOA = "keyword"   # tieu de muc mang tin hieu duong
 NGUON_LA_BAN = "anchor"     # mot dong do tang 2 (LLM) chi ra
 NGUON_CUM = "cluster"       # cum de muc ngang cap, khong co tieu de muc
+# Trang khong co MUC uu diem nao, lay ca khoi mo ta cua site lam noi dung.
+NGUON_MO_TA = "description"
 NGUON_KHONG_CO = "none"     # khong duong nao dinh vi duoc
 
 _HEADINGS = ("h1", "h2", "h3", "h4")
+
+# The KHONG PHAI <h*> nhung dong vai tro tieu de muc. Do tren trang that:
+#   roman.vn      <div class="text">Đặc điểm nổi bật:</div>
+#   dienquang.com <a>Đặc điểm</a>            (nhan tab)
+# Chi coi la tieu de khi CA BA dieu kien: the thuoc nhom nay, chuoi NGAN (mot
+# dong tieu de, khong phai doan van), va mang tin hieu duong `_POSITIVE_TITLE`.
+# Thieu rang buoc do dai thi moi doan van co chu "dac diem" deu thanh tieu de.
+_PSEUDO_HEADING_TAGS = ("div", "p", "strong", "b", "span", "a", "label", "dt")
+
+# Chuoi ngan thoi CHUA du. Do tren fixture denvinaled: dong noi dung "Rọi vào
+# cây cối, bụi hoa, tượng phù điêu để làm nổi bật vẻ đẹp..." dai 78 ky tu va
+# co chu "nổi bật" - lot moi nguong do dai rong rai va cuop mat ket qua dung.
+# Nen phai doi hoi no KHONG DOC NHU MOT CAU:
+#   - ket thuc bang dau hai cham -> nhan ro rang, cho toi 60 ky tu
+#     (roman.vn: "Đặc điểm nổi bật:")
+#   - khong co dau hai cham -> phai rat ngan, khong dau phay, khong ket thuc
+#     bang dau cham (dienquang.com: "Đặc điểm")
+_PSEUDO_HEADING_MAX_LEN = 60
+_PSEUDO_HEADING_MAX_LEN_KHONG_HAI_CHAM = 40
+
+
+def _doc_nhu_tieu_de(text: str) -> bool:
+    t = text.strip()
+    if t.endswith(":"):
+        return len(t) <= _PSEUDO_HEADING_MAX_LEN
+    return (
+        len(t) <= _PSEUDO_HEADING_MAX_LEN_KHONG_HAI_CHAM
+        and "," not in t
+        and not t.endswith(".")
+    )
+
+# Tieu de gia luon duoc coi la cap SAU NHAT: muc cua no dung lai truoc bat ky
+# <h1>..<h4> nao phia sau. Coi no cap cao hon thi no se nuot ca cac muc <h*>
+# ke tiep khong lien quan.
+_PSEUDO_LEVEL = 4
 
 # Bo dau de khop duoc ca "ưu điểm", "Ưu Điểm", "uu diem".
 _ADVANTAGE_RE = re.compile(r"uu\s*diem", re.IGNORECASE)
@@ -81,6 +118,49 @@ def _strip_accents(text: str) -> str:
     return "".join(c for c in decomposed if not unicodedata.combining(c))
 
 
+def _heading_level(node) -> int:
+    """Cap cua mot tieu de. `h2` -> 2; tieu de gia -> `_PSEUDO_LEVEL`."""
+    name = getattr(node, "name", None)
+    if name in _HEADINGS:
+        return int(name[1])
+    return _PSEUDO_LEVEL
+
+
+def _pseudo_headings(soup) -> list:
+    """Cac the dong vai tro tieu de muc nhung khong phai <h*>.
+
+    Bo qua the co con la the KHOI: mot <div> boc ca muc thi text cua no dai va
+    da bi rang buoc do dai loai; nhung <div> boc dung mot <p> ngan thi khong -
+    va lay no lam tieu de se khien muc rong (noi dung nam BEN TRONG chinh no,
+    khong phai o cac the anh em).
+    """
+    out = []
+    for tag in soup.find_all(_PSEUDO_HEADING_TAGS):
+        if tag.find(["div", "p", "ul", "ol", "table", "section"]):
+            continue
+        text = tag.get_text(" ", strip=True)
+        if not text or not _doc_nhu_tieu_de(text):
+            continue
+        if not _POSITIVE_TITLE.search(_strip_accents(text)):
+            continue
+        out.append(tag)
+    return out
+
+
+# Muc do MOT tieu de gia phai dan toi, de duoc coi la muc uu diem that.
+_PSEUDO_MIN_DONG = 2
+_PSEUDO_MIN_KY_TU = 80
+
+
+def _du_noi_dung(heading, nodes: list) -> bool:
+    if not nodes:
+        return False
+    lines = [d for d in _section_text(heading, nodes).split("\n") if d.strip()]
+    # Dong dau la chinh tieu de -> bo ra khi dem.
+    than = lines[1:]
+    return len(than) >= _PSEUDO_MIN_DONG and sum(len(d) for d in than) >= _PSEUDO_MIN_KY_TU
+
+
 def _is_advantage_heading(tag) -> bool:
     return bool(_ADVANTAGE_RE.search(_strip_accents(tag.get_text(" ", strip=True))))
 
@@ -99,12 +179,40 @@ def _holds_heading_at_or_above(node, level: int) -> bool:
     return any(int(h.name[1]) <= level for h in node.find_all(_HEADINGS))
 
 
+def _leading_children_before_heading(node, level: int) -> list:
+    """Phan DAU cua `node`, cat ngay truoc de muc ngang/tren `level` dau tien
+    ben trong no."""
+    nodes = []
+    for child in node.children:
+        if getattr(child, "name", None) is None:
+            continue
+        name = child.name
+        if name in _HEADINGS and int(name[1]) <= level:
+            break
+        if _holds_heading_at_or_above(child, level):
+            nodes.extend(_leading_children_before_heading(child, level))
+            break
+        nodes.append(child)
+    return nodes
+
+
 def _siblings_after(start, level: int) -> list:
     nodes = []
     for sibling in start.next_siblings:
-        if getattr(sibling, "name", None) is None:
+        name = getattr(sibling, "name", None)
+        if name is None:
             continue
+        if name in _HEADINGS and int(name[1]) <= level:
+            break
         if _holds_heading_at_or_above(sibling, level):
+            # The anh em nay khong PHAI de muc ke tiep, no CHUA de muc ke tiep
+            # ben trong - tuc mot the boc gop nhieu muc lam mot. Cat truoc day
+            # thi ca noi dung nam phia truoc de muc do bi vut theo, va muc coi
+            # nhu rong -> _section_nodes leo len the cha va vo phai noi dung
+            # cua mot muc KHAC. Do that tren denvinaled.vn: muc "Vai trò chính
+            # của đèn chiếu cảnh quan" tra ve khoi "Thông tin liên hệ" (dia chi
+            # showroom, MST) va do la thu duoc ghi vao cot "Ưu điểm".
+            nodes.extend(_leading_children_before_heading(sibling, level))
             break
         nodes.append(sibling)
     return nodes
@@ -124,7 +232,7 @@ def _section_nodes(heading) -> list:
     truc tiep thi muc nay tra ve rong du tim thay heading, va do la lo hong im
     lang: khong bao loi, chi la 2 cot bi trong.
     """
-    level = int(heading.name[1])
+    level = _heading_level(heading)
     nodes = _siblings_after(heading, level)
     if nodes:
         return nodes
@@ -322,7 +430,7 @@ def _score_candidate(heading, nodes, from_anchor: bool = False, is_cluster: bool
     nhung phan lon trang thi tab do BO TRONG con noi dung that lai nam duoi cac
     de muc khong mang dau hieu gi.
     """
-    level = int(heading.name[1]) if heading is not None else 1
+    level = _heading_level(heading) if heading is not None else 1
     text = _section_text(heading, nodes)
     if len(text.split("\n")) < 2:
         return None
@@ -423,10 +531,36 @@ def _heading_clusters(soup) -> list:
     return out
 
 
+# Dong CHI LA mot cap thong so ("Cong suat (W): 7", "Tuoi tho: 25000 gio").
+# Khoi mo ta chi gom nhung dong nhu vay thi KHONG phai uu diem - do la bang
+# thong so viet doc. Do tren vne-led.vn: `#tab-description` cua no chua dung
+# 9 dong kieu nay va khong mot cau nao.
+_DONG_THONG_SO = re.compile(r"^[^:]{2,44}:\s*[<>~]?\s*[\d.,/\-]+\s*\w{0,12}$")
+
+# Ty le toi da cac dong la cap thong so de khoi mo ta van duoc coi la uu diem.
+_TY_LE_THONG_SO_TOI_DA = 0.6
+
+
+def _mo_ta_la_uu_diem(text: str) -> bool:
+    """Khoi mo ta co dang van xuoi (uu diem) hay chi la bang thong so.
+
+    Doi hoi hai dieu, deu do duoc: co it nhat MOT CAU that (dai va co dau cham
+    hoac dau phay), va khong qua nua so dong la cap "nhan: so".
+    """
+    lines = [d.strip() for d in text.split("\n") if d.strip()]
+    if not lines:
+        return False
+    thong_so = sum(1 for d in lines if _DONG_THONG_SO.match(d))
+    if thong_so / len(lines) > _TY_LE_THONG_SO_TOI_DA:
+        return False
+    return any(len(d) >= 40 and ("." in d or "," in d) for d in lines)
+
+
 def extract_advantages(
     html: str,
     noise_selector: Optional[str] = None,
     anchor: Optional[str] = None,
+    description_selector: Optional[str] = None,
 ) -> Advantages:
     """Tra ve (tom_tat, noi_dung, nguon). Hai gia tri dau None neu trang khong
     co muc do; `nguon` khi do la NGUON_KHONG_CO.
@@ -475,6 +609,24 @@ def extract_advantages(
         if _POSITIVE_TITLE.search(_strip_accents(heading.get_text(" ", strip=True))):
             offer(heading, _section_nodes(heading), NGUON_TU_KHOA)
 
+    # Tieu de muc KHONG PHAI <h*>. Site tu do dat: roman.vn dung
+    # `<div class="text">Đặc điểm nổi bật:</div>`, dienquang.com dung nhan tab
+    # `<a>Đặc điểm</a>`. Chi quet <h1>..<h4> thi ca hai deu vo hinh - do tren
+    # 40 trang Roman thieu uu diem, 37 trang CO chu "dac diem/uu diem" tren
+    # trang ma khong trang nao co no trong mot the <h*>.
+    for heading in _pseudo_headings(soup):
+        nodes = _section_nodes(heading)
+        # Tieu de gia phai DAN TOI NOI DUNG THAT. Rang buoc nay khong the bo:
+        # `<a class="nav-link">Vì sao chọn MPE</a>` la link dieu huong, no van
+        # qua duoc moi kiem tra hinh dang (ngan, khong dau phay, co "vi sao")
+        # va keo theo dung mot dong "Hồ Sơ Năng Lực MPE". Khong chan thi ca 180
+        # san pham MPE deu bi ghi ho so cong ty vao cot uu diem.
+        #
+        # <h*> that khong can rang buoc nay: chinh viec site danh dau no la de
+        # muc da la mot khang dinh, con <div>/<a> thi khong.
+        if _du_noi_dung(heading, nodes):
+            offer(heading, nodes, NGUON_TU_KHOA)
+
     if anchor:
         anchor_heading, anchor_nodes = _locate_by_anchor(soup, anchor)
         offer(anchor_heading, anchor_nodes, NGUON_LA_BAN, from_anchor=True)
@@ -483,7 +635,7 @@ def extract_advantages(
         offer(heading, nodes, NGUON_CUM, is_cluster=True)
 
     if not candidates:
-        return Advantages(None, None, NGUON_KHONG_CO)
+        return _tu_khoi_mo_ta(soup, description_selector)
 
     _, heading, nodes, source = max(candidates, key=lambda c: c[0])
     tom_tat, noi_dung = _assemble(heading, nodes)
@@ -491,12 +643,76 @@ def extract_advantages(
     # gi thi nguon phai la KHONG_CO, khong phai nhanh da thang - neu khong,
     # cot `uu_diem_nguon` se bao la tim thay trong khi hai cot kia trong.
     if tom_tat is None and noi_dung is None:
-        return Advantages(None, None, NGUON_KHONG_CO)
+        return _tu_khoi_mo_ta(soup, description_selector)
     return Advantages(tom_tat, noi_dung, source)
 
 
+# Nhan cua mot muc, khong phai mot Y. Do tren www.denasia.vn: khoi mo ta cua
+# `bep-dien-tu-bt01` mo dau bang dong "Mô tả sản phẩm", va ghi thang no vao cot
+# "Tóm tắt ưu điểm" thi nguoi doc nhan duoc mot cai nhan chu khong phai du lieu.
+_NHAN_MUC = re.compile(
+    r"^(mo\s*ta|thong\s*tin|thong\s*so|chi\s*tiet|gioi\s*thieu|noi\s*dung)"
+    r"(\s+(san\s*pham|ky\s*thuat|chung))?\s*:?$",
+    re.IGNORECASE,
+)
+
+
+def _la_nhan_muc(text: str) -> bool:
+    return bool(_NHAN_MUC.match(_strip_accents(text).strip()))
+
+
+def _y_do_site_tach_san(node) -> list[str]:
+    """Cac y ma CHINH SITE da tach roi trong khoi mo ta.
+
+    Hai cach site tach: the <li>, hoac ky tu gach dau dong mo dau dong. Khong
+    tim thay cach nao thi tra ve rong - khong tu cat cau.
+    """
+    items = [_clean_line(li.get_text(" ", strip=True)) for li in node.select("li")]
+    items = [d for d in items if d and not _la_nhan_muc(d)]
+    if items:
+        return items
+    out = []
+    for dong in node.get_text("\n", strip=True).split("\n"):
+        dong = dong.strip()
+        if _BULLET_MARKER.match(dong):
+            sach = _clean_line(_BULLET_MARKER.sub("", dong))
+            if sach and not _la_nhan_muc(sach):
+                out.append(sach)
+    return out
+
+
+def _tu_khoi_mo_ta(soup, description_selector: Optional[str]) -> Advantages:
+    """Duong cuoi: khong co MUC uu diem nao thi lay ca KHOI MO TA cua site.
+
+    Nhieu site khong viet muc uu diem rieng ma go thang mot doan mo ta, va
+    chinh doan do noi ve uu diem. Do tren trang that: denvinaled.vn ("chat
+    luong cao, tuoi tho lau nam"), roman.vn ("ben, dep, chong oxy hoa, tan
+    nhiet nhanh"), nanoco ("chi phi tiet kiem hon...").
+
+    Cot TOM TAT chi duoc dien khi CHINH SITE da tach san cac y - bang the <li>
+    hoac bang ky tu gach dau dong ("– Thiết kế hiện đại, sang trọng. – Dễ dàng
+    sử dụng." tren www.denasia.vn). Doan van xuoi lien mach thi de trong cot
+    do: tu cat cau ra thanh gach dau dong la tu dien giai ho site.
+    """
+    if not description_selector:
+        return Advantages(None, None, NGUON_KHONG_CO)
+    for node in soup.select(description_selector):
+        lines = [
+            _clean_line(d)
+            for d in node.get_text("\n", strip=True).split("\n")
+            if _clean_line(d) and not _CROSS_SELL.match(d)
+        ]
+        text = "\n".join(dict.fromkeys(lines))
+        if not text or not _mo_ta_la_uu_diem(text):
+            continue
+        labels = _y_do_site_tach_san(node)
+        tom_tat = "\n".join(dict.fromkeys(labels))[:_MAX_SUMMARY] or None
+        return Advantages(tom_tat, text[:_MAX_CONTENT], NGUON_MO_TA)
+    return Advantages(None, None, NGUON_KHONG_CO)
+
+
 def _assemble(heading, nodes: list):
-    level = int(heading.name[1]) if heading is not None else 1
+    level = _heading_level(heading) if heading is not None else 1
     # Cau truc phang: cac y cua muc la heading NGANG CAP voi tieu de muc.
     flat = any(
         getattr(n, "name", None) in _HEADINGS and int(n.name[1]) == level for n in nodes

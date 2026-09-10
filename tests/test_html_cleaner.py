@@ -122,3 +122,26 @@ def test_kingled_related_products_are_stripped_before_reaching_llm(fixture_html)
     # Thông số của chính sản phẩm đang xem phải còn nguyên.
     assert "Mã SP: ND-TO-150-12" in after
     assert "Công Suất: 150W" in after
+
+
+def test_denvinaled_spec_pairs_use_bold_labels_not_label_tags(fixture_html):
+    """Bug 4 (denvinaled.vn): ca trang cung khong co <table>, va thong so cung
+    khong nam trong the <label> nhu KingLED - chung la
+    `<strong>Công suất:</strong> 9W<br>` trong phan mo ta ngan.
+
+    Cau truc the o day KHONG dang tin: trong cung mot doan, "Công suất:" nam
+    trong <span><strong> con "Kích thước:" nam trong <strong><span> - dao
+    nguoc nhau. Nen phai doc theo DONG TEXT (nhan la chuoi ket thuc bang ":",
+    gia tri la chuoi ngay sau).
+    """
+    html = fixture_html("denvinaled_product.html")
+
+    assert extract_spec_text(html) == "", "chưa khoanh vùng thì không đọc được gì"
+
+    spec = extract_spec_text(html, spec_root_selector="div.product-short-description")
+
+    assert "Công suất: 9W" in spec
+    assert "Kích thước: Ø87xH33mm" in spec
+    assert "Kích thước thi công: Ø75mm" in spec
+    # Gia cua san pham khac trong sidebar/luoi lien quan khong duoc lot vao.
+    assert "₫" not in spec

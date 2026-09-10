@@ -76,6 +76,38 @@ def _pair_value(label) -> str:
     return rest.lstrip(" :").strip()
 
 
+def _colon_pair_lines(root) -> list[str]:
+    """Cap "nhan: gia tri" khi nhan KHONG phai the <label> ma la mot doan text
+    ket thuc bang ":" (vd `<strong>Công suất:</strong> 9W<br>` - denvinaled.vn).
+
+    Doc theo DONG TEXT chu khong theo the, vi o day cau truc the khong dang tin:
+    trong cung mot doan mo ta, "Công suất:" nam trong <span><strong> con "Kích
+    thước:" nam trong <strong><span> - dao nguoc nhau. Diem chung duy nhat la
+    nhan luon la mot chuoi text rieng ket thuc bang ":" va gia tri la chuoi
+    text ngay sau no.
+
+    Chi duoc goi khi trong pham vi KHONG co the <label> nao, de khong dong vao
+    hanh vi cua nhung site da chay duoc bang <label> (case KingLED).
+    """
+    parts = [
+        part.strip()
+        for part in root.get_text("\n", strip=True).split("\n")
+        if part.strip()
+    ]
+    lines: list[str] = []
+    index = 0
+    while index < len(parts) - 1:
+        name = parts[index]
+        # Nhan di lien nhan (":" roi lai ":") la mot nhan RONG - site chua dien
+        # gia tri. Bo qua chu khong ghep bua voi nhan ke tiep.
+        if name.endswith(":") and not parts[index + 1].endswith(":"):
+            lines.append(f"{name.rstrip(': ').strip()}: {parts[index + 1]}")
+            index += 2
+            continue
+        index += 1
+    return lines
+
+
 def _definition_pair_lines(soup, spec_root_selector: str) -> list[str]:
     """Dong "label: value" tu bo cuc <label>/<span> (khong dung <table>), CHI
     trong cac node khop `spec_root_selector`.
@@ -96,6 +128,7 @@ def _definition_pair_lines(soup, spec_root_selector: str) -> list[str]:
     """
     lines: list[str] = []
     for root in soup.select(spec_root_selector):
+        found = False
         for label in root.find_all("label"):
             parent = label.parent
             # <label> cua o nhap lieu (form "Đăng ký tư vấn": Họ tên*, Số điện
@@ -106,6 +139,9 @@ def _definition_pair_lines(soup, spec_root_selector: str) -> list[str]:
             value = _pair_value(label)
             if name and value:
                 lines.append(f"{name}: {value}")
+                found = True
+        if not found:
+            lines.extend(_colon_pair_lines(root))
     return lines
 
 

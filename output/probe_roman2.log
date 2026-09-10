@@ -1,0 +1,18 @@
+CLOAKBROWSER_EXECUTABLE_PATH chua duoc cau hinh - dang fallback ve Chromium mac dinh cua Playwright (khong co stealth fingerprinting).
+KETQUA strategy= menu_crawl product_urls= 225 sau loc= 225
+KETQUA listing_urls= 26
+   https://roman.vn/10-thong-so-den-led-quan-trong-can-nam-duoc-khi-mua.html
+   https://roman.vn/5-loi-ich-hang-dau-cua-chieu-sang-cong-nghiep.html
+   https://roman.vn/6-meo-su-dung-dien-hop-ly-trong-khung-gio-cao-diem.html
+   https://roman.vn/7-cach-phan-biet-den-downlight-am-tran.html
+   https://roman.vn/aptomat-10a-la-gi-cong-dung-noi-bat-cua-aptomat.html
+   https://roman.vn/bo-bong-den-tuyp-led-1-3-nhom-than-elbdt.html
+   https://roman.vn/bo-bong-den-tuyp-led-thuy-tinh-ell8219-19w-than-elb8dt.html
+   https://roman.vn/bo-den-led-wing-ell6021-36w.html
+   https://roman.vn/bo-den-tuyp-led-1-3-nhom-ell8212-28w-roman.html
+   https://roman.vn/bo-den-tuyp-led-thuy-tinh-ell8329-19w.html
+   https://roman.vn/bong-den-e27-la-gi.html
+   https://roman.vn/bong-den-led-bulb-20w-tru-nhom.html
+   https://roman.vn/bong-den-led-bulb-30w-tru-nhom.html
+   https://roman.vn/bong-den-led-bulb-40w-tru-nhom.html
+   https://roman.vn/bong-den-led-bulb-a3-elb7028-3a-w.html

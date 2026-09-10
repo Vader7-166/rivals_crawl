@@ -1,0 +1,1003 @@
+2026-09-07 12:53:47,617 WARNING crawler.fetch.stealth_fetch: CLOAKBROWSER_EXECUTABLE_PATH chua duoc cau hinh - dang fallback ve Chromium mac dinh cua Playwright (khong co stealth fingerprinting).
+2026-09-07 12:53:47,702 INFO crawler.probing.prober: Dung ket qua probe da cache cho dienquang.com
+2026-09-07 12:53:47,702 INFO crawl_site: Site probing: strategy=sitemap reliability=0.8 sitemap=https://dienquang.com/sitemap.xml
+2026-09-07 12:53:47,703 INFO crawl_site: Bỏ 1 mục trong sitemap (trùng lặp / không phải trang sản phẩm)
+2026-09-07 12:53:47,759 INFO crawl_site: Sẽ crawl 741 URL sản phẩm của dienquang.com
+2026-09-07 12:53:47,828 INFO crawl_site: Kho dữ liệu đã có 741 bản ghi của dienquang.com (bản ghi OK sẽ không crawl lại)
+2026-09-07 12:53:47,910 INFO crawler.pipeline: Cần crawl 123/741 URL (618 tái sử dụng từ lần trước), 4 luồng xử lý
+2026-09-07 12:53:48,572 WARNING crawler.fetch.stealth_fetch: CLOAKBROWSER_EXECUTABLE_PATH chua duoc cau hinh - dang fallback ve Chromium mac dinh cua Playwright (khong co stealth fingerprinting).
+2026-09-07 12:53:50,440 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:53:50,495 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:53:51,494 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:53:51,495 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:53:52,569 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:53:52,569 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:53:53,901 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:53:53,902 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:53:53,916 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:53:53,926 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: kich_thuoc_doi_voi_den_tron_co_lo_khoet_mm_2mm='D=300, Khoét lo 280'
+2026-09-07 12:53:54,900 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:53:55,431 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:53:55,432 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:53:55,956 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:53:55,957 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:53:56,436 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:53:56,556 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:53:56,831 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:53:57,328 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:53:57,329 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:53:58,151 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:53:58,152 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:53:58,890 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:53:58,890 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:53:58,906 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:53:59,269 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:54:00,006 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:54:00,355 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:54:00,356 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:01,696 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:54:02,068 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:54:03,191 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:54:03,192 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:03,605 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:03,607 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:04,846 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:54:04,847 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:05,766 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:54:05,766 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:06,213 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:06,215 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:06,400 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:06,759 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:54:06,760 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:06,963 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:06,964 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:07,823 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:54:08,535 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:08,765 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:54:08,766 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:09,201 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:09,202 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:10,605 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:54:10,994 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:54:11,666 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:11,732 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:11,857 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:54:11,858 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:12,181 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:12,182 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:12,211 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:12,214 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:12,481 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:54:12,482 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:12,786 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:12,792 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:13,151 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:54:13,861 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:54:13,862 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:14,210 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:14,212 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:14,416 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:14,744 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:14,749 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:15,367 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:15,672 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:15,678 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:16,257 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:16,575 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:16,585 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:16,783 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:17,067 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:17,073 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:19,052 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:19,475 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:19,476 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:20,550 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:20,841 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:20,848 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:21,955 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:22,257 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:22,262 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:25,526 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:25,814 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:25,821 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:27,892 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:28,208 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:28,213 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:29,212 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:29,514 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:29,518 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:30,265 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:30,572 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:30,577 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:42,171 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:43,483 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:43,484 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:44,942 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:45,292 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:45,294 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:45,592 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:46,123 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:46,125 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:54:47,200 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:54:47,524 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:54:47,525 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:16,352 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:17,853 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:18,218 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:20,408 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:21,384 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:21,619 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:22,132 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:22,354 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:22,355 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:22,534 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:23,680 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:23,680 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:23,880 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:23,881 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:23,972 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:23,974 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:24,452 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:24,871 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:25,111 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:25,112 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:25,273 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:25,849 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:26,045 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:26,046 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:26,636 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:26,636 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:27,133 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:27,134 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:27,991 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:28,379 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:28,379 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:28,730 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:28,732 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:28,883 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:29,280 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:29,295 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:29,692 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:29,693 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:30,513 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:30,513 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:30,617 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:30,617 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:30,818 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:30,819 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:30,821 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:31,097 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:31,097 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:31,345 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:31,391 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:31,393 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 3.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:31,878 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:32,478 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:32,479 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:33,110 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:33,682 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:33,682 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:33,737 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:33,989 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:33,992 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:34,033 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:34,034 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:34,077 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:34,455 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:34,750 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:34,757 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:34,760 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:34,760 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:35,116 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:35,118 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:36,189 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:36,499 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:36,501 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:37,453 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:37,744 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:37,747 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:38,943 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:39,554 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:40,707 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:41,311 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:41,606 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:41,607 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:41,793 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:41,873 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:41,874 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:41,965 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:41,966 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:42,225 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:42,230 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:42,449 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:42,743 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:42,748 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:44,219 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:44,483 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:44,488 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:44,548 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:44,809 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:44,813 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:49,150 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:49,488 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:49,489 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:49,491 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:49,759 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:49,764 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 9.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:49,891 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:55:50,339 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:55:50,339 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:50,592 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:50,596 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:51,097 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:51,407 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:51,412 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:53,189 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:53,450 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:53,454 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:57,624 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:57,895 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:57,901 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:57,933 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:58,196 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:58,203 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:55:58,746 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:55:59,031 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:55:59,035 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 17.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:06,364 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:07,778 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:08,635 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:08,837 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:08,837 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:09,250 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:09,252 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:10,259 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:10,801 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:10,802 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:11,194 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:11,195 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:11,686 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:12,003 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:12,005 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:13,422 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:14,611 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:15,495 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:15,715 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:15,715 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:15,846 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:15,997 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:16,320 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:16,320 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:16,938 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:17,239 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:17,457 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:17,457 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:17,546 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:17,548 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:18,084 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:18,267 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:18,290 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:18,551 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:18,551 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:18,977 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:18,978 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:19,594 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:19,885 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:19,885 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:20,414 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:20,819 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:20,821 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:20,827 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:21,280 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:21,281 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:21,788 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:22,355 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:22,634 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:22,634 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:23,688 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:23,894 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:24,284 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:24,284 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:24,412 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:24,413 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:24,962 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:26,247 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:26,248 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:26,331 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:26,656 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:26,842 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:26,843 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:27,063 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:27,064 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:27,156 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:27,161 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:27,200 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:27,417 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:27,419 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:29,319 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:29,611 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:29,612 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:29,791 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:29,895 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:29,906 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:29,912 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:30,139 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:30,140 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:30,342 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:30,343 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:32,708 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:33,003 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:33,009 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:34,198 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:34,507 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:34,511 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:34,872 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:34,932 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:35,257 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:35,258 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:35,992 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:56:36,464 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:56:36,464 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:36,909 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:36,910 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:37,262 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:37,585 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:37,586 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:39,038 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:39,456 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:39,458 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:42,726 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:43,041 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:43,043 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:43,673 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:43,845 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:43,977 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:43,981 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:45,193 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:45,195 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:45,960 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:46,255 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:46,260 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:52,408 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:56:52,776 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:56:52,777 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:56:59,453 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:00,756 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:00,758 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:02,054 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:02,290 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:02,378 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:02,380 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:05,057 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:57:05,329 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:05,330 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:06,183 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:57:06,611 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:06,611 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:06,899 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:06,901 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:08,854 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:09,254 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:09,256 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:09,489 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:10,279 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:57:10,541 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:10,541 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:11,392 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:57:11,827 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:11,828 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:12,122 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:12,124 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:14,934 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:15,608 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:57:15,876 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:15,876 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:17,756 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:57:18,181 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:18,181 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:19,905 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:57:20,188 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:20,188 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:22,259 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:57:22,710 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:22,710 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:24,615 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:57:24,886 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:24,886 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:26,600 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:57:27,038 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:27,038 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:33,524 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:34,020 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:34,021 WARNING crawler.llm.fallback: Provider vertex-ai thất bại (Vertex AI lỗi: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}), chuyển sang provider tiếp theo
+2026-09-07 12:57:34,021 INFO crawler.llm.fallback: Gọi LLM provider: deepseek
+2026-09-07 12:57:34,811 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:34,930 INFO httpx2: HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 402 Payment Required"
+2026-09-07 12:57:34,931 WARNING crawler.llm.fallback: Provider deepseek thất bại (DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}), chuyển sang provider tiếp theo
+2026-09-07 12:57:34,931 WARNING crawler.pipeline: Tầng 2 (LLM) thất bại cho https://dienquang.com/products/bo-den-led-tube-dien-quang-dq-ledfx02-18: Tất cả LLM provider đều thất bại: DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}
+2026-09-07 12:57:35,273 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:35,279 WARNING crawler.llm.fallback: Provider vertex-ai thất bại (Vertex AI lỗi: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}), chuyển sang provider tiếp theo
+2026-09-07 12:57:35,284 INFO crawler.llm.fallback: Gọi LLM provider: deepseek
+2026-09-07 12:57:35,367 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:35,367 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:35,386 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:57:35,667 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:35,667 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:35,798 INFO httpx2: HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 402 Payment Required"
+2026-09-07 12:57:35,799 WARNING crawler.llm.fallback: Provider deepseek thất bại (DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}), chuyển sang provider tiếp theo
+2026-09-07 12:57:35,799 WARNING crawler.pipeline: Tầng 2 (LLM) thất bại cho https://dienquang.com/products/bo-den-led-pegasus-dien-quang-dq-ledpgs01-32w: Tất cả LLM provider đều thất bại: DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}
+2026-09-07 12:57:36,102 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:36,103 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:36,105 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:36,105 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:36,270 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:36,271 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:37,416 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:57:37,673 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:37,674 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:38,031 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:38,032 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:38,119 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:38,383 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:38,415 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:38,419 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 5.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:38,748 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:38,750 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:40,543 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:40,896 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:40,898 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:41,886 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:42,227 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:42,229 WARNING crawler.llm.fallback: Provider vertex-ai thất bại (Vertex AI lỗi: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}), chuyển sang provider tiếp theo
+2026-09-07 12:57:42,229 INFO crawler.llm.fallback: Gọi LLM provider: deepseek
+2026-09-07 12:57:42,842 INFO httpx2: HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 402 Payment Required"
+2026-09-07 12:57:42,844 WARNING crawler.llm.fallback: Provider deepseek thất bại (DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}), chuyển sang provider tiếp theo
+2026-09-07 12:57:42,846 WARNING crawler.pipeline: Tầng 2 (LLM) thất bại cho https://dienquang.com/products/bo-den-led-tube-dien-quang-dq-ledfx09-218765: Tất cả LLM provider đều thất bại: DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}
+2026-09-07 12:57:42,868 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:43,252 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:43,253 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:43,324 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:57:43,324 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:43,374 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:43,608 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:43,615 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:43,703 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:43,705 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:45,626 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:46,020 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:46,021 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:46,151 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:46,438 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:46,444 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:50,640 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:51,034 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:51,038 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 9.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:51,339 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:51,751 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:51,752 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:52,506 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:52,825 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:52,830 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:57:54,922 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:57:55,236 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:57:55,237 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:00,001 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:00,353 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:00,354 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:07,804 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:09,165 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:09,167 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:09,758 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:11,505 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:11,800 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:11,800 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:11,970 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:13,051 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:13,534 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:13,535 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:14,076 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:14,300 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:14,468 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:14,468 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:14,880 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:14,880 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:16,126 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:16,432 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:16,433 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:16,479 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:16,846 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:16,858 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:16,994 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:16,995 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:17,064 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:17,362 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:17,363 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:18,381 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:18,697 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:18,697 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:19,087 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:19,409 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:19,411 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:21,041 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:21,544 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:21,545 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:22,882 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:23,166 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:23,167 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:23,455 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:24,547 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:24,750 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:25,373 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:25,374 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:25,591 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:25,591 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:25,658 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:25,662 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:25,955 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:25,957 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:28,521 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:28,826 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:28,833 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:28,835 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:30,049 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:30,345 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:30,345 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:30,663 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:30,665 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:33,052 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:33,346 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:33,636 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:33,640 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:34,511 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:35,022 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:35,022 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:36,808 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:58:37,156 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:37,156 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:37,488 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:37,493 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:40,103 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:40,440 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:40,445 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:41,997 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:42,173 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:42,306 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:42,311 WARNING crawler.llm.fallback: Provider vertex-ai thất bại (Vertex AI lỗi: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}), chuyển sang provider tiếp theo
+2026-09-07 12:58:42,312 INFO crawler.llm.fallback: Gọi LLM provider: deepseek
+2026-09-07 12:58:42,951 INFO httpx2: HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 402 Payment Required"
+2026-09-07 12:58:42,953 WARNING crawler.llm.fallback: Provider deepseek thất bại (DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}), chuyển sang provider tiếp theo
+2026-09-07 12:58:42,955 WARNING crawler.pipeline: Tầng 2 (LLM) thất bại cho https://dienquang.com/products/bo-den-panel-dq-led-pa01v-135mm-12w: Tất cả LLM provider đều thất bại: DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}
+2026-09-07 12:58:43,430 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:43,432 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:43,455 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:43,455 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:43,873 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:43,875 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:45,333 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:45,647 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:45,653 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:45,954 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:46,331 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:46,333 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:50,251 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:50,406 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:50,532 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:50,538 WARNING crawler.llm.fallback: Provider vertex-ai thất bại (Vertex AI lỗi: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}), chuyển sang provider tiếp theo
+2026-09-07 12:58:50,538 INFO crawler.llm.fallback: Gọi LLM provider: deepseek
+2026-09-07 12:58:51,145 INFO httpx2: HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 402 Payment Required"
+2026-09-07 12:58:51,146 WARNING crawler.llm.fallback: Provider deepseek thất bại (DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}), chuyển sang provider tiếp theo
+2026-09-07 12:58:51,146 WARNING crawler.pipeline: Tầng 2 (LLM) thất bại cho https://dienquang.com/products/bo-den-thoat-hiem-dien-quang-dq-ex02-sc05l-r-2w-5-led-2-mat-chu-exit-mui-ten-quay-ph: Tất cả LLM provider đều thất bại: DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}
+2026-09-07 12:58:51,444 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:58:51,445 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:51,729 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:51,733 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:51,755 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:51,760 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:53,886 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:53,917 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:54,230 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:54,233 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:54,234 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:54,237 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:58:58,627 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:58:59,028 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:58:59,029 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:00,143 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:00,443 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:00,448 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:00,650 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:00,985 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:00,990 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:07,611 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:10,191 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:59:10,813 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:10,814 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:10,829 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:11,214 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:11,215 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:12,341 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:12,343 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:13,310 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:14,492 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:59:14,819 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:14,819 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:15,122 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:15,124 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:17,379 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:17,883 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:19,715 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:59:20,196 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:20,197 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:22,272 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:59:22,802 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:22,802 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:26,175 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:59:26,494 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:26,494 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:27,598 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:59:28,064 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:28,065 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:28,417 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:28,419 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:30,894 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:33,027 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:35,078 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:59:35,079 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:59:35,883 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:35,884 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:35,938 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:35,938 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:36,218 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:36,219 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:36,241 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:36,243 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:37,224 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:59:37,228 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: vat_lieu_than_den='Thân đèn làm bằng Hợp kim Nhôm đóc, sơn tĩnh điện.'
+2026-09-07 12:59:37,228 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: can_den_lap_dat_linh_hoat='Ø (42-60mm), có thể điều chỉnh góc ngậng linh hoạt.'
+2026-09-07 12:59:37,520 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:37,520 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:38,245 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:38,648 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:38,661 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:38,662 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:39,069 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:39,070 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:40,297 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:59:40,797 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:40,797 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:41,221 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:41,222 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:43,253 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:43,370 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:43,426 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:43,744 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:43,745 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:43,810 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:43,814 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:44,858 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:44,866 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:59:45,193 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:45,193 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:45,271 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:45,272 WARNING crawler.llm.fallback: Provider vertex-ai thất bại (Vertex AI lỗi: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}), chuyển sang provider tiếp theo
+2026-09-07 12:59:45,272 INFO crawler.llm.fallback: Gọi LLM provider: deepseek
+2026-09-07 12:59:45,550 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:45,552 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:45,927 INFO httpx2: HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 402 Payment Required"
+2026-09-07 12:59:45,928 WARNING crawler.llm.fallback: Provider deepseek thất bại (DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}), chuyển sang provider tiếp theo
+2026-09-07 12:59:45,928 WARNING crawler.pipeline: Tầng 2 (LLM) thất bại cho https://dienquang.com/products/den-ban-hoc-chong-can-hinh-xe-hoi-5w: Tất cả LLM provider đều thất bại: DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}
+2026-09-07 12:59:46,488 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:46,489 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:46,849 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:46,851 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:47,630 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:48,078 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:48,080 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:48,253 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:48,609 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:48,614 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:48,931 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:49,307 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:49,309 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:52,493 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:52,555 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:52,892 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:52,894 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:54,105 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:54,429 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:54,431 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:54,684 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:59:54,979 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:54,980 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:55,350 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:55,352 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:56,964 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:57,369 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:57,377 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:57,378 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 12:59:58,441 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 12:59:58,930 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 12:59:58,931 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 12:59:59,241 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 12:59:59,243 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:01,528 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:01,823 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:01,827 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:03,060 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:04,876 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:05,157 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:05,158 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:05,487 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:05,488 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:06,627 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:07,640 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:07,922 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:08,030 WARNING crawler.extraction.css_fallback: Bỏ qua giá không phân giải được ở dienquang.com (#price-preview > span:not(.sku)): 'Hết hàng'
+2026-09-07 13:00:08,046 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:08,046 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:09,483 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:09,992 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:10,269 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:10,270 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:11,323 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:11,903 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:11,903 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:12,434 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:12,709 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:12,709 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:13,033 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:13,037 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:13,563 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:13,615 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:14,078 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:14,078 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:14,084 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:14,085 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 33.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:15,276 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:15,625 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:15,627 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:15,628 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:15,630 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: bao_hanh_chinh_hang='1 doi 1 trong vong 12 thang theo chinh sach cua Dien Quang'
+2026-09-07 13:00:15,929 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:15,929 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:17,161 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:17,378 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:17,379 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:17,776 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:17,778 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:18,185 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:18,684 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:18,684 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:19,743 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:19,790 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:20,133 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:20,134 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:20,135 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:20,136 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:21,051 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:21,329 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:21,329 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:21,666 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:21,667 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:23,880 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:24,227 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:24,228 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:24,247 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:24,636 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:24,637 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:28,616 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:28,859 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:28,915 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:28,920 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:32,430 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:32,438 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: kich_thuoc_doi_voi_den_tron_co_lo_khoet_mm='D138xH120, khoét lỗ \x85120'
+2026-09-07 13:00:32,845 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:32,845 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:33,231 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:33,236 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:33,237 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:33,581 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:33,582 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:36,159 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:36,451 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:36,456 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:37,018 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:37,333 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:37,334 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:40,778 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:41,124 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:41,126 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:47,049 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:48,497 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:48,499 WARNING crawler.llm.fallback: Provider vertex-ai thất bại (Vertex AI lỗi: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}), chuyển sang provider tiếp theo
+2026-09-07 13:00:48,525 INFO crawler.llm.fallback: Gọi LLM provider: deepseek
+2026-09-07 13:00:49,098 INFO httpx2: HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 402 Payment Required"
+2026-09-07 13:00:49,099 WARNING crawler.llm.fallback: Provider deepseek thất bại (DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}), chuyển sang provider tiếp theo
+2026-09-07 13:00:49,099 WARNING crawler.pipeline: Tầng 2 (LLM) thất bại cho https://dienquang.com/products/dien-nang-luong-mat-troi-dien-quang: Tất cả LLM provider đều thất bại: DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}
+2026-09-07 13:00:49,435 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:49,435 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:49,637 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:49,768 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:49,769 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:49,873 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:50,133 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:50,135 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:50,954 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:50,955 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:52,110 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:53,418 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:53,464 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:53,818 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:53,819 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:53,996 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:53,996 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:55,355 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:55,651 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:55,651 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:55,969 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:00:55,970 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:00:58,516 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:00:59,348 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:00:59,854 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:00:59,854 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:00,172 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:00,174 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:02,978 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:05,594 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:01:05,895 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:01:05,896 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:06,638 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:07,235 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:07,236 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:08,233 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:01:08,243 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: ho_tro_toi_da='15 ket noi song song'
+2026-09-07 13:01:08,243 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: chu_ky_su_dung='len den 6000 lan (@80% DoD)'
+2026-09-07 13:01:08,243 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: chung_nhan='CE va UL 954.3 Class 9'
+2026-09-07 13:01:08,243 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: nhiet_do_hoat_dong='-20°C den 65°C (xa), 0°C den 55°C (sac)'
+2026-09-07 13:01:08,243 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: chat_lieu_vo='Kim loai (Sheet metal)'
+2026-09-07 13:01:08,243 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: bao_ve_thong_minh='Qua nhiet, qua dong, doan mach, qua sac, qua xa, dien ap thap'
+2026-09-07 13:01:08,726 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:01:08,726 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:09,037 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:09,042 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:11,853 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:12,150 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:12,151 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:16,609 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:16,963 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:16,965 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:23,274 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:25,291 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:25,835 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:01:25,917 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:26,492 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:01:26,492 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:26,539 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:26,541 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:27,100 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:01:27,404 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:01:27,405 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:27,817 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:27,819 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.9s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:28,329 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:01:28,851 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:01:28,852 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:29,238 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:29,240 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:30,747 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:31,092 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:31,094 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:31,285 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:33,655 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:01:33,938 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:01:33,939 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:34,268 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:34,269 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.2s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:35,143 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:36,377 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:01:36,439 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:36,828 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:36,832 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.8s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:36,923 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:01:36,923 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:39,651 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:39,856 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:01:40,217 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:01:40,217 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:40,513 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:40,518 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.6s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:40,923 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:40,925 WARNING crawler.llm.fallback: Provider vertex-ai thất bại (Vertex AI lỗi: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}), chuyển sang provider tiếp theo
+2026-09-07 13:01:40,925 INFO crawler.llm.fallback: Gọi LLM provider: deepseek
+2026-09-07 13:01:41,435 INFO httpx2: HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 402 Payment Required"
+2026-09-07 13:01:41,436 WARNING crawler.llm.fallback: Provider deepseek thất bại (DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}), chuyển sang provider tiếp theo
+2026-09-07 13:01:41,436 WARNING crawler.pipeline: Tầng 2 (LLM) thất bại cho https://dienquang.com/products/ong-luon-day-dien-tron-cung-dien-quang-dq-cw-f1250-l292: Tất cả LLM provider đều thất bại: DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}
+2026-09-07 13:01:41,686 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:42,048 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:01:42,049 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:42,052 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:42,053 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:42,430 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:42,432 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 1/6), đợi 2.0s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:42,854 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:43,127 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:43,164 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:43,168 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 5/6), đợi 32.4s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:43,428 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:43,430 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:44,436 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:44,737 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:44,741 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 2/6), đợi 4.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:47,901 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:48,297 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:48,299 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.1s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:49,408 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:49,730 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:49,731 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 3/6), đợi 8.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:50,092 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:50,379 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:50,384 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.5s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:56,368 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:57,596 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:57,601 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.3s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:01:58,387 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:01:58,740 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:01:58,743 WARNING crawler.llm.vertex_provider: Vertex AI lỗi tạm thời (lần 4/6), đợi 16.7s rồi thử lại: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to 
+2026-09-07 13:02:06,845 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:02:08,816 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:02:09,269 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:02:09,270 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:02:10,107 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:02:10,391 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-07 13:02:10,391 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:02:12,455 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:02:13,929 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:02:15,486 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:02:15,616 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-07 13:02:16,865 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 429 Too Many Requests"
+2026-09-07 13:02:16,866 WARNING crawler.llm.fallback: Provider vertex-ai thất bại (Vertex AI lỗi: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'Resource exhausted. Please try again later. Please refer to https://cloud.google.com/vertex-ai/generative-ai/docs/error-code-429 for more details.', 'status': 'RESOURCE_EXHAUSTED'}}), chuyển sang provider tiếp theo
+2026-09-07 13:02:16,866 INFO crawler.llm.fallback: Gọi LLM provider: deepseek
+2026-09-07 13:02:17,377 INFO httpx2: HTTP Request: POST https://api.deepseek.com/chat/completions "HTTP/1.1 402 Payment Required"
+2026-09-07 13:02:17,378 WARNING crawler.llm.fallback: Provider deepseek thất bại (DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}), chuyển sang provider tiếp theo
+2026-09-07 13:02:17,378 WARNING crawler.pipeline: Tầng 2 (LLM) thất bại cho https://dienquang.com/products/pin-sac-du-phong-dien-quang: Tất cả LLM provider đều thất bại: DeepSeek lỗi: Error code: 402 - {'error': {'message': 'Insufficient Balance', 'type': 'unknown_error', 'param': None, 'code': 'invalid_request_error'}}
+2026-09-07 13:02:19,426 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:02:25,227 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-07 13:02:25,973 INFO crawl_site: Đã ghi 741 bản ghi vào output/dienquang.com.xlsx (661 OK, 80 cần review)
+2026-09-07 13:02:25,973 INFO crawl_site: Chia thành 35 sheet theo loại sản phẩm:
+2026-09-07 13:02:25,973 INFO crawl_site:   nhom-san-pham-cong trinh                      114 sản phẩm
+2026-09-07 13:02:25,973 INFO crawl_site:   ĐÈN LED - SIÊU SÁNG, BỀN & TIẾT KIỆM ĐIỆN NĂNG 101 sản phẩm
+2026-09-07 13:02:25,973 INFO crawl_site:   Điện Gia Dụng                                 140 sản phẩm
+2026-09-07 13:02:25,973 INFO crawl_site:   Adapter Sạc                                     1 sản phẩm
+2026-09-07 13:02:25,973 INFO crawl_site:   Thiết bị gia dụng, điện tử, thiết bị thông minh ưu đãi hấp dẫn   1 sản phẩm
+2026-09-07 13:02:25,973 INFO crawl_site:   BALLAST ĐIỆN TỬ                                 3 sản phẩm
+2026-09-07 13:02:25,973 INFO crawl_site:   BALLAST TỪ                                      5 sản phẩm
+2026-09-07 13:02:25,973 INFO crawl_site:   Ưu Đãi Bất Ngờ                                 37 sản phẩm
+2026-09-07 13:02:25,973 INFO crawl_site:   VẬT TƯ ĐIỆN                                    98 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   Bình Ủ - Bình Giữ Nhiệt                         2 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   SẢN PHẨM ĐIỆN QUANG SOLAR                      12 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   LED CHIẾU ĐIỂM (SPOTLIGHT)                      7 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   Đèn Trang Trí Cao Cấp                          30 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   ĐIỆN CHIẾU SÁNG                                22 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   LED MICA                                        2 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   LED ỐP TRẦN                                    21 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   Led Ốp Trần, Downlight                          3 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   Đèn Led Panel Âm Trần Hiện Đại - Điện Quang    48 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   Đèn Pha                                        10 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   LED TUBE                                        7 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   CHIẾU SÁNG KHẨN CẤP                             6 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   ĐÈN LED THÔNG MINH                              4 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   Double Wing                                     1 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   PHÍCH CẮM                                       1 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   KHÁC - ĐIỆN QUANG SOLAR                         2 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   ĐÈN BÀN CÁC LOẠI                                4 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   SUMMER SALE ĐIỆN QUANG - Giảm đến 50% lận, nhanh tay mua ngay nào!   2 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   Sản Phẩm Được Mua Nhiều                         1 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   Đèn Tube Huỳnh Quang                            1 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   ĐÈN GIA DỤNG                                    2 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   ĐÈN TREO TRANG TRÍ                             11 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   GIẢI PHÁP ĐIỆN NĂNG LƯỢNG MẶT TRỜI              1 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   SmartHome - Sản phẩm thông minh đến từ Điện Quang   2 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   QUẠT ĐIỆN                                       8 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site:   Chưa phân loại                                 31 sản phẩm
+2026-09-07 13:02:25,974 INFO crawl_site: THỜI GIAN: 8.6 phút cho 741 sản phẩm (4 luồng, 0.70 s/sản phẩm)

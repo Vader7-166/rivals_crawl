@@ -10,7 +10,7 @@ from __future__ import annotations
 import logging
 import re
 import xml.etree.ElementTree as ET
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 
 import requests
@@ -53,6 +53,28 @@ _REQUEST_HEADERS = {
 class SitemapEntry:
     loc: str
     lastmod: Optional[str] = None
+
+
+@dataclass
+class SitemapSources:
+    """Hai loai URL rut ra tu cung mot sitemap, GIU RIENG chu khong gop.
+
+    Truoc day `listing` bi vut thang di. Vut la dung theo nghia "khong duoc lan
+    vao danh sach san pham" - trang danh muc khong co structured data san pham,
+    moi trang lot vao la mot luot fetch cong mot luot goi LLM de sinh ra ban ghi
+    rong (bug 559-thay-vi-486, xem docs/pipeline.md). Nhung "khong duoc lan vao"
+    khac "phai vut di": chinh cac trang do liet ke san pham nao thuoc danh muc
+    nao - nguyen lieu de biet mot URL thuoc danh muc gi TRUOC khi fetch no.
+
+    Bat bien: `product` va `listing` khong giao nhau.
+    """
+
+    product: list[SitemapEntry] = field(default_factory=list)
+    listing: list[SitemapEntry] = field(default_factory=list)
+
+    def extend(self, other: "SitemapSources") -> None:
+        self.product.extend(other.product)
+        self.listing.extend(other.listing)
 
 
 def discover_sitemap_candidates(base_url: str) -> list[str]:
@@ -118,27 +140,38 @@ def _parse_sitemap_xml(content: bytes):
 def resolve_sitemap_entries(
     sitemap_url: str, timeout: float = 15.0, _depth: int = 0
 ) -> list[SitemapEntry]:
-    """Giai de quy 1 sitemap (hoac sitemap index) thanh danh sach URL phang.
+    """Danh sach URL SAN PHAM phang cua 1 sitemap (hoac sitemap index).
+
+    Giu nguyen chu ky va hanh vi tu truoc khi co kenh danh muc - moi ben goi cu
+    khong phai doi gi. Ai can ca hai loai thi dung `resolve_sitemap_sources`.
+    """
+    return resolve_sitemap_sources(sitemap_url, timeout=timeout, _depth=_depth).product
+
+
+def resolve_sitemap_sources(
+    sitemap_url: str, timeout: float = 15.0, _depth: int = 0
+) -> SitemapSources:
+    """Giai de quy 1 sitemap thanh URL san pham VA URL trang danh muc, tach rieng.
 
     Neu URL khong tra ve XML hop le (vd site tra ve trang HTML 200 gia -
-    case KingLED voi cac path sitemap khong ton tai), tra ve [] thay vi loi,
-    de tang tren coi day la "khong tim thay sitemap tai duong dan nay".
+    case KingLED voi cac path sitemap khong ton tai), tra ve ket qua rong thay
+    vi loi, de tang tren coi day la "khong tim thay sitemap tai duong dan nay".
     """
     if _depth > 3:
-        return []
+        return SitemapSources()
     try:
         resp = requests.get(sitemap_url, timeout=timeout, headers=_REQUEST_HEADERS)
     except requests.RequestException:
-        return []
+        return SitemapSources()
     if resp.status_code != 200:
-        return []
+        return SitemapSources()
 
     root = _parse_sitemap_xml(resp.content)
     if root is None:
-        return []
+        return SitemapSources()
 
     root_tag = _local_tag(root.tag)
-    entries: list[SitemapEntry] = []
+    sources = SitemapSources()
 
     if root_tag == "sitemapindex":
         child_locs = [
@@ -155,10 +188,26 @@ def resolve_sitemap_entries(
             u for u in child_locs
             if "product" in u.lower() and not _TAXONOMY_SITEMAP.search(u)
         ]
-        targets = product_like or child_locs
-        for child_url in targets:
-            entries.extend(resolve_sitemap_entries(child_url, timeout=timeout, _depth=_depth + 1))
-        return entries
+        # Sitemap taxonomy chi duoc TACH RA khi da that su loc duoc sitemap san
+        # pham. Neu khong sub-sitemap nao ghi ro "product" thi ta dang o nhanh
+        # "giai ma tat ca" va KHONG co can cu nao noi cai nao la danh muc - doan
+        # bua o day se lam danh sach san pham ngan di, tuc doi hanh vi cu.
+        taxonomy_like = (
+            [u for u in child_locs if "product" in u.lower() and _TAXONOMY_SITEMAP.search(u)]
+            if product_like
+            else []
+        )
+        for child_url in product_like or child_locs:
+            sources.extend(
+                resolve_sitemap_sources(child_url, timeout=timeout, _depth=_depth + 1)
+            )
+        for child_url in taxonomy_like:
+            # Trong mot sitemap taxonomy thi MOI URL deu la trang danh muc -
+            # ke ca cac URL ma nhanh urlset ben duoi xep vao `product`.
+            sub = resolve_sitemap_sources(child_url, timeout=timeout, _depth=_depth + 1)
+            sources.listing.extend(sub.product)
+            sources.listing.extend(sub.listing)
+        return sources
 
     if root_tag == "urlset":
         for url_el in root:
@@ -172,7 +221,7 @@ def resolve_sitemap_entries(
                 elif child_tag == "lastmod" and child.text:
                     lastmod = child.text.strip()
             if loc:
-                entries.append(SitemapEntry(loc=loc, lastmod=lastmod))
-        return entries
+                sources.product.append(SitemapEntry(loc=loc, lastmod=lastmod))
+        return sources
 
-    return []
+    return sources

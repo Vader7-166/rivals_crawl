@@ -1,0 +1,50 @@
+2026-09-10 15:27:14,998 WARNING crawler.fetch.stealth_fetch: CLOAKBROWSER_EXECUTABLE_PATH chua duoc cau hinh - dang fallback ve Chromium mac dinh cua Playwright (khong co stealth fingerprinting).
+2026-09-10 15:27:42,441 INFO crawler.probing.prober: Sitemap https://panasonicvn.com.vn/sitemap_index.xml: 605 URL san pham + 23 trang danh muc, do tin cay = 100%
+2026-09-10 15:27:42,444 INFO crawl_site: Site probing: strategy=sitemap reliability=1.0 sitemap=https://panasonicvn.com.vn/sitemap_index.xml
+2026-09-10 15:27:42,444 INFO crawl_site: Bỏ 1 mục trong sitemap (trùng lặp / không phải trang sản phẩm)
+2026-09-10 15:27:42,494 INFO crawl_site: Sẽ crawl 12 URL sản phẩm của panasonicvn.com.vn
+2026-09-10 15:27:42,700 INFO crawler.pipeline: Cần crawl 12/12 URL (0 tái sử dụng từ lần trước), 4 luồng xử lý
+2026-09-10 15:27:43,386 WARNING crawler.fetch.stealth_fetch: CLOAKBROWSER_EXECUTABLE_PATH chua duoc cau hinh - dang fallback ve Chromium mac dinh cua Playwright (khong co stealth fingerprinting).
+2026-09-10 15:27:46,189 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:27:46,368 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:27:48,010 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:27:48,021 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: bo_cong_tac='co den bao'
+2026-09-10 15:27:48,453 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:27:48,453 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:27:49,546 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:27:50,484 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:27:50,484 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:27:51,468 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:27:52,504 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:27:52,504 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:27:53,440 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:27:54,671 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:27:54,671 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:27:55,831 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:27:56,594 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:27:56,594 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:27:57,821 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:27:57,827 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: bo_cong_tac='1 cong tac co den bao'
+2026-09-10 15:27:58,858 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:27:58,858 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:27:59,631 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:28:01,052 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:28:01,053 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:28:02,178 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:28:03,011 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:28:03,011 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:28:03,980 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:28:05,059 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:28:05,060 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:28:06,669 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:28:07,049 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:28:07,051 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:28:08,630 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:28:09,057 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:28:09,058 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:28:10,617 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:28:10,903 INFO crawl_site: Đã ghi 12 bản ghi vào output/panasonicvn.com.vn.xlsx (0 OK, 12 cần review)
+2026-09-10 15:28:10,904 INFO crawl_site: Chia thành 2 sheet theo loại sản phẩm:
+2026-09-10 15:28:10,904 INFO crawl_site:   Công Tắc Ổ Cắm                                  9 sản phẩm
+2026-09-10 15:28:10,904 INFO crawl_site:   Đèn Led                                         3 sản phẩm
+2026-09-10 15:28:10,904 INFO crawl_site: THỜI GIAN: 0.5 phút cho 12 sản phẩm (4 luồng, 2.36 s/sản phẩm)

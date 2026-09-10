@@ -28,11 +28,17 @@ cp .env.example .env      # điền khoá LLM + đường dẫn cloakBrowser
 .venv/bin/python scripts/export_excel.py kingled.com.vn
 ```
 
+**Site không có sitemap vẫn chạy đúng lệnh đó.** Không có sitemap dùng được thì
+tầng 0 tự dò URL sản phẩm từ trang danh mục — xem
+[docs/pipeline.md](docs/pipeline.md) mục "Nhánh không-sitemap". Đo trên 5 đối
+thủ không có sitemap: MPE, Roman, VNE, Duhal, Nanoco.
+
+Danh sách nhãn hiệu cần crawl và trạng thái từng nhãn: [crawl_list.md](crawl_list.md).
+
 ## Kho dữ liệu
 
 `crawl.db` (SQLite, 1 file) là **nguồn sự thật**; file `.xlsx` là bản kết xuất.
-File này **không nằm trong git** (~100 MB khi đủ 3 site) — dựng lại từ các file
-`.xlsx` đã có:
+File này **không nằm trong git** — dựng lại từ các file `.xlsx` đã có:
 
 ```bash
 .venv/bin/python scripts/import_legacy.py output/*.xlsx

@@ -1,0 +1,48 @@
+2026-09-10 15:26:19,628 WARNING crawler.fetch.stealth_fetch: CLOAKBROWSER_EXECUTABLE_PATH chua duoc cau hinh - dang fallback ve Chromium mac dinh cua Playwright (khong co stealth fingerprinting).
+2026-09-10 15:26:41,977 INFO crawler.probing.prober: Sitemap https://philipsvietnam.com/sitemap_index.xml: 937 URL san pham + 0 trang danh muc, do tin cay = 80%
+2026-09-10 15:26:41,981 INFO crawl_site: Site probing: strategy=sitemap reliability=0.8 sitemap=https://philipsvietnam.com/sitemap_index.xml
+2026-09-10 15:26:41,982 INFO crawl_site: Bỏ 90 mục trong sitemap (trùng lặp / không phải trang sản phẩm)
+2026-09-10 15:26:42,048 INFO crawl_site: Sẽ crawl 12 URL sản phẩm của philipsvietnam.com
+2026-09-10 15:26:42,256 INFO crawler.pipeline: Cần crawl 12/12 URL (0 tái sử dụng từ lần trước), 4 luồng xử lý
+2026-09-10 15:26:43,410 WARNING crawler.fetch.stealth_fetch: CLOAKBROWSER_EXECUTABLE_PATH chua duoc cau hinh - dang fallback ve Chromium mac dinh cua Playwright (khong co stealth fingerprinting).
+2026-09-10 15:26:45,852 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:26:45,888 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:26:47,659 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:26:47,659 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:26:48,157 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:26:49,604 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:26:49,605 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:26:50,612 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:26:51,350 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:26:51,762 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:26:51,763 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:26:53,397 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:26:53,398 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:26:55,141 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:26:55,188 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:26:55,505 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:26:55,506 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:26:57,951 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:26:57,952 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:26:58,458 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:26:59,475 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:26:59,475 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:27:00,176 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:27:00,709 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:27:00,718 INFO crawler.llm.validate: Bỏ tag không có căn cứ trong nguồn: loai_den='Sodium cao ap'
+2026-09-10 15:27:01,502 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:27:01,502 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:27:03,388 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:27:03,388 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:27:03,715 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:27:05,489 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:27:05,489 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:27:06,159 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:27:07,391 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:27:07,684 INFO crawler.llm.fallback: Gọi LLM provider: vertex-ai
+2026-09-10 15:27:07,685 INFO google_genai.models: AFC is enabled with max remote calls: 10.
+2026-09-10 15:27:10,212 INFO httpx: HTTP Request: POST https://us-central1-aiplatform.googleapis.com/v1beta1/projects/project-bf21b155-6b73-4230-8ef/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent "HTTP/1.1 200 OK"
+2026-09-10 15:27:10,901 INFO crawl_site: Đã ghi 12 bản ghi vào output/philipsvietnam.com.xlsx (0 OK, 12 cần review)
+2026-09-10 15:27:10,901 INFO crawl_site: Chia thành 1 sheet theo loại sản phẩm:
+2026-09-10 15:27:10,901 INFO crawl_site:   Loại đèn led khác                              12 sản phẩm
+2026-09-10 15:27:10,901 INFO crawl_site: THỜI GIAN: 0.5 phút cho 12 sản phẩm (4 luồng, 2.39 s/sản phẩm)

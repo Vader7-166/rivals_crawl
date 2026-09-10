@@ -1,0 +1,4 @@
+=== BAT DAU Panasonic lan 2 21:31:21 ===
+=== XONG Panasonic rc=1 21:39:42 ===
+2026-09-07 21:39:41,585 INFO crawler.probing.prober: Do khong-sitemap panasonic.net: 1 trang danh muc, 33 URL san pham, 88 trang da fetch
+2026-09-07 21:39:41,637 ERROR crawl_site: Probe không trả về URL sản phẩm nào cho panasonic.net - dừng. Kiểm tra site có sitemap không, hoặc chạy lại với --refresh-probe.

@@ -63,6 +63,34 @@ def _find_by_jsonld_type(nodes: list[dict], type_name: str) -> Optional[dict]:
     return None
 
 
+def _gia_tu_offer(offers: Any) -> Any:
+    """Gia trong mot khoi `offers` cua schema.org.
+
+    Dang pho bien nhat la `offers.price` phang. Nhung WooCommerce ban moi khong
+    phat truong do nua ma long gia vao `priceSpecification`:
+
+        "offers": [{"@type": "Offer", "priceSpecification": [
+            {"@type": "UnitPriceSpecification", "price": "1612500",
+             "priceCurrency": "VND", "valueAddedTaxIncluded": false}]}]
+
+    Do tren panasonicvn.com.vn: 12/12 ban ghi mat gia du gia hien ro tren
+    trang, chi vi tang 1 khong biet nhin vao day. Day la hinh dang CHUAN cua
+    schema.org chu khong phai cua rieng site nao, nen doc o tang 1 - khong
+    dang ky selector theo domain.
+    """
+    if not isinstance(offers, dict):
+        return None
+    if offers.get("price") is not None:
+        return offers.get("price")
+    spec = offers.get("priceSpecification")
+    if isinstance(spec, dict):
+        spec = [spec]
+    for muc in spec or []:
+        if isinstance(muc, dict) and muc.get("price") is not None:
+            return muc.get("price")
+    return None
+
+
 def _adapt_jsonld_product(node: dict) -> dict[str, Any]:
     offers = node.get("offers")
     if isinstance(offers, list):
@@ -77,7 +105,7 @@ def _adapt_jsonld_product(node: dict) -> dict[str, Any]:
         "name": node.get("name"),
         "sku": node.get("sku"),
         "image": image,
-        "price": offers.get("price") if isinstance(offers, dict) else None,
+        "price": _gia_tu_offer(offers),
         "url": node.get("url"),
     }
 

@@ -77,3 +77,59 @@ def test_duplicates_differing_only_by_trailing_slash_keep_the_first_form():
     urls = ["https://moi.vn/den-a", "https://moi.vn/den-a/"]
 
     assert select_product_urls(urls, "https://moi.vn") == ["https://moi.vn/den-a"]
+
+
+def test_listing_fetch_options_do_not_reuse_product_wait_selector():
+    """`wait_selector` cua KingLED la bang thong so cua TRANG SAN PHAM - tren
+    trang danh muc no khong the xuat hien, nen dung chung la moi trang dung cho
+    het 5s timeout (138 trang ~ 11,5 phut cho vo ich)."""
+    profile = get_profile("https://kingled.com.vn")
+
+    assert profile.fetch_options == {
+        "wait_selector": 'div.property[data-id="Property"] label'
+    }
+    assert profile.listing_fetch_options == {}
+
+
+def test_brand_name_is_declared_not_derived():
+    assert get_profile("https://kingled.com.vn").brand_name == "KingLED"
+    assert get_profile("https://tlclighting.com.vn").brand_name == "TLC Lighting"
+    assert get_profile("https://chua-dang-ky.vn").brand_name is None
+
+
+def test_two_new_competitors_needed_no_new_module():
+    """dienquang.com (Haravan) và denvinaled.vn (WooCommerce) được thêm bằng
+    đúng một dòng dữ liệu mỗi site - không file .py nào mọc thêm.
+
+    Cả hai sitemap sản phẩm đều lẫn đúng một trang không phải sản phẩm (trang
+    chủ ở dienquang, trang "Cửa hàng" ở denvinaled), và cả hai đều lọc lại
+    được bằng pattern đường dẫn.
+    """
+    dq = select_product_urls(
+        ["https://dienquang.com", "https://dienquang.com/products/den-tube-x"],
+        "https://dienquang.com",
+    )
+    dv = select_product_urls(
+        ["https://denvinaled.vn/cua-hang/", "https://denvinaled.vn/san-pham/den-y/"],
+        "https://denvinaled.vn",
+    )
+
+    assert dq == ["https://dienquang.com/products/den-tube-x"]
+    assert dv == ["https://denvinaled.vn/san-pham/den-y/"]
+
+
+def test_new_competitors_need_no_wait_selector():
+    """Đo trên trang thật: giá, breadcrumb và bảng thông số của cả hai site đều
+    có sẵn trong HTML tĩnh. Khai wait_selector thừa chỉ tốn thời gian chờ
+    suông cho mỗi trang (xem chú thích listing_wait_selector)."""
+    assert get_profile("https://dienquang.com").fetch_options == {}
+    assert get_profile("https://denvinaled.vn").fetch_options == {}
+
+
+def test_listing_seed_urls_mac_dinh_rong():
+    """Chỉ site nào trang chủ không lộ lối vào mới cần khai — mặc định là rỗng."""
+    from crawler.sites import get_profile
+
+    assert get_profile("https://tlclighting.com.vn").listing_seed_urls == ()
+    assert get_profile("https://khong-co-trong-registry.vn").listing_seed_urls == ()
+    assert get_profile("https://www.nanoco.com.vn").listing_seed_urls != ()

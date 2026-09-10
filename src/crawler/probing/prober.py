@@ -10,10 +10,12 @@ from urllib.parse import urlparse
 
 from ..config import PROBING
 from ..fetch import StealthFetcher
+from ..sites import get_profile
 from .cache import ProbeCache, ProbeResult
 from .detection import analyze_page
 from .menu_crawl import find_candidate_listing_urls
-from .sitemap import discover_sitemap_candidates, resolve_sitemap_entries
+from .product_discovery import discover_product_urls
+from .sitemap import discover_sitemap_candidates, resolve_sitemap_sources
 
 logger = logging.getLogger(__name__)
 
@@ -49,12 +51,14 @@ def probe_domain(
             return cached
 
     for sitemap_url in discover_sitemap_candidates(base_url):
-        entries = resolve_sitemap_entries(sitemap_url)
+        sources = resolve_sitemap_sources(sitemap_url)
+        entries = sources.product
         if not entries:
             continue
         score = _score_sitemap_reliability(entries, fetcher)
         logger.info(
-            "Sitemap %s: %d URL, do tin cay = %.0f%%", sitemap_url, len(entries), score * 100
+            "Sitemap %s: %d URL san pham + %d trang danh muc, do tin cay = %.0f%%",
+            sitemap_url, len(entries), len(sources.listing), score * 100,
         )
         if score >= PROBING.sitemap_reliability_threshold:
             result = ProbeResult(
@@ -64,30 +68,56 @@ def probe_domain(
                 sitemap_url=sitemap_url,
                 reliability_score=score,
                 product_urls=[e.loc for e in entries],
+                # Do tin cay CHI cham diem tren URL san pham. Trang danh muc di
+                # kem khong duoc tinh vao diem: no khong phai trang san pham nen
+                # bo phat hien se truot, va truot thi keo diem xuong duoi nguong
+                # -> site tut xuong nhanh menu-crawl du sitemap hoan toan du.
+                listing_urls=[e.loc for e in sources.listing],
             )
             cache.save(result)
             return result
 
     logger.info("Khong tim thay sitemap dang tin cay cho %s, fallback menu crawl", domain)
-    candidates = find_candidate_listing_urls(base_url, fetcher)[:_MAX_MENU_CANDIDATES]
+    profile = get_profile(base_url)
+    # Site da khai `listing_seed_urls` thi CHI di tu do, khong bo them ung vien
+    # doc tu menu trang chu. Khai seed la mot cau khang dinh da do duoc: san
+    # pham cua site nay nam duoi day, cho khac thi khong.
+    #
+    # Do tren roman.vn: menu trang chu la carousel ANH, khong the <nav> nao,
+    # nen `find_candidate_listing_urls` tut ve "lay ca trang lam menu" va nem
+    # vao 122 link - trong do co ca bai blog, va bai blog ky thuat ("10 thong
+    # so den LED can biet") thi vuot moi nguong noi dung nen di thang vao ket
+    # qua. Them seed ma van gop menu thi chi THEM URL chu khong bot rac: do
+    # duoc 94/94 san pham nhung cung giu nguyen 45/45 rac.
+    if profile.listing_seed_urls:
+        candidates = list(profile.listing_seed_urls)
+    else:
+        candidates = find_candidate_listing_urls(base_url, fetcher)[:_MAX_MENU_CANDIDATES]
 
-    listing_urls: list[str] = []
-    flagged: list[str] = []
-    for url in candidates:
-        result = fetcher.fetch(url)
-        if not result.ok or not result.html:
-            continue
-        if analyze_page(result.html).looks_like_product_listing:
-            listing_urls.append(url)
-        else:
-            flagged.append(url)
+    # Menu chi cho ra UNG VIEN trang danh muc. Viec bien chung thanh URL san
+    # pham la cua product_discovery.py - truoc no, nhanh nay tra ve
+    # product_urls=[] va crawl_site.py dung ngay tai do.
+    discovery = discover_product_urls(
+        base_url,
+        fetcher,
+        seed_urls=candidates,
+        listing_fetch_options=profile.listing_fetch_options,
+        product_fetch_options=profile.fetch_options,
+        product_url_pattern=profile.product_url_pattern,
+    )
+    logger.info(
+        "Do khong-sitemap %s: %d trang danh muc, %d URL san pham, %d trang da fetch%s",
+        domain, len(discovery.listing_urls), len(discovery.product_urls),
+        discovery.pages_fetched, " (CHAM TRAN)" if discovery.budget_exhausted else "",
+    )
 
     probe_result = ProbeResult(
         domain=domain,
         strategy="menu_crawl",
         probed_at=ProbeCache.now_iso(),
-        listing_urls=listing_urls,
-        flagged_landing_urls=flagged,
+        product_urls=discovery.product_urls,
+        listing_urls=discovery.listing_urls,
+        flagged_landing_urls=discovery.flagged_urls,
     )
     cache.save(probe_result)
     return probe_result

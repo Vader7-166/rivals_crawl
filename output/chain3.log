@@ -1,0 +1,21 @@
+=== Roman xong 19:33:31 ===
+2026-09-07 19:33:19,919 INFO crawl_site: Đã ghi 139 bản ghi vào output/roman.vn.xlsx (0 OK, 139 cần review)
+2026-09-07 19:33:19,919 INFO crawl_site: Chia thành 1 sheet theo loại sản phẩm:
+2026-09-07 19:33:19,919 INFO crawl_site:   Chưa phân loại                                139 sản phẩm
+2026-09-07 19:33:19,919 INFO crawl_site: THỜI GIAN: 8.7 phút cho 139 sản phẩm (4 luồng, 3.76 s/sản phẩm)
+=== BAT DAU vne-led.vn 19:33:31 ===
+=== XONG vne-led.vn rc=0 19:40:50 ===
+2026-09-07 19:40:49,901 INFO crawl_site: Đã ghi 120 bản ghi vào output/vne-led.vn.xlsx (0 OK, 120 cần review)
+2026-09-07 19:40:49,901 INFO crawl_site: THỜI GIAN: 7.3 phút cho 120 sản phẩm (4 luồng, 3.63 s/sản phẩm)
+=== BAT DAU www.nanoco.com.vn 19:40:50 ===
+=== XONG www.nanoco.com.vn rc=0 19:43:48 ===
+2026-09-07 19:43:48,114 INFO crawl_site: Đã ghi 48 bản ghi vào output/www.nanoco.com.vn.xlsx (0 OK, 48 cần review)
+2026-09-07 19:43:48,115 INFO crawl_site: THỜI GIAN: 2.9 phút cho 48 sản phẩm (4 luồng, 3.62 s/sản phẩm)
+=== BAT DAU www.mpe.com.vn 19:43:48 ===
+=== XONG www.mpe.com.vn rc=0 20:02:06 ===
+2026-09-07 20:02:05,740 INFO crawl_site: Đã ghi 180 bản ghi vào output/www.mpe.com.vn.xlsx (0 OK, 180 cần review)
+2026-09-07 20:02:05,740 INFO crawl_site: THỜI GIAN: 18.2 phút cho 180 sản phẩm (4 luồng, 6.07 s/sản phẩm)
+=== BAT DAU duhal.com.vn 20:02:06 ===
+Terminated                 .venv/bin/python -u scripts/crawl_site.py "$u" > "output/crawl_${d}.log" 2>&1
+=== XONG duhal.com.vn rc=143 20:02:18 ===
+=== HET CHUOI 20:02:18 ===

@@ -1,0 +1,5 @@
+=== probe Roman xong, bat dau Duhal 20:14:23 ===
+=== XONG Duhal rc=0 21:56:24 ===
+2026-09-07 21:13:46,337 INFO crawl_site: Sẽ crawl 615 URL sản phẩm của duhal.com.vn
+2026-09-07 21:56:23,830 INFO crawl_site: Đã ghi 615 bản ghi vào output/duhal.com.vn.xlsx (0 OK, 615 cần review)
+2026-09-07 21:56:23,830 INFO crawl_site: THỜI GIAN: 42.6 phút cho 615 sản phẩm (4 luồng, 4.16 s/sản phẩm)

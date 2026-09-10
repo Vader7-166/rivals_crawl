@@ -4,7 +4,12 @@ Dữ liệu này CÓ THẬT trên trang nhưng trước đó pipeline không dù
 trống 100%. Cơ chế phải TỔNG QUÁT cho mọi site - không có config riêng theo
 domain - nên bộ test này đối chiếu 3 site có 3 hình dạng khác hẳn nhau.
 """
-from crawler.extraction.advantages import extract_advantages
+from crawler.extraction.advantages import (
+    NGUON_LA_BAN,
+    NGUON_MO_TA,
+    NGUON_TU_KHOA,
+    extract_advantages,
+)
 
 KINGLED_NOISE = "div.item"
 SPEC_SELECTOR_NOISE = {"noise_selector": KINGLED_NOISE}
@@ -347,3 +352,142 @@ def test_an_empty_section_reports_no_source_not_the_branch_that_won():
     """
     result = extract_advantages("<h3>Ưu điểm sản phẩm</h3>")
     assert result == (None, None, "none")
+
+
+def test_section_stops_at_nested_heading_instead_of_grabbing_another_section(
+    fixture_html,
+):
+    """denvinaled.vn boc NHIEU muc trong CUNG mot <div>: <h2> "Vai trò chính"
+    co dung 1 the anh em, va the do lai chua <h2> ke tiep ben trong.
+
+    Luat cu ("gap the nao chua de muc ngang cap thi dung") cat ngay tai the do
+    -> muc rong -> `_section_nodes` leo len the cha va vo phai khoi "Thông tin
+    liên hệ" nam ngoai (dia chi showroom, so dien thoai, MST). Cot "Ưu điểm"
+    khi do chua dia chi cong ty, va no VAN co ve hop le khi review vi moi dong
+    deu co that tren trang.
+    """
+    html = fixture_html("denvinaled_product_contact_block.html")
+
+    result = extract_advantages(
+        html, anchor="Vai trò chính của đèn chiếu cảnh quan:"
+    )
+
+    assert result.nguon == NGUON_LA_BAN
+    assert "Tạo điểm nhấn thẩm mỹ" in result.tom_tat
+    assert "Showroom" not in (result.tom_tat or "")
+    assert "MST" not in (result.noi_dung or "")
+
+
+# --- A: tieu de muc khong phai <h*> ---------------------------------------
+
+
+def test_tieu_de_nam_trong_div_van_duoc_nhan():
+    """roman.vn dung `<div class="text">Đặc điểm nổi bật:</div>` lam tieu de
+    muc. Chi quet <h1>..<h4> thi ca muc vo hinh - do tren 40 trang Roman thieu
+    uu diem, khong trang nao co tu khoa do trong mot the <h*>."""
+    html = """
+    <div class="text">Đặc điểm nổi bật:</div>
+    <p>Chất liệu: thân đèn bằng thép sơn tĩnh điện, bền và chống oxy hóa.</p>
+    <p>Nguồn sáng: chip LED Hàn Quốc, hiệu suất phát quang cao.</p>
+    """
+    result = extract_advantages(html)
+
+    assert result.nguon == NGUON_TU_KHOA
+    assert "thép sơn tĩnh điện" in result.noi_dung
+
+
+def test_tieu_de_gia_phai_dan_toi_noi_dung_that():
+    """`<a class="nav-link">Vì sao chọn MPE</a>` qua duoc moi kiem tra hinh
+    dang (ngan, khong dau phay, mang tin hieu duong) nhung chi keo theo mot
+    dong. Khong chan thi ca 180 san pham MPE bi ghi ho so cong ty vao cot uu
+    diem."""
+    html = '<a class="nav-link">Vì sao chọn MPE</a><a>Hồ Sơ Năng Lực MPE</a>'
+
+    assert extract_advantages(html) == (None, None, "none")
+
+
+def test_doan_van_dai_co_tu_khoa_khong_phai_tieu_de():
+    """Rang buoc "khong doc nhu mot cau" la thu giu cho dong noi dung khong bi
+    nham thanh tieu de: fixture denvinaled co dong "Rọi vào cây cối, bụi hoa,
+    tượng phù điêu để làm nổi bật vẻ đẹp..." - dai, co dau phay, co "nổi bật".
+    """
+    html = (
+        "<div>Rọi vào cây cối, bụi hoa, tượng phù điêu để làm nổi bật vẻ đẹp"
+        " của cảnh quan sân vườn.</div><p>Một dòng nội dung khác.</p>"
+    )
+
+    assert extract_advantages(html).nguon == "none"
+
+
+# --- B: khoi mo ta lam uu diem --------------------------------------------
+
+
+def test_khoi_mo_ta_duoc_dung_khi_khong_co_muc_uu_diem():
+    """denvinaled.vn khong co MUC uu diem nao, chi co mot doan mo ta - va
+    chinh doan do noi ve uu diem."""
+    html = (
+        '<div id="tab-description">Đầu Cấp Nguồn Ray Nam Châm VinaLED V1MT20-P'
+        " chất lượng cao, tuổi thọ lâu năm. Phụ kiện kết nối driver tới thanh"
+        " ray nam châm.</div>"
+    )
+
+    result = extract_advantages(html, description_selector="#tab-description")
+
+    assert result.nguon == NGUON_MO_TA
+    assert "tuổi thọ lâu năm" in result.noi_dung
+    # Van xuoi lien mach: khong tu cat cau ra thanh gach dau dong.
+    assert result.tom_tat is None
+
+
+def test_khoi_mo_ta_chi_toan_thong_so_thi_bi_tu_choi():
+    """`#tab-description` cua vne-led.vn chua dung 9 cap thong so va khong mot
+    cau nao. Do la bang thong so viet doc, khong phai uu diem - ghi no vao cot
+    uu diem la sai du lieu tren ca 120 san pham."""
+    html = (
+        '<div id="tab-description">Công suất (Watt): 7\nQuang thông (lm): 700\n'
+        "Điện áp (V): 100-240\nĐui/Lỗ khoét: Φ90\nPF: >0.5\n"
+        "Hoàn màu (RA or CRI): >80\nTuổi thọ (Giờ): 25000</div>"
+    )
+
+    assert extract_advantages(html, description_selector="#tab-description") == (
+        None, None, "none",
+    )
+
+
+def test_tom_tat_chi_dien_khi_site_da_tach_san_cac_y():
+    """www.denasia.vn tach san bang dau "–". Khi do cot tom tat duoc dien -
+    day la cach site tu chia, khong phai ta dien giai."""
+    html = (
+        '<div class="thongSoNhanh">– Thiết kế hiện đại, sang trọng.\n'
+        "– Dễ dàng sử dụng.\n– Thân ấm được làm bằng inox siêu bền, dùng lâu"
+        " năm không hoen gỉ.</div>"
+    )
+
+    result = extract_advantages(html, description_selector=".thongSoNhanh")
+
+    assert result.nguon == NGUON_MO_TA
+    assert "Thiết kế hiện đại, sang trọng." in result.tom_tat
+    assert "Dễ dàng sử dụng." in result.tom_tat
+
+
+def test_nhan_muc_khong_duoc_ghi_vao_cot_tom_tat():
+    """Khoi mo ta cua `bep-dien-tu-bt01` mo dau bang dong "Mô tả sản phẩm".
+    Ghi thang no vao cot tom tat thi nguoi doc nhan duoc mot cai nhan chu
+    khong phai du lieu."""
+    html = (
+        '<div class="thongSoNhanh"><li>Mô tả sản phẩm</li>'
+        "<li>Thiết kế hiện đại, sang trọng, phù hợp mọi không gian bếp.</li></div>"
+    )
+
+    result = extract_advantages(html, description_selector=".thongSoNhanh")
+
+    assert "Mô tả sản phẩm" not in (result.tom_tat or "")
+    assert "Thiết kế hiện đại" in result.tom_tat
+
+
+def test_khong_dang_ky_selector_thi_nhanh_mo_ta_tat_han():
+    """Domain chua khao sat khong bi ap luat cua site khac - giu nguyen nguyen
+    tac cua registry."""
+    html = '<div id="tab-description">Sản phẩm chất lượng cao, tuổi thọ lâu năm và bền bỉ.</div>'
+
+    assert extract_advantages(html) == (None, None, "none")

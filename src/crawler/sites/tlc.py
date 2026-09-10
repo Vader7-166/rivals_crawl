@@ -1,5 +1,15 @@
 """Pilot crawler cho TLC (tlclighting.com.vn), category "Đèn LED âm trần". Tasks 8.1-8.2.
 
+ĐƯỜNG TỔNG QUÁT NAY O `probing/category_crawl.py`, khong phai o day. File nay
+giu nguyen lam ban pilot da chay that; no KHONG phai khuon mau de nhan ban.
+
+Khac biet ban chat giua hai duong, la ly do khong gop lam mot:
+  - o day  : san pham = link khop `a[href*='/san-pham/']`, tuc mot CSS selector
+             rieng cua TLC. KingLED de URL phang nen cach nay bat kha.
+  - tang 0.5: san pham = link co mat trong TAP URL SAN PHAM tu sitemap. Khong
+             selector, dung cho moi site, nhung DOI HOI da probe xong domain.
+Ban pilot chay doc lap khong co ket qua probe nen khong bac len duong kia duoc.
+
 `product-sitemap.xml` cua TLC la nguon URL san pham dang tin cay CHO CA SITE
 (486 URL - da xac nhan o site-probing), nhung khong mang thong tin category -
 nen de biet chinh xac URL nao thuoc category "Đèn LED âm trần" (129 SP), phai

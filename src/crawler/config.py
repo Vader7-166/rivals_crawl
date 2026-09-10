@@ -111,6 +111,10 @@ class CrawlConfig:
 @dataclass(frozen=True)
 class OutputConfig:
     output_dir: Path = Path(os.environ.get("OUTPUT_DIR", "./output"))
+    # Noi chua HTML dinh kem cua sheet canh bao. Tach RIENG khoi thu muc .xlsx
+    # co chu dich: no nang 244 MB tren 12 site, gap hon 100 lan tong so file
+    # .xlsx - de lan vao thi thu muc ket qua khong con mo ra doc duoc nua.
+    html_dir: Path = Path(os.environ.get("HTML_DIR", "./output/html"))
 
 
 @dataclass(frozen=True)
