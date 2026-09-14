@@ -153,6 +153,15 @@ class CrawlStore:
         tags = self._tags_for({row["id"] for row in rows})
         return {row["url"]: self._to_record(row, tags.get(row["id"], {})) for row in rows}
 
+    # Hai trang thai duoc coi la DA XONG, khong phai ung vien crawl lai:
+    #
+    #   OK              lay du roi
+    #   NOT_A_PRODUCT   trang doc duoc nhung khong phai san pham (bai viet).
+    #                   Khong co gi de sua va crawl lai bao nhieu lan cung ra
+    #                   dung ket luan do - bo no ra khoi day la de 68 URL cua
+    #                   Roman/Duhal khong bi fetch lai o MOI luot chay.
+    _DA_XONG = (CrawlStatus.OK, CrawlStatus.NOT_A_PRODUCT)
+
     def urls_needing_crawl(self, urls: Iterable[str]) -> list[str]:
         """Cac URL chua co ban trich xuat day du - ung vien crawl (lai)."""
         current = {}
@@ -160,7 +169,7 @@ class CrawlStore:
             current.update(self.current_records(domain))
         return [
             url for url in urls
-            if not (url in current and current[url].crawl_status == CrawlStatus.OK)
+            if not (url in current and current[url].crawl_status in self._DA_XONG)
         ]
 
     def latest_snapshots(self, domain: str) -> list[tuple[int, str, str]]:
@@ -190,6 +199,56 @@ class CrawlStore:
 
     def domains(self) -> list[str]:
         return [r["domain"] for r in self._conn.execute("SELECT domain FROM sites ORDER BY domain")]
+
+    # -- nguon goi y cho o tim kiem ----------------------------------------
+    #
+    # Ba ham duoi day doc thang bang SQL thay vi di qua `current_records()`, va
+    # do la chu dich: `current_records()` dung ProductRecord day du (keo theo
+    # ca bang tag), dat gap nhieu lan cho mot viec chi can dem. Do tren kho
+    # that (9.818 ban ghi): ba truy van nay deu ~0,3s, con dung lai toan bo ban
+    # ghi thi cham hon han.
+    #
+    # 0,3s van la QUA CHAM cho moi lan go phim - ben goi phai giu cache va lam
+    # moi sau moi lan crawl. Ham o day chi lo lay du lieu ra.
+
+    def category_counts(self) -> list[tuple[str, str, int]]:
+        """(domain, ten `category 1`, so san pham) cho moi danh muc DA CRAWL.
+
+        Day la nguon danh muc thu hai, canh chi muc tang 0.5, va hai nguon tra
+        loi hai cau khac nhau: chi muc biet ca danh muc CHUA crawl (no doc tu
+        site doi thu), con cai nay chi biet cai da crawl - nhung no co san va
+        khong doi mot lan fetch nao. Domain chua dung chi muc van goi y duoc
+        nho nguon nay.
+        """
+        return [
+            (r["domain"], r["category_1"], r["n"])
+            for r in self._conn.execute(
+                "SELECT domain, category_1, COUNT(*) AS n FROM products "
+                "WHERE category_1 IS NOT NULL AND category_1 <> '' "
+                "GROUP BY domain, category_1"
+            )
+        ]
+
+    def product_counts(self) -> dict[str, int]:
+        """domain -> so san pham hien co trong kho."""
+        return {
+            r["domain"]: r["n"]
+            for r in self._conn.execute(
+                "SELECT domain, COUNT(*) AS n FROM products GROUP BY domain"
+            )
+        }
+
+    def product_names(self, limit: int = 5000) -> list[tuple[str, str]]:
+        """(domain, ten san pham) - dau vao cho nhom goi y thu ba."""
+        return [
+            (r["domain"], r["ten_san_pham"])
+            for r in self._conn.execute(
+                "SELECT domain, ten_san_pham FROM products "
+                "WHERE ten_san_pham IS NOT NULL AND ten_san_pham <> '' "
+                "ORDER BY domain, ten_san_pham LIMIT ?",
+                (limit,),
+            )
+        ]
 
     # -- noi bo ------------------------------------------------------------
 

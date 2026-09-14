@@ -5,6 +5,7 @@ import pytest
 from openpyxl import load_workbook
 
 from crawler.record import COLUMNS, REVIEW_HEADERS, REVIEW_SHEET, ProductRecord
+from crawler.record.schema import CrawlStatus
 from crawler.record.excel_reader import import_legacy_xlsx
 from crawler.store import CrawlStore, connect, export_domain, import_xlsx_into_store
 
@@ -200,3 +201,53 @@ def test_round_trip_through_the_store_preserves_every_cell(store, tmp_path):
         a = [row for row in truoc[name].iter_rows(values_only=True)]
         b = [row for row in sau[name].iter_rows(values_only=True)]
         assert a == b, f"sheet '{name}' lệch"
+
+
+# -- Trang khong phai san pham ----------------------------------------------
+
+
+def test_a_non_product_page_stays_out_of_the_file(store, tmp_path):
+    """68 ban ghi cua Roman/Duhal la BAI VIET chu khong phai san pham. Chung
+    khong duoc di vao file ket qua - nhung van nam nguyen trong kho, nen doi y
+    thi chi phai xuat lai, khong phai crawl lai."""
+    _add(store, "https://x.vn/den-a", ten_san_pham="Đèn A")
+    url = "https://x.vn/10-thong-so-den-led"
+    bai_viet = _add(store, url, ten_san_pham="10 thông số")
+    bai_viet.mark_not_a_product("Thông tin")
+    store.save_extraction(
+        bai_viet, snapshot_id=store.snapshot_id_for(url), extractor_version="v7"
+    )
+
+    path, _ = export_domain(store, "x.vn", tmp_path / "out.xlsx")
+
+    names = [row[2] for row in load_workbook(path)["Đèn âm trần"].iter_rows(
+        min_row=2, values_only=True)]
+    assert names == ["Đèn A"]
+    assert "https://x.vn/10-thong-so-den-led" in store.current_records("x.vn")
+
+
+def test_a_non_product_is_never_queued_for_crawling_again(store):
+    """Crawl lai bao nhieu lan cung ra dung ket luan do. De no trong hang doi
+    la fetch lai 68 URL o MOI luot chay."""
+    url = "https://x.vn/bai-viet"
+    record = _add(store, url, ten_san_pham="Bài viết")
+    record.mark_not_a_product("Tin tức")
+    store.save_extraction(
+        record, snapshot_id=store.snapshot_id_for(url), extractor_version="v7"
+    )
+
+    assert store.urls_needing_crawl([url]) == []
+
+
+def test_a_page_missing_fields_is_still_queued(store):
+    """Doi chung: NOT_A_PRODUCT khac han "san pham that nhung thieu o" - cai
+    sau VAN phai duoc crawl lai."""
+    url = "https://x.vn/thieu-o"
+    record = _add(store, url, ten_san_pham=None)
+    record.recompute_status()
+    store.save_extraction(
+        record, snapshot_id=store.snapshot_id_for(url), extractor_version="v7"
+    )
+
+    assert record.crawl_status is CrawlStatus.PARTIAL_MISSING_FIELDS
+    assert store.urls_needing_crawl([url]) == [url]

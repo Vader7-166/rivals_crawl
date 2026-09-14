@@ -207,3 +207,46 @@ CREATE TABLE IF NOT EXISTS category_products (
 
 CREATE INDEX IF NOT EXISTS idx_category_products_url ON category_products (product_url);
 CREATE INDEX IF NOT EXISTS idx_category_products_cat ON category_products (domain, category_url);
+
+
+-- HANG DOI JOB (capability `crawl-job-runner`).
+--
+-- Hang doi nam trong chinh file nay chu khong o mot broker rieng - quyet dinh
+-- va ly do day du o design.md Open Question 4. Tom tat: rang buoc MOT NGUOI GHI
+-- da loai bo phan kho cua bai toan hang doi, nen ca viec nay rut lai thanh "lay
+-- job cho lau nhat", va mot broker rieng chi them mot tien trinh phai nuoi.
+--
+-- Job va du lieu no sinh ra nam cung mot file: mot lan sao luu, mot lan khoi
+-- phuc. Hang doi ngoai thi khoi phuc kho ve moc cu la lech voi hang doi.
+CREATE TABLE IF NOT EXISTS jobs (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    -- Pham vi da CHOT thanh danh sach URL, luu JSON. Chot o luc TAO job chu
+    -- khong tra cuu lai luc chay: nguoi dung da nhin thay con so "con thieu N"
+    -- va bam dong y voi chinh no. Tra cuu lai luc chay thi pham vi co the da
+    -- khac (vd chi muc vua duoc dung lai), tuc chay mot thu khong ai duyet.
+    kind         TEXT    NOT NULL,            -- 'crawl' | 'index'
+    keyword      TEXT,                        -- tu khoa nguoi dung go, de hien lai
+    scope_json   TEXT    NOT NULL,            -- {"domains": {...: [url, ...]}}
+
+    status       TEXT    NOT NULL,            -- xem JobStatus trong job_store.py
+    total        INTEGER NOT NULL DEFAULT 0,
+    processed    INTEGER NOT NULL DEFAULT 0,
+    -- URL dang xu ly, de man tien do noi duoc cau "dang lam gi" chu khong chi
+    -- mot thanh %.
+    current_url  TEXT,
+
+    created_at   TEXT    NOT NULL,            -- ISO-8601 UTC
+    started_at   TEXT,
+    finished_at  TEXT,
+    -- Nhip tim cua worker dang giu job. Job 'running' ma tim ngung qua lau la
+    -- job cua mot worker da chet - xem `JobStore.reclaim_dead()`. Khong co cot
+    -- nay thi mot worker chet giua chung khoa hang doi vinh vien.
+    heartbeat_at TEXT,
+
+    -- Ly do dung, cho ca truong hop dung dep lan dung xau. Nguoi dung phai doc
+    -- duoc "can quota LLM" khac "bi chan" khac "nguoi dung huy".
+    stop_reason  TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_jobs_status ON jobs (status, id);

@@ -16,54 +16,20 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from crawler.store import connect  # noqa: E402
-
-# Cac cot dang quan tam. Hai cot uu diem dat truoc vi do la ly do chinh cua
-# viec so sanh nay.
-_FIELDS = (
-    "tom_tat_uu_diem_tinh_nang",
-    "noi_dung_uu_diem_sp",
-    "uu_diem_nguon",
-    "gia",
-    "ma_san_pham",
-    "thong_so_ky_thuat",
+from crawler.store.diff import (  # noqa: E402
+    DOI,
+    FIELDS,
+    HONG,
+    VA,
+    changes,
+    diff,
+    versions,
 )
 
-
-def _rows(conn, domain, version):
-    return {
-        (r["snapshot_id"], r["url"]): r
-        for r in conn.execute(
-            "SELECT * FROM extractions e WHERE domain = ? AND extractor_version = ? "
-            "AND snapshot_id IS NOT NULL "
-            "AND id = (SELECT MAX(id) FROM extractions WHERE snapshot_id = e.snapshot_id "
-            "          AND extractor_version = e.extractor_version)",
-            (domain, version),
-        )
-    }
-
-
-def tally(old: dict, new: dict, fields=_FIELDS) -> dict[str, Counter]:
-    """Dem thay doi tren cac khoa CO MAT O CA HAI ben.
-
-    Ba nhom tach rieng vi y nghia khac han nhau:
-      va    : truoc trong, sau co    -> chinh sua lay them duoc du lieu
-      hong  : truoc co, sau trong    -> chinh sua LAM MAT du lieu dang dung
-      doi   : ca hai deu co, gia tri khac -> can mo tay xem ben nao dung
-    """
-    out: dict[str, Counter] = {}
-    for key in set(old) & set(new):
-        for field in fields:
-            before, after = old[key][field], new[key][field]
-            if before == after:
-                continue
-            bucket = out.setdefault(field, Counter())
-            if before is None:
-                bucket["va"] += 1
-            elif after is None:
-                bucket["hong"] += 1
-            else:
-                bucket["doi"] += 1
-    return out
+# Phan TINH TOAN da chuyen sang `crawler/store/diff.py` de API dung chung mot
+# duong (task 7.1). Script nay giu nguyen dau ra nhu truoc - no van la duong
+# lui khi tang web khong chay.
+_FIELDS = FIELDS
 
 
 def main() -> int:
@@ -71,47 +37,54 @@ def main() -> int:
     parser.add_argument("domain")
     parser.add_argument("truoc", help="nhãn phiên bản của lần chạy CŨ")
     parser.add_argument("sau", help="nhãn phiên bản của lần chạy MỚI")
+    parser.add_argument(
+        "--liet-ke", metavar="CỘT", default=None,
+        help="In ĐẦY ĐỦ các sản phẩm đổi ở một cột, thay vì vài URL lấy mẫu",
+    )
     args = parser.parse_args()
 
     conn = connect()
     try:
-        old = _rows(conn, args.domain, args.truoc)
-        new = _rows(conn, args.domain, args.sau)
+        ket_qua = diff(conn, args.domain, args.truoc, args.sau)
+        if ket_qua.message:
+            print(ket_qua.message)
+            print("\nCác phiên bản đang có:")
+            for v in versions(conn, args.domain):
+                print(f"  {v.version:12} {v.snapshots} snapshot")
+            return 1
+
+        if args.liet_ke:
+            for o in changes(conn, args.domain, args.truoc, args.sau,
+                             field_name=args.liet_ke):
+                print(f"[{o.group}] {o.url}\n    trước: {o.before!r}\n    sau  : {o.after!r}")
+            return 0
+
+        print(f"{args.domain}: so sánh trên {ket_qua.shared_snapshots} snapshot chung\n")
+        if ket_qua.skipped_without_snapshot:
+            # Bao ro chu khong nuot: nguoi doc phai biet phep so nay bo qua bao
+            # nhieu ban ghi (task 7.5).
+            print(f"(bỏ qua {ket_qua.skipped_without_snapshot} bản ghi không có "
+                  f"snapshot — nhập từ .xlsx cũ)\n")
+        print(f"{'cột':28} {'vá được':>9} {'làm hỏng':>9} {'đổi khác':>9}")
+        print("-" * 58)
+        for field_name in _FIELDS:
+            c = ket_qua.counts.get(field_name)
+            if c:
+                print(f"{field_name:28} {c[VA]:>9} {c[HONG]:>9} {c[DOI]:>9}")
+
+        if ket_qua.is_empty:
+            print("\nKhông có ô nào đổi.")
+            return 0
+
+        print("\nVài URL để soi tay:")
+        for field_name in ket_qua.counts:
+            for o in changes(conn, args.domain, args.truoc, args.sau,
+                             field_name=field_name, limit=3):
+                print(f"  [{field_name}] {o.url}")
+        print("\nXem đầy đủ một cột: --liet-ke <tên cột>")
+        return 0
     finally:
         conn.close()
-
-    shared = sorted(set(old) & set(new))
-    if not shared:
-        print(
-            f"Không có snapshot nào chạy bằng CẢ '{args.truoc}' lẫn '{args.sau}'.\n"
-            "Chạy scripts/reextract.py với --version khác nhau cho hai lượt."
-        )
-        return 1
-
-    print(f"{args.domain}: so sánh trên {len(shared)} snapshot chung\n")
-    print(f"{'cột':28} {'vá được':>9} {'làm hỏng':>9} {'đổi khác':>9}")
-    print("-" * 58)
-
-    counts = tally({k: old[k] for k in shared}, {k: new[k] for k in shared})
-    changed_examples: dict[str, list[str]] = {}
-    for key in shared:
-        for field in counts:
-            if old[key][field] != new[key][field] and old[key][field] is not None:
-                changed_examples.setdefault(field, []).append(key[1])
-    for field in _FIELDS:
-        if field in counts:
-            c = counts[field]
-            print(f"{field:28} {c['va']:>9} {c['hong']:>9} {c['doi']:>9}")
-
-    if not changed_examples:
-        print("\nKhông có ô nào đổi.")
-        return 0
-
-    print("\nVài URL để soi tay:")
-    for field, urls in changed_examples.items():
-        for url in urls[:3]:
-            print(f"  [{field}] {url}")
-    return 0
 
 
 if __name__ == "__main__":
