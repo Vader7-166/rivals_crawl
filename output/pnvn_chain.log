@@ -1,0 +1,5 @@
+=== BAT DAU panasonicvn 15:30:05 ===
+=== XONG rc=0 16:03:01 ===
+2026-09-10 15:30:08,725 INFO crawl_site: Sẽ crawl 604 URL sản phẩm của panasonicvn.com.vn
+2026-09-10 16:03:00,160 INFO crawl_site: Đã ghi 604 bản ghi vào output/panasonicvn.com.vn.xlsx (587 OK, 17 cần review)
+2026-09-10 16:03:00,160 INFO crawl_site: THỜI GIAN: 32.9 phút cho 604 sản phẩm (4 luồng, 3.26 s/sản phẩm)

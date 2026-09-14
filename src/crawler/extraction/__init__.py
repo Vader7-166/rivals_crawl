@@ -1,10 +1,58 @@
-from .css_fallback import DOMAIN_FALLBACK_RULES, SelectorRule, apply_css_fallback
+from .advantages import (
+    NGUON_CUM,
+    NGUON_KHONG_CO,
+    NGUON_LA_BAN,
+    NGUON_TU_KHOA,
+    Advantages,
+    extract_advantages,
+)
+from .categories import (
+    CATEGORY_ANCHOR,
+    DOMAIN_NON_PRODUCT_BRANCHES,
+    non_product_branch,
+    sheet_category,
+)
+from .css_fallback import (
+    DOMAIN_CATEGORY_SELECTORS,
+    DOMAIN_FALLBACK_RULES,
+    DOMAIN_DESCRIPTION_SELECTORS,
+    DOMAIN_NOISE_SELECTORS,
+    DOMAIN_PLACEHOLDER_PRICES,
+    DOMAIN_SPEC_ROOT_SELECTORS,
+    SelectorRule,
+    apply_css_fallback,
+    extract_categories,
+    get_description_selector,
+    get_noise_selector,
+    get_spec_root_selector,
+    is_placeholder_price,
+)
 from .structured_data import StructuredDataResult, extract_structured_data
 
 __all__ = [
+    "CATEGORY_ANCHOR",
+    "DOMAIN_NON_PRODUCT_BRANCHES",
+    "non_product_branch",
+    "sheet_category",
+    "extract_advantages",
+    "Advantages",
+    "NGUON_TU_KHOA",
+    "NGUON_LA_BAN",
+    "NGUON_CUM",
+    "NGUON_KHONG_CO",
     "StructuredDataResult",
     "extract_structured_data",
     "DOMAIN_FALLBACK_RULES",
+    "DOMAIN_CATEGORY_SELECTORS",
+    "DOMAIN_SPEC_ROOT_SELECTORS",
+    "DOMAIN_DESCRIPTION_SELECTORS",
+    "get_description_selector",
+    "DOMAIN_PLACEHOLDER_PRICES",
+    "DOMAIN_NOISE_SELECTORS",
     "SelectorRule",
     "apply_css_fallback",
+    "extract_categories",
+    "get_spec_root_selector",
+    "get_noise_selector",
+    "is_placeholder_price",
 ]

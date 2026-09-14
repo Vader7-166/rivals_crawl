@@ -11,11 +11,18 @@ venv/
 secrets/
 
 # Du lieu - dataset nguon va dataset crawl ra deu khong thuoc ve git
-dataset/
-output/
+datasets/
+
 
 # Cache noi bo (site-probing results, v.v.)
 .cache/
+
+# Kho du lieu crawl (~100MB khi du 3 site) + HTML dinh kem cua file xuat ra.
+# Dung lai duoc tu output/*.xlsx - xem README.md muc "Kho du lieu".
+crawl.db
+crawl.db-wal
+crawl.db-shm
+output/*_html/
 
 # OS / editor
 .DS_Store

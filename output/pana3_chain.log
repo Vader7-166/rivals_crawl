@@ -1,0 +1,6 @@
+=== BAT DAU Panasonic 22:14:54 ===
+=== XONG Panasonic rc=0 22:33:45 ===
+2026-09-07 22:23:27,517 INFO crawler.probing.prober: Do khong-sitemap panasonic.net: 2 trang danh muc, 147 URL san pham, 134 trang da fetch
+2026-09-07 22:23:27,570 INFO crawl_site: Sẽ crawl 147 URL sản phẩm của panasonic.net
+2026-09-07 22:33:45,006 INFO crawl_site: Đã ghi 147 bản ghi vào output/panasonic.net.xlsx (0 OK, 147 cần review)
+2026-09-07 22:33:45,007 INFO crawl_site: THỜI GIAN: 10.3 phút cho 147 sản phẩm (4 luồng, 4.20 s/sản phẩm)

@@ -1,0 +1,52 @@
+# Khởi chạy toàn bộ tầng web bằng một lệnh:
+#
+#     docker compose up
+#
+# Đường CLI hiện có (`crawl_site.py`, `export_excel.py`, `reextract.py`,
+# `diff_extractions.py`) KHÔNG bị thay thế — nó vẫn chạy thẳng trên máy và vẫn
+# là đường lui khi tầng web hỏng.
+
+services:
+  api:
+    build: .
+    # KHÔNG có `--reload` (design.md mục 4). Giao diện là HTML+JS thuần nên
+    # không có build step nào để mà cần nạp lại: sửa file trong `static/` rồi
+    # bấm F5 là thấy — thư mục đó được bind mount ngay dưới đây.
+    command: python -m uvicorn crawler.web.api:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - kho:/data
+      # Bind mount giao diện: sửa trên máy chủ, F5 là thấy, không dựng lại
+      # image, không cần một container riêng cho frontend và không cần Node.
+      - ./src/crawler/web/static:/app/src/crawler/web/static:ro
+      - ./output:/data/output
+    env_file: [.env]
+    environment:
+      PYTHONPATH: /app/src
+    depends_on: [worker]
+
+  worker:
+    build: .
+    # NGƯỜI GHI DUY NHẤT vào crawl.db.
+    #
+    # `deploy.replicas` cố ý KHÔNG có mặt ở đây, và đừng thêm vào: nhân bản
+    # worker lên 2 là hai tiến trình cùng ghi một file SQLite — dính
+    # `database is locked` bất kể `busy_timeout`. Hàng đợi đã chặn một lớp
+    # (`claim_next` chỉ nhận job khi không có job nào đang chạy), nhưng đó là
+    # lớp thứ hai chứ không phải lớp duy nhất.
+    #
+    # Cũng không `--reload`: một lượt crawl kéo 33–70 phút và sẽ bị giết ngang
+    # mỗi lần có ai lưu file.
+    command: python -m crawler.web.run_worker
+    volumes:
+      - kho:/data
+      - ./output:/data/output
+    env_file: [.env]
+    environment:
+      PYTHONPATH: /app/src
+    restart: unless-stopped
+
+volumes:
+  # Ổ LOCAL, không phải NFS: WAL của SQLite không an toàn trên NFS.
+  kho:

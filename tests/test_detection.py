@@ -31,3 +31,28 @@ def test_single_product_pages_are_detected_across_sites(fixture_html):
         signals = analyze_page(html)
 
         assert signals.looks_like_single_product_page is True, fixture_name
+
+
+def test_taxonomy_sitemaps_are_not_mistaken_for_product_sitemaps():
+    """Loc "co chu product trong ten" khong duoc keo theo sitemap TAXONOMY.
+
+    Case that TLC: `product_cat-sitemap.xml` (WooCommerce dat ten taxonomy theo
+    tien to `product_`) lot qua bo loc, keo 73 trang danh muc `/danh-muc/...`
+    vao danh sach URL san pham - crawler ton fetch + goi LLM roi sinh ban ghi
+    rong.
+    """
+    from crawler.probing.sitemap import _TAXONOMY_SITEMAP
+
+    for taxonomy in (
+        "https://x.vn/product_cat-sitemap.xml",
+        "https://x.vn/product_tag-sitemap.xml",
+        "https://x.vn/product_brand-sitemap.xml",
+        "https://x.vn/product_shipping_class-sitemap.xml",
+    ):
+        assert _TAXONOMY_SITEMAP.search(taxonomy), taxonomy
+
+    for real_product_sitemap in (
+        "https://x.vn/product-sitemap.xml",
+        "https://x.vn/product-sitemap1.xml",
+    ):
+        assert not _TAXONOMY_SITEMAP.search(real_product_sitemap), real_product_sitemap

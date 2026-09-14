@@ -1,0 +1,8 @@
+=== BAT DAU Panasonic 21:09:16 ===
+=== XONG Panasonic rc=1 21:16:31 ===
+2026-09-07 21:16:31,259 ERROR crawl_site: Probe không trả về URL sản phẩm nào cho panasonic.net - dừng. Kiểm tra site có sitemap không, hoặc chạy lại với --refresh-probe.
+=== BAT DAU Roman lai 21:16:32 ===
+=== XONG Roman rc=0 21:31:16 ===
+2026-09-07 21:16:35,484 INFO crawl_site: Sẽ crawl 189 URL sản phẩm của roman.vn
+2026-09-07 21:31:15,760 INFO crawl_site: Đã ghi 189 bản ghi vào output/roman.vn.xlsx (126 OK, 63 cần review)
+2026-09-07 21:31:15,760 INFO crawl_site: THỜI GIAN: 14.7 phút cho 189 sản phẩm (4 luồng, 4.66 s/sản phẩm)

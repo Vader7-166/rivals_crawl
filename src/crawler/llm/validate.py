@@ -2,11 +2,60 @@
 from __future__ import annotations
 
 import json
+import logging
+import re
+import unicodedata
 
 from .schema import ExtractionOutput
 
+logger = logging.getLogger(__name__)
+
 _MAX_TAG_VALUE_LEN = 200
 _MAX_TAG_COUNT = 60
+
+# Tach gia tri nhieu thanh phan truoc khi doi chieu: model thuong doi dau phan
+# cach ("6500K, 4000K" -> "6500K/4000K") du van chep dung tung so.
+_VALUE_PIECES = re.compile(r"[/,;()]+")
+_WHITESPACE = re.compile(r"[\s\u00a0]+")
+
+
+def _norm(text: str) -> str:
+    return _WHITESPACE.sub("", unicodedata.normalize("NFC", str(text)).lower())
+
+
+def drop_ungrounded_tags(tags: dict[str, str], source_text: str) -> dict[str, str]:
+    """Bo cac tag co gia tri KHONG xuat hien trong chinh noi dung nguon.
+
+    Prompt da yeu cau "khong bia", nhung yeu cau khong phai la dam bao - day la
+    luoi an toan cuoi cung truoc khi ghi vao file giao di. Do tren ca dot
+    kingled.com.vn (549 san pham, 5.252 gia tri tag): loai dung 1 tag. Tuc la
+    voi model + prompt hien tai, bia dat KHONG phai van de pho bien; giu ham nay
+    de doi provider/model khac khong am tham lam ban du lieu.
+
+    Doi chieu phai chiu duoc viec model dinh dang lai, neu khong se xoa nham du
+    lieu that: chuan hoa 2 ben (bo dau cach, ha chu thuong) roi tach gia tri
+    thanh cac manh theo dau phan cach, moi manh deu phai co mat trong nguon.
+    Nho vay "IP44" van khop nguon ghi "IP 44", "6500K/4000K" khop "6500K, 4000K".
+
+    LUU Y ve pham vi doi chieu: nguon o day la TOAN BO text da dua cho model
+    (bang thong so + mo ta san pham), khong phai rieng bang thong so. Nhieu
+    thuoc tinh that chi duoc noi trong phan mo ta - vd `dien_ap="12VDC"` cua
+    den ban HS 10W khong co trong bang thong so (bang ghi `Nguồn Điện:
+    220V/50Hz` la dien vao) nhung duoc noi ro 2 lan trong mo ta ("Điệp áp 12VDC
+    an toan khi su dung"). Thu hep pham vi ve rieng bang thong so se xoa nham
+    dung nhung gia tri nay.
+    """
+    if not source_text:
+        return tags
+    source = _norm(source_text)
+    kept: dict[str, str] = {}
+    for key, value in tags.items():
+        pieces = [p for p in _VALUE_PIECES.split(_norm(value)) if p]
+        if pieces and all(piece in source for piece in pieces):
+            kept[key] = value
+        else:
+            logger.info("Bỏ tag không có căn cứ trong nguồn: %s=%r", key, value)
+    return kept
 
 
 class ExtractionValidationError(ValueError):
@@ -45,10 +94,12 @@ def parse_and_validate(raw_text: str) -> ExtractionOutput:
         if len(clean_tags) >= _MAX_TAG_COUNT:
             break
 
-    ma_san_pham = data.get("ma_san_pham")
-    if not isinstance(ma_san_pham, str) or not ma_san_pham.strip():
-        ma_san_pham = None
-    else:
-        ma_san_pham = ma_san_pham.strip()
+    def _text_field(name: str) -> str | None:
+        value = data.get(name)
+        return value.strip() if isinstance(value, str) and value.strip() else None
 
-    return ExtractionOutput(tags=clean_tags, ma_san_pham=ma_san_pham)
+    return ExtractionOutput(
+        tags=clean_tags,
+        ma_san_pham=_text_field("ma_san_pham"),
+        muc_uu_diem=_text_field("muc_uu_diem"),
+    )

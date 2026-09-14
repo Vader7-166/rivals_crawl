@@ -76,6 +76,13 @@ class FetchConfig:
     default_accept_language: str = "vi-VN,vi;q=0.9,en;q=0.8"
     navigation_timeout_ms: int = 30_000
 
+    # Giai cach toi thieu giua 2 lan fetch (giay). Mac dinh 0 - do thuc te cho
+    # thay fetch tuan tu khong delay da la nhanh nhat ma van an toan. Dat > 0
+    # neu site doi thu nhay cam hon.
+    min_interval_seconds: float = _env_float("FETCH_MIN_INTERVAL", 0.0)
+    # Tran cua co che tu lui (adaptive cooldown) khi server bat dau tu choi.
+    max_cooldown_seconds: float = _env_float("FETCH_MAX_COOLDOWN", 15.0)
+
 
 @dataclass(frozen=True)
 class ProbingConfig:
@@ -85,12 +92,49 @@ class ProbingConfig:
 
 
 @dataclass(frozen=True)
+class CrawlConfig:
+    """So luong san pham crawl song song.
+
+    Mac dinh 4 - chon dua tren do thuc te, khong phai uoc luong:
+      4 luong -> 32.9 SP/phut   (1.00x)
+      8 luong -> 54.2 SP/phut   (1.65x)
+     16 luong -> 62.8 SP/phut   (1.91x)
+    Lai giam dan rat nhanh vi tran that la QUOTA Vertex chu khong phai CPU/RAM
+    (goi LLM la cho mang, gan nhu khong ton CPU). Day worker len cao chi bien
+    "cham" thanh "mat du lieu" khi quota can. 4 luong cung la muc lich su voi
+    server doi thu - moi luong giu 1 browser rieng (~450MB RAM).
+    """
+
+    workers: int = _env_int("CRAWL_WORKERS", 4)
+
+
+@dataclass(frozen=True)
 class OutputConfig:
     output_dir: Path = Path(os.environ.get("OUTPUT_DIR", "./output"))
+    # Noi chua HTML dinh kem cua sheet canh bao. Tach RIENG khoi thu muc .xlsx
+    # co chu dich: no nang 244 MB tren 12 site, gap hon 100 lan tong so file
+    # .xlsx - de lan vao thi thu muc ket qua khong con mo ra doc duoc nua.
+    html_dir: Path = Path(os.environ.get("HTML_DIR", "./output/html"))
+
+
+@dataclass(frozen=True)
+class StoreConfig:
+    """Kho du lieu crawl (SQLite, 1 file).
+
+    Uoc luong dung luong tu do that: 549 SP KingLED ~9,3MB + 485 SP TLC ~22,8MB
+    -> ~32MB cho 2 site da co, ~100MB neu tinh ca Roman. File nay KHONG nam
+    trong git (xem .gitignore) - dung lai duoc tu output/*.xlsx.
+    """
+
+    db_path: Path = Path(os.environ.get("CRAWL_DB_PATH", "./crawl.db"))
+    # Cho bao lau khi file dang bi khoa boi mot lan ghi khac truoc khi bao loi.
+    busy_timeout_seconds: float = _env_float("CRAWL_DB_BUSY_TIMEOUT", 30.0)
 
 
 VERTEX = VertexConfig()
 DEEPSEEK = DeepSeekConfig()
 FETCH = FetchConfig()
 PROBING = ProbingConfig()
+CRAWL = CrawlConfig()
 OUTPUT = OutputConfig()
+STORE = StoreConfig()

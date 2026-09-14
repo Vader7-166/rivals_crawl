@@ -18,6 +18,15 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
+    # TestClient cua FastAPI chay tren httpx.
+    "httpx>=0.27",
+]
+# Tang web (change `crawl-control-web`). Tach thanh extra chu khong nhet vao
+# `dependencies`: duong CLI la duong lui khi tang web hong, nen no phai cai
+# duoc va chay duoc ma khong can mot web framework nao.
+web = [
+    "fastapi>=0.111",
+    "uvicorn>=0.30",
 ]
 
 [build-system]

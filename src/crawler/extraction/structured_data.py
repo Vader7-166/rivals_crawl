@@ -10,10 +10,12 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from typing import Any, Optional
+from urllib.parse import urlparse
 
 import extruct
 
 from ..record.price import PriceValue, normalize_price
+from .categories import anchor_categories
 
 _HAS_LETTER_RE = re.compile(r"[A-Za-zÀ-ỹ]")
 
@@ -63,6 +65,34 @@ def _find_by_jsonld_type(nodes: list[dict], type_name: str) -> Optional[dict]:
     return None
 
 
+def _gia_tu_offer(offers: Any) -> Any:
+    """Gia trong mot khoi `offers` cua schema.org.
+
+    Dang pho bien nhat la `offers.price` phang. Nhung WooCommerce ban moi khong
+    phat truong do nua ma long gia vao `priceSpecification`:
+
+        "offers": [{"@type": "Offer", "priceSpecification": [
+            {"@type": "UnitPriceSpecification", "price": "1612500",
+             "priceCurrency": "VND", "valueAddedTaxIncluded": false}]}]
+
+    Do tren panasonicvn.com.vn: 12/12 ban ghi mat gia du gia hien ro tren
+    trang, chi vi tang 1 khong biet nhin vao day. Day la hinh dang CHUAN cua
+    schema.org chu khong phai cua rieng site nao, nen doc o tang 1 - khong
+    dang ky selector theo domain.
+    """
+    if not isinstance(offers, dict):
+        return None
+    if offers.get("price") is not None:
+        return offers.get("price")
+    spec = offers.get("priceSpecification")
+    if isinstance(spec, dict):
+        spec = [spec]
+    for muc in spec or []:
+        if isinstance(muc, dict) and muc.get("price") is not None:
+            return muc.get("price")
+    return None
+
+
 def _adapt_jsonld_product(node: dict) -> dict[str, Any]:
     offers = node.get("offers")
     if isinstance(offers, list):
@@ -77,7 +107,7 @@ def _adapt_jsonld_product(node: dict) -> dict[str, Any]:
         "name": node.get("name"),
         "sku": node.get("sku"),
         "image": image,
-        "price": offers.get("price") if isinstance(offers, dict) else None,
+        "price": _gia_tu_offer(offers),
         "url": node.get("url"),
     }
 
@@ -170,14 +200,19 @@ def _adapt_opengraph(items: list[dict]) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
-def _labels_to_categories(labels: list[str]) -> tuple[Optional[str], Optional[str], Optional[str]]:
+def _labels_to_categories(
+    labels: list[str], domain: str
+) -> tuple[Optional[str], Optional[str], Optional[str]]:
     """Bo phan tu dau (home) va cuoi (chinh trang san pham), lay toi da 3 cap
-    con lai tu tong quat -> cu the (theo dung thu tu breadcrumb goc)."""
+    con lai tu tong quat -> cu the (theo dung thu tu breadcrumb goc).
+
+    Cac cap dau la thung dieu huong cua site thi bi cat them - xem
+    `extraction/categories.py`. Viec cat nam TRONG day chu khong o ben goi, de
+    no dien ra truoc khi chuoi bi xen con 3 cap (Nanoco co 4 cap danh muc that).
+    """
     if len(labels) <= 2:
         return None, None, None
-    middle = labels[1:-1][:3]
-    padded = middle + [None] * (3 - len(middle))
-    return padded[0], padded[1], padded[2]
+    return anchor_categories(labels[1:-1], domain)
 
 
 def _normalize_sku(sku: Any) -> tuple[Optional[str], Optional[str]]:
@@ -263,7 +298,7 @@ def extract_structured_data(html: str, page_url: str) -> StructuredDataResult:
             source = "opengraph"
 
     ma_san_pham, raw_id = _normalize_sku(product.get("sku"))
-    cat1, cat2, cat3 = _labels_to_categories(breadcrumb_labels)
+    cat1, cat2, cat3 = _labels_to_categories(breadcrumb_labels, urlparse(page_url).netloc)
 
     return StructuredDataResult(
         ten_san_pham=product.get("name"),
