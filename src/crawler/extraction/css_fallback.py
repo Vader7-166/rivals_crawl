@@ -14,6 +14,7 @@ from typing import Optional
 from bs4 import BeautifulSoup
 
 from ..record.price import InvalidPriceError, normalize_price
+from .categories import anchor_categories
 
 logger = logging.getLogger(__name__)
 
@@ -226,8 +227,17 @@ DOMAIN_CATEGORY_SELECTORS: dict[str, str] = {
     # vao mot sheet. Breadcrumb DOM thi day du 4 cap. Hai cap dau la dieu huong
     # chung va tro sang signify.com chu khong phai domain nay, nen loai bang
     # chinh duoi href cua chung. Do tren 300 trang: 300/300 bat duoc.
+    #
+    # Buoc theo class `breadcrumbs__item-link`: trong cung khoi `.breadcrumbs`
+    # con hai link KHONG phai breadcrumb - "Quay lại dòng sản phẩm"
+    # (`breadcrumbs__back-link`) va "Quay lại trang Pioneers of Light"
+    # (`breadcrumbs__target-link`) - do la nut dieu huong nguoc, dung o cuoi
+    # chuoi. Do tren 150 trang lay mau: 150/150 trang deu dinh ca hai, va tren
+    # 24 ban ghi ma breadcrumb chi con mot cap thi "Quay lại dòng sản phẩm" da
+    # bi ghi thang vao cot `category 2`.
     "www.lighting.philips.com.vn":
-        '.breadcrumbs a:not([href$="/vi-vn/"]):not([href$="/vi-vn/prof"])',
+        '.breadcrumbs a.breadcrumbs__item-link'
+        ':not([href$="/vi-vn/"]):not([href$="/vi-vn/prof"])',
     # roman.vn CO breadcrumb day du - `div.breadCrumbBox`, khong phai
     # `.breadcrumb`. Chu C viet hoa: cac dot khao sat truoc do tim bang
     # `[class*=breadcrumb]` (khop chu thuong, phan biet hoa thuong) nen ket
@@ -271,23 +281,34 @@ DOMAIN_CATEGORY_SELECTORS: dict[str, str] = {
 
 
 def extract_categories(
-    html: str, domain: str
+    html: str, domain: str, page_url: Optional[str] = None
 ) -> tuple[Optional[str], Optional[str], Optional[str]]:
     """(category_1, category_2, category_3) doc tu DOM theo selector cua
     `domain`. Domain chua dang ky -> (None, None, None), ben goi giu nguyen ket
-    qua tang 1."""
+    qua tang 1.
+
+    `page_url` dung de bo cap breadcrumb tro ve CHINH TRANG DANG DOC - cap cuoi
+    cua roman.vn la ten san pham va no la mot the <a> y het cac cap danh muc,
+    khong selector nao tach duoc. Truoc day no tu roi ra ngoai vi chi lay 3 cap
+    dau; tu khi cac cap dieu huong dau bi cat (xem `anchor_categories`) thi no
+    doi len va se bi ghi vao cot category. Doi chieu bang chinh URL la cach duy
+    nhat chac chan, va dung cho moi site chu khong rieng roman.vn.
+    """
     selector = DOMAIN_CATEGORY_SELECTORS.get(domain)
     if not selector:
         return None, None, None
 
+    self_url = (page_url or "").rstrip("/")
     soup = BeautifulSoup(html, "lxml")
     names: list[str] = []
     for el in soup.select(selector):
+        href = el.get("href") if el.name == "a" else None
+        if self_url and href and str(href).rstrip("/") == self_url:
+            continue
         name = " ".join(el.get_text(" ", strip=True).split())
         if name and name not in names:
             names.append(name)
-    padded = (names[:3] + [None, None, None])[:3]
-    return padded[0], padded[1], padded[2]
+    return anchor_categories(names, domain)
 
 
 # Gia tri "gia" ma site dung lam CHO TRONG chu khong phai gia that. KingLED tra

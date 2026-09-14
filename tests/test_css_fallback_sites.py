@@ -233,13 +233,35 @@ def test_roman_co_breadcrumb_chu_C_viet_hoa(fixture_html):
     assert extract_categories(html, "roman.vn") != (None, None, None)
 
 
-def test_roman_bo_hai_cap_dieu_huong_dau(fixture_html):
-    """Giu "Trang chu"/"San pham" thi ca site roi vao mot sheet "San pham" -
-    dung bang mat ca danh muc."""
+ROMAN_URL = "https://roman.vn/den-led-downlight-am-tran-cam-bien-12w-eld9001.html"
+
+
+def test_roman_lay_cap_sat_san_pham(fixture_html):
+    """Breadcrumb goc cua fixture nay co 5 cap danh muc:
+
+        Sản phẩm > Thiết bị chiếu sáng - Led > Đèn nội thất
+                 > Đèn Downlight LED > Đèn downlight nhôm tỳ
+
+    Doc tu cap dau thi 121/121 san pham chieu sang cua Roman don vao mot sheet
+    "Thiết bị chiếu sáng - Led" - dung file nhung khong so sanh duoc voi ai."""
     html = fixture_html("roman_product.html")
 
-    cat_1, cat_2, cat_3 = extract_categories(html, "roman.vn")
+    cat_1, cat_2, cat_3 = extract_categories(html, "roman.vn", ROMAN_URL)
 
-    assert cat_1 == "Thiết bị chiếu sáng - Led"
-    assert cat_2 == "Đèn nội thất"
-    assert cat_3 == "Đèn Downlight LED"
+    assert cat_1 == "Đèn nội thất"
+    assert cat_2 == "Đèn Downlight LED"
+    assert cat_3 == "Đèn downlight nhôm tỳ"
+
+
+def test_roman_bo_cap_breadcrumb_tro_ve_chinh_trang_dang_doc(fixture_html):
+    """Cap cuoi cua Roman la TEN SAN PHAM, va no la mot the <a> y het cac cap
+    danh muc - chi phan biet duoc bang href.
+
+    Voi luat doc-tu-duoi-len thi day khong con la chi tiet nho: khong doi chieu
+    URL thi chinh ten san pham thanh ten sheet, moi san pham mot sheet."""
+    html = fixture_html("roman_product.html")
+
+    assert extract_categories(html, "roman.vn")[2] == (
+        "Đèn downlight nhôm tỳ cảm biến ELD9001/12W"
+    )
+    assert extract_categories(html, "roman.vn", ROMAN_URL)[2] == "Đèn downlight nhôm tỳ"

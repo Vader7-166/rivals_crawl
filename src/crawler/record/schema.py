@@ -21,6 +21,11 @@ class CrawlStatus(str, Enum):
     OK = "ok"
     ERROR = "error"
     PARTIAL_MISSING_FIELDS = "partial-missing-fields"
+    # Trang crawl duoc, doc duoc, nhung KHONG PHAI san pham - bai viet, trang
+    # gioi thieu giai phap. Khac han ERROR (loi ky thuat, dang crawl lai) va
+    # khac han PARTIAL (san pham that nhung thieu o): o day khong co gi de sua,
+    # va crawl lai bao nhieu lan cung ra dung ket qua nay.
+    NOT_A_PRODUCT = "not-a-product"
 
 
 # (ten cot trong file Excel xuat ra, ten field tren ProductRecord) - dung thu tu
@@ -143,9 +148,13 @@ class ProductRecord:
         """Suy ra crawl_status tu do day du cua cac field bat buoc.
 
         Neu da bi danh dau ERROR (loi ky thuat cung, vd fetch that bai hoan
-        toan) thi giu nguyen - khong bi ha xuong PARTIAL_MISSING_FIELDS.
+        toan) hoac NOT_A_PRODUCT thi giu nguyen - ca hai deu la ket luan da
+        chot, khong duoc ha xuong PARTIAL_MISSING_FIELDS. Voi NOT_A_PRODUCT
+        dieu nay quan trong hon: bai viet thi THIEU gan het field bat buoc, nen
+        tinh lai se bien no thanh "san pham thieu o" va nem no tro lai hang doi
+        crawl lai mai mai.
         """
-        if self.crawl_status != CrawlStatus.ERROR:
+        if self.crawl_status not in (CrawlStatus.ERROR, CrawlStatus.NOT_A_PRODUCT):
             missing = self.missing_required_fields()
             self.crawl_status = (
                 CrawlStatus.PARTIAL_MISSING_FIELDS if missing else CrawlStatus.OK
@@ -155,4 +164,12 @@ class ProductRecord:
     def mark_error(self, message: str) -> "ProductRecord":
         self.crawl_status = CrawlStatus.ERROR
         self.crawl_error = message
+        return self
+
+    def mark_not_a_product(self, branch: str) -> "ProductRecord":
+        """Trang nay nam trong mot nhanh ma chinh site khai la khong phai san
+        pham. Giu lai ly do kem TEN NHANH - de doc lai log la biet vi sao mot
+        URL bien mat khoi file ket qua, khong phai di doan."""
+        self.crawl_status = CrawlStatus.NOT_A_PRODUCT
+        self.crawl_error = f"Không phải sản phẩm: site xếp trang này vào “{branch}”"
         return self

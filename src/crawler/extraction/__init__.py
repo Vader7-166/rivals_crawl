@@ -6,6 +6,12 @@ from .advantages import (
     Advantages,
     extract_advantages,
 )
+from .categories import (
+    CATEGORY_ANCHOR,
+    DOMAIN_NON_PRODUCT_BRANCHES,
+    non_product_branch,
+    sheet_category,
+)
 from .css_fallback import (
     DOMAIN_CATEGORY_SELECTORS,
     DOMAIN_FALLBACK_RULES,
@@ -24,6 +30,10 @@ from .css_fallback import (
 from .structured_data import StructuredDataResult, extract_structured_data
 
 __all__ = [
+    "CATEGORY_ANCHOR",
+    "DOMAIN_NON_PRODUCT_BRANCHES",
+    "non_product_branch",
+    "sheet_category",
     "extract_advantages",
     "Advantages",
     "NGUON_TU_KHOA",

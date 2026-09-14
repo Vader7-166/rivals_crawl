@@ -16,6 +16,7 @@ from urllib.parse import urlparse
 from .config import CRAWL
 from .extraction import (
     apply_css_fallback,
+    non_product_branch,
     extract_advantages,
     extract_categories,
     extract_structured_data,
@@ -39,13 +40,22 @@ logger = logging.getLogger(__name__)
 # so hai lan chay tren cung mot snapshot de biet mot chinh sua va duoc may o va
 # lam hong may o (scripts/diff_extractions.py). Khong tang thi hai lan chay lan
 # vao nhau va phep so mat y nghia.
+# v6 -> v7: trang nam trong nhanh breadcrumb ma chinh site khai la khong phai
+# san pham (bai viet, trang giai phap) duoc danh dau NOT_A_PRODUCT, khong di
+# vao file ket qua va khong bi crawl lai nua (extraction/categories.py
+# `DOMAIN_NON_PRODUCT_BRANCHES`).
+# v5 -> v6: site "leaf" CHON ba cap gan san pham nhat nhung DIEN theo dung thu\n# tu goc cua site; ten sheet chuyen sang cap sau cung (extraction/categories.py\n# `sheet_category`).\n# v4 -> v5: site "leaf" dem NGUOC tu cap sat san pham len va dien DU ba cot\n# category (cu the -> tong quat), thay vi chi dien cot 1 roi bo trong cot 2-3.\n# v3 -> v4: neo breadcrumb ve dung cap LOAI SAN PHAM (extraction/categories.py)
+# - cat cac cap dieu huong dau cua tung site truoc khi xen con 3 cap, va bo cap
+# tro ve chinh trang dang doc. Truoc do cot `category 1` khong cung mot nghia
+# giua cac site: 441 den Panasonic don vao mot sheet "Đèn Led", 1.855 san pham
+# Philips vao "Bộ đèn trong nhà", 48 san pham Nanoco vao "Danh Mục".
 # v2 -> v3: cho `ten_san_pham` di qua tang 1.5 (truoc day lay thang tu tang 1,
 # nen site khong co structured data va khong co OpenGraph thi mat ten).
 # v1 -> v2: them danh muc doc tu DOM (DOMAIN_CATEGORY_SELECTORS), cot Gia doi
 # chieu, va cho tang 1.5 va duoc ca `link_anh_san_pham`; doc duoc cap thong so
 # co nhan la <strong> thay vi <label>; sua ranh gioi muc "Uu diem" khi mot the
 # BOC de muc ke tiep thay vi LA de muc ke tiep.
-EXTRACTOR_VERSION = "v3"
+EXTRACTOR_VERSION = "v7"
 
 
 def crawl_product_urls(
@@ -57,9 +67,12 @@ def crawl_product_urls(
     workers: Optional[int] = None,
     checkpoint_path: Optional[Path] = None,
     checkpoint_every: int = 15,
+    force: bool = False,
     fetch_options: Optional[dict] = None,
     store: Optional[CrawlStore] = None,
     extractor_version: str = EXTRACTOR_VERSION,
+    on_progress: Optional[Callable[[int, Optional[str]], None]] = None,
+    should_stop: Optional[Callable[[], bool]] = None,
 ) -> list[ProductRecord]:
     """Crawl danh sach URL san pham, tai su dung ban ghi da OK thay vi crawl
     lai (crawl-lai-co-chon-loc).
@@ -92,6 +105,18 @@ def crawl_product_urls(
     trich xuat luu sau do kem `extractor_version`. Ca hai deu ghi tu DUY NHAT
     main thread - worker chi tinh toan roi tra ban ghi ve. De None thi pipeline
     chay y nhu truoc khi co kho du lieu.
+
+    `on_progress(so_da_xu_ly, url_dang_lam)` va `should_stop()` la hai moc cho
+    job nen (`crawl-job-runner`). Ca hai deu tuy chon va de trong thi pipeline
+    chay Y NGUYEN nhu truoc - duong CLI khong truyen gi ca.
+
+    Chung duoc goi tu DUNG diem thu hoach don luong da co san (`harvest` trong
+    `_crawl_pipelined`), khong mo them diem ghi moi: do la noi duy nhat chay
+    tren main thread va biet mot ban ghi vua duoc commit xong. Them mot diem
+    ghi thu hai la them mot duong co the lech voi kho du lieu.
+
+    `should_stop()` duoc hoi GIUA hai trang, sau khi ban ghi vua lam xong da
+    vao kho - nen huy khong bao gio bo roi mot trang da ton cong fetch.
     """
     fetch_options = fetch_options or {}
     workers = CRAWL.workers if workers is None else workers
@@ -110,16 +135,27 @@ def crawl_product_urls(
     existing = existing or {}
 
     # Tach truoc: ban ghi da OK thi khong ton fetch lan goi LLM nao.
+    #
+    # `force` tat co che nay. Can den no khi thu muon KHONG phai ban ghi (da co
+    # roi) ma la HTML: 549 ban ghi KingLED nhap tu .xlsx cu deu OK nen khong
+    # bao gio duoc crawl lai, ma khong co snapshot thi moi lan sua bo trich
+    # xuat sau nay KingLED deu dung ngoai - `reextract.py` khong co gi de chay.
     results: list[Optional[ProductRecord]] = [None] * len(urls)
     todo: list[tuple[int, str]] = []
     for index, url in enumerate(urls):
         prior = existing.get(url)
-        if prior is not None and prior.crawl_status == CrawlStatus.OK:
+        if not force and prior is not None and prior.crawl_status == CrawlStatus.OK:
             results[index] = prior
         else:
             todo.append((index, url))
 
-    def checkpoint(newly_crawled: int) -> None:
+    def checkpoint(newly_crawled: int, current_url: Optional[str] = None) -> None:
+        if on_progress is not None:
+            # Tien do dem theo TOAN BO pham vi, khong chi phan phai crawl moi:
+            # nguoi dung bam "crawl 549 san pham" thi ho doi thanh tien do chay
+            # tu 0 den 549, du 400 trong so do duoc tai su dung trong mot giay.
+            on_progress(len(urls) - len(todo) + newly_crawled, current_url)
+
         # Co kho du lieu thi KHONG ghi tam ra .xlsx nua: moi ban ghi da duoc
         # commit ngay khi xong, tuc diem khoi phuc day hon han (tung ban ghi so
         # voi moi 40 ban). Ghi Excel gio chi con la buoc KET XUAT o cuoi
@@ -148,10 +184,15 @@ def crawl_product_urls(
             if workers > 1:
                 _crawl_pipelined(
                     todo, results, fetcher, llm_provider, workers, checkpoint,
-                    fetch_options, store, extractor_version,
+                    fetch_options, store, extractor_version, should_stop,
                 )
             else:
                 for done, (index, url) in enumerate(todo, start=1):
+                    # Cung diem dung an toan nhu nhanh song song: truoc mot lan
+                    # fetch moi, sau khi ban ghi truoc do da vao kho.
+                    if should_stop is not None and should_stop():
+                        logger.info("Dừng theo yêu cầu sau %d/%d URL", done - 1, len(todo))
+                        break
                     fetch_result = fetcher.fetch(url, **fetch_options)
                     # Luu HTML TRUOC khi trich xuat: tang 2 no loi hay tien
                     # trinh bi kill giua chung thi trang van con de chay lai.
@@ -165,7 +206,7 @@ def crawl_product_urls(
                             record, snapshot_id=snapshot_id,
                             extractor_version=extractor_version,
                         )
-                    checkpoint(done)
+                    checkpoint(done, url)
         finally:
             if owned is not None:
                 owned.__exit__(None, None, None)
@@ -179,10 +220,11 @@ def _crawl_pipelined(
     fetcher: StealthFetcher,
     llm_provider: LLMProvider,
     workers: int,
-    checkpoint: Callable[[int], None],
+    checkpoint: Callable[..., None],
     fetch_options: dict,
     store: Optional[CrawlStore] = None,
     extractor_version: str = EXTRACTOR_VERSION,
+    should_stop: Optional[Callable[[], bool]] = None,
 ) -> None:
     """Fetch TUAN TU (1 browser) nhung xu ly SONG SONG, 2 phan chong len nhau.
 
@@ -207,6 +249,9 @@ def _crawl_pipelined(
         futures = []
         snapshot_ids: list[Optional[int]] = []  # song song voi `futures`
         collected = 0  # so future da thu hoach, cung la so dem cho checkpoint
+        # Trong list de `harvest()` doc duoc gia tri moi nhat ma khong can
+        # `nonlocal` - no chi de bao "dang lam URL nao" cho man tien do.
+        url_dang_lam: list[Optional[str]] = [None]
 
         def harvest(block: bool) -> None:
             """Thu hoach future da xong o DAU hang doi, theo dung thu tu submit.
@@ -228,9 +273,16 @@ def _crawl_pipelined(
                         extractor_version=extractor_version,
                     )
                 collected += 1
-                checkpoint(collected)
+                checkpoint(collected, url_dang_lam[0])
 
         for index, url in todo:
+            # Diem dung AN TOAN cho viec huy job: truoc khi ton mot lan fetch
+            # moi, va sau khi moi ban ghi da thu hoach deu da vao kho. Dung o
+            # day thi khong trang nao bi bo roi giua chung.
+            if should_stop is not None and should_stop():
+                logger.info("Dừng theo yêu cầu sau %d/%d URL", collected, len(todo))
+                break
+            url_dang_lam[0] = url
             # Chi buoc nay chiem main thread; submit() tra ve ngay lap tuc nen
             # vong lap chay tiep sang URL ke tiep trong khi worker dang xu ly.
             fetch_result = fetcher.fetch(url, **fetch_options)
@@ -425,7 +477,7 @@ def _assemble_record(
     # Danh muc: breadcrumb cua structured data la mac dinh, nhung domain co
     # dang ky selector danh muc thi selector THANG - viec dang ky chinh la ket
     # luan "breadcrumb cua site nay sai/vang" (xem DOMAIN_CATEGORY_SELECTORS).
-    cat_1, cat_2, cat_3 = extract_categories(html, urlparse(url).netloc)
+    cat_1, cat_2, cat_3 = extract_categories(html, urlparse(url).netloc, url)
     if cat_1 is None:
         cat_1, cat_2, cat_3 = (
             structured.category_1, structured.category_2, structured.category_3,
@@ -470,6 +522,13 @@ def _assemble_record(
     # `tags` rong (do llm_error) lam recompute_status() ha trang thai xuong
     # PARTIAL_MISSING_FIELDS - ban ghi tu dong thanh ung vien crawl lai. Ghi
     # them ly do de log/debug, khong xuat ra Excel.
+    # Trang nam trong mot nhanh ma chinh site khai la khong phai san pham (bai
+    # viet, trang giai phap). Danh dau TRUOC recompute_status(): bai viet thieu
+    # gan het field bat buoc nen neu de tinh binh thuong, no thanh "san pham
+    # thieu o" va quay lai hang doi crawl lai o moi lan chay.
+    branch = non_product_branch(cat_1, cat_2, cat_3, urlparse(url).netloc)
+    if branch:
+        record.mark_not_a_product(branch)
     record.recompute_status()
     if llm_error is not None:
         record.crawl_error = f"Tầng 2 (LLM) thất bại: {llm_error}"

@@ -10,10 +10,12 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from typing import Any, Optional
+from urllib.parse import urlparse
 
 import extruct
 
 from ..record.price import PriceValue, normalize_price
+from .categories import anchor_categories
 
 _HAS_LETTER_RE = re.compile(r"[A-Za-zÀ-ỹ]")
 
@@ -198,14 +200,19 @@ def _adapt_opengraph(items: list[dict]) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
-def _labels_to_categories(labels: list[str]) -> tuple[Optional[str], Optional[str], Optional[str]]:
+def _labels_to_categories(
+    labels: list[str], domain: str
+) -> tuple[Optional[str], Optional[str], Optional[str]]:
     """Bo phan tu dau (home) va cuoi (chinh trang san pham), lay toi da 3 cap
-    con lai tu tong quat -> cu the (theo dung thu tu breadcrumb goc)."""
+    con lai tu tong quat -> cu the (theo dung thu tu breadcrumb goc).
+
+    Cac cap dau la thung dieu huong cua site thi bi cat them - xem
+    `extraction/categories.py`. Viec cat nam TRONG day chu khong o ben goi, de
+    no dien ra truoc khi chuoi bi xen con 3 cap (Nanoco co 4 cap danh muc that).
+    """
     if len(labels) <= 2:
         return None, None, None
-    middle = labels[1:-1][:3]
-    padded = middle + [None] * (3 - len(middle))
-    return padded[0], padded[1], padded[2]
+    return anchor_categories(labels[1:-1], domain)
 
 
 def _normalize_sku(sku: Any) -> tuple[Optional[str], Optional[str]]:
@@ -291,7 +298,7 @@ def extract_structured_data(html: str, page_url: str) -> StructuredDataResult:
             source = "opengraph"
 
     ma_san_pham, raw_id = _normalize_sku(product.get("sku"))
-    cat1, cat2, cat3 = _labels_to_categories(breadcrumb_labels)
+    cat1, cat2, cat3 = _labels_to_categories(breadcrumb_labels, urlparse(page_url).netloc)
 
     return StructuredDataResult(
         ten_san_pham=product.get("name"),

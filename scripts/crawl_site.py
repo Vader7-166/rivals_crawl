@@ -69,6 +69,13 @@ def parse_args() -> argparse.Namespace:
              "quả trích xuất được ghi vào đây SONG SONG với file .xlsx.",
     )
     parser.add_argument(
+        "--force", action="store_true",
+        help="Crawl lại CẢ bản ghi đã OK. Dùng khi thứ cần là HTML chứ không "
+             "phải bản ghi - vd 549 bản ghi KingLED nhập từ .xlsx cũ đều OK "
+             "nên không bao giờ được crawl lại, mà thiếu HTML thì mỗi lần sửa "
+             "bộ trích xuất về sau KingLED đều đứng ngoài.",
+    )
+    parser.add_argument(
         "--no-store", action="store_true",
         help="Không ghi kho dữ liệu, chỉ ghi .xlsx như trước khi có kho",
     )
@@ -146,6 +153,7 @@ def main() -> None:
             workers=CRAWL.workers,
             checkpoint_path=output_path,
             checkpoint_every=CHECKPOINT_EVERY,
+            force=args.force,
             fetch_options=profile.fetch_options,
             store=store,
         )

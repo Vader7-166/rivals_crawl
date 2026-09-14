@@ -19,10 +19,12 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
+from urllib.parse import urlparse
 from typing import Iterable, Optional, Sequence
 
 from openpyxl import Workbook
 
+from ..extraction.categories import sheet_category
 from .price import LIEN_HE
 from .schema import COLUMNS, ProductRecord
 
@@ -88,22 +90,36 @@ def _shorten(name: str) -> str:
 
 
 def _sheet_name(raw: str, taken: set[str]) -> str:
-    """Ten sheet hop le, duy nhat, giu duoc cang nhieu ten goc cang tot."""
+    """Ten sheet hop le, duy nhat, giu duoc cang nhieu ten goc cang tot.
+
+    `taken` giu ban DA HA CHU THUONG, vi Excel coi ten sheet la khong phan biet
+    hoa thuong. Do that tren Philips: "LuxSpace Accent Nhỏ Gọn Có Thể Điều
+    Chỉnh" va "LuxSpace Accent phiên bản Performance có thể điều chỉnh" cat
+    giua ra hai ten chi khac nhau chu "T"/"t". So khop phan biet hoa thuong thi
+    ta khong thay trung, nhung openpyxl thay - no lang le doi ten sheet thu hai
+    bang cach noi them "1", va KHONG kiem lai gioi han 31 ky tu, de ra mot ten
+    32 ky tu ma vai ung dung khong doc duoc.
+    """
     name = _shorten(_INVALID_SHEET_CHARS.sub("-", raw).strip() or UNGROUPED_SHEET)
-    if name not in taken:
+    if name.casefold() not in taken:
         return name
     # Van trung sau khi cat giua (2 category giong nhau ca dau lan duoi): danh
     # so de khong nhom nao bi de len nhom khac va mat sach du lieu.
     for suffix_index in range(2, 100):
         suffix = f" ({suffix_index})"
         candidate = name[: _MAX_SHEET_NAME - len(suffix)] + suffix
-        if candidate not in taken:
+        if candidate.casefold() not in taken:
             return candidate
     raise ValueError(f"Khong sinh duoc ten sheet duy nhat cho '{raw}'")
 
 
 def group_records_by_type(records: Iterable[ProductRecord]) -> dict[str, list[ProductRecord]]:
-    """Gom ban ghi theo loai san pham (`category 1` cua site nguon).
+    """Gom ban ghi theo loai san pham cua site nguon.
+
+    Loai san pham KHONG phai luon la `category 1`: voi site khai `leaf`, ba cot
+    category duoc dien theo dung thu tu goc cua site nen cot 1 la thung dieu
+    huong ("Đèn Led" om 441/604 san pham Panasonic), con loai san pham nam o
+    cap sau cung. `sheet_category` biet site nao doc kieu nao.
 
     Giu THU TU XUAT HIEN dau tien cua moi loai thay vi sap xep A-Z: thu tu do
     phan anh thu tu duyet danh muc cua site, on dinh giua cac lan chay va de
@@ -111,7 +127,13 @@ def group_records_by_type(records: Iterable[ProductRecord]) -> dict[str, list[Pr
     """
     grouped: dict[str, list[ProductRecord]] = {}
     for record in records:
-        key = (record.category_1 or "").strip() or UNGROUPED_SHEET
+        loai = sheet_category(
+            record.category_1,
+            record.category_2,
+            record.category_3,
+            urlparse(record.link_san_pham or "").netloc,
+        )
+        key = (loai or "").strip() or UNGROUPED_SHEET
         grouped.setdefault(key, []).append(record)
     # Nhom "chua phan loai" luon xuong cuoi file - do la phan can review, khong
     # nen chen giua cac sheet du lieu that.
@@ -124,6 +146,7 @@ def write_records_to_excel(
     records: Iterable[ProductRecord],
     output_path: str | Path,
     review_rows: Optional[Iterable[Sequence]] = None,
+    grouped: Optional[dict[str, list[ProductRecord]]] = None,
 ) -> Path:
     """Ghi toan bo ban ghi cua 1 site ra 1 file .xlsx, moi loai san pham 1 sheet.
 
@@ -132,11 +155,20 @@ def write_records_to_excel(
     hien o CA HAI cho: tren sheet danh muc (2 o uu diem de TRONG - de trong moi
     dung, khong bia du lieu) va tren sheet canh bao kem nguyen lieu de xu ly.
     Khong truyen gi thi file khong co sheet canh bao, y nhu truoc.
+
+    `grouped` cho ben goi TU quyet dinh cach chia sheet, giu nguyen thu tu cua
+    dict truyen vao. Duong xuat theo domain khong truyen gi va van chia theo
+    loai san pham y nhu truoc; duong xuat theo tap chon (`export_selection`)
+    can chia theo DOI THU, mot chieu ma ban ghi khong tu mang.
+
+    Phan con lai - khuon 20 cot, cat ten sheet, danh so STT, sheet canh bao -
+    dung chung tuyet doi cho ca hai duong. Tach ra thanh hai ham ghi la tach ra
+    thanh hai khuon se lech nhau.
     """
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    grouped = group_records_by_type(records)
+    grouped = group_records_by_type(records) if grouped is None else grouped
     headers = [header for header, _ in COLUMNS]
 
     wb = Workbook()
@@ -145,7 +177,7 @@ def write_records_to_excel(
     taken: set[str] = set()
     for group_name, group_records in grouped.items():
         name = _sheet_name(group_name, taken)
-        taken.add(name)
+        taken.add(name.casefold())
 
         ws = wb.create_sheet(title=name)
         ws.append(headers)

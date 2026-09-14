@@ -163,13 +163,17 @@ def test_a_page_that_lost_its_section_shows_up_as_a_regression(store):
 
 
 # --- Dem thay doi giua hai lan chay ----------------------------------------
+#
+# Phan tinh toan da chuyen tu script sang `crawler/store/diff.py` (task 7.1) de
+# CLI va API dung chung mot duong. Cac test duoi day di theo no - chung chot
+# HANH VI, khong chot noi ma nguon nam o dau.
 
 def test_the_diff_counts_both_directions():
     """Chieu "lam hong" moi la chieu quan trong: mot chinh sua bao giat gau va
     vai, va truoc gio khong co cach nao biet. Da kiem tay tren 79 snapshot
     that (gieo 5 va / 3 hong -> dem ra dung 5 / 3); test nay khoa lai.
     """
-    from diff_extractions import tally
+    from crawler.store.diff import tally
 
     old = {
         1: {"gia": None, "uu_diem_nguon": "none"},        # -> va duoc
@@ -191,7 +195,7 @@ def test_the_diff_counts_both_directions():
 def test_the_diff_ignores_snapshots_only_one_side_has():
     """Chi so tren snapshot CHUNG: khac snapshot thi khac biet den tu SITE chu
     khong phai tu code, gop vao lam phep so mat nghia."""
-    from diff_extractions import tally
+    from crawler.store.diff import tally
 
     counts = tally({1: {"gia": None}, 2: {"gia": 1.0}}, {1: {"gia": 5.0}}, fields=("gia",))
     assert list(counts) == ["gia"] and counts["gia"]["va"] == 1
@@ -200,7 +204,7 @@ def test_the_diff_ignores_snapshots_only_one_side_has():
 def test_no_change_reports_nothing():
     """Ca doi chung: cung code + cung snapshot -> khong duoc bao gi. Da xac
     nhan tren 48 snapshot that."""
-    from diff_extractions import tally
+    from crawler.store.diff import tally
 
     rows = {1: {"gia": 1.0}, 2: {"gia": None}}
     assert tally(rows, dict(rows), fields=("gia",)) == {}

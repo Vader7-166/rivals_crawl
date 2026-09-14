@@ -269,6 +269,27 @@ SITE_PROFILES: dict[str, SiteProfile] = {
         brand_name="VinaLED",
         brand_aliases=("Vina LED", "Đèn VinaLED"),
     ),
+    # Hai entry dưới đây KHÔNG khai gì cho việc crawl — cả hai site crawl được
+    # bằng đúng hành vi mặc định (180 và 120 sản phẩm trong kho), và đó vẫn là
+    # tính chất mà `test_site_registry.py` chốt.
+    #
+    # Chúng có mặt ở đây vì tìm kiếm cần một thứ khác hẳn: tập đóng nhãn hiệu.
+    # Thiếu entry thì gõ "mpe" không khớp nhãn nào và rơi xuống nhánh tên sản
+    # phẩm, còn gõ "vne" thì khớp trúng danh mục `Đèn VNE` — tức người dùng hỏi
+    # một nhãn hiệu và được trả về một danh mục của chính nhãn đó.
+    #
+    # Rút ra: `brand_name` là field DUY NHẤT trong hồ sơ có ích cho một site
+    # không cần hiệu chỉnh crawl gì cả, nên nó phải được điền cho MỌI domain đã
+    # crawl, không chỉ domain có phần riêng.
+    "www.mpe.com.vn": SiteProfile(
+        brand_name="MPE",
+    ),
+    "vne-led.vn": SiteProfile(
+        # Site tự in nhãn là "VNE" trong chính tên sản phẩm ("Bộ bán nguyệt LED
+        # 20W nhãn VNE"). "VNE Led" lấy từ domain — người dùng gõ cả hai kiểu.
+        brand_name="VNE",
+        brand_aliases=("VNE Led", "Đèn VNE"),
+    ),
 }
 
 
