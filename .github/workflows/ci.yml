@@ -28,8 +28,13 @@ jobs:
       # fetch duoc thay bang fetcher gia - xem tests/test_pipeline_checkpoint.py),
       # nen tai ~150MB Chromium moi lan push la ton thoi gian ma khong kiem
       # them duoc gi.
+      # `web` la extra CHU KHONG phai dependency goc (xem pyproject.toml: duong
+      # CLI phai cai duoc ma khong can web framework nao). Nhung CI thi PHAI cai
+      # no: `tests/test_web_api.py` import fastapi ngay o dong dau, thieu extra
+      # la pytest hong ngay o buoc thu gom test - khong phai mot test do ma ca
+      # lan chay dung voi exit code 2.
       - name: Cai dependency
-        run: pip install -e ".[dev]"
+        run: pip install -e ".[web,dev]"
 
       # Cac script trong scripts/ la entry point chinh nhung khong nam trong
       # bo test. Compile de bat loi cu phap truoc khi no chi lo ra luc chay that.
