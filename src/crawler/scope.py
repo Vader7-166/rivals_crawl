@@ -14,7 +14,15 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional
 
-from .search import Scope, ScopeKind, classify, matches_all_tokens, normalise
+from .search import (
+    Scope,
+    ScopeKind,
+    Suggestions,
+    classify,
+    matches_all_tokens,
+    normalise,
+    suggest,
+)
 from .sites.registry import brand_of
 from .store.category_store import CategorySummary, CategoryStore
 from .store.crawl_store import CrawlStore
@@ -148,4 +156,85 @@ def resolve(
     return resolved
 
 
-__all__ = ["DomainScope", "ResolvedScope", "resolve"]
+class SuggestionIndex:
+    """Nguon goi y da nap san bo nho. MOT lan doc kho, N lan go phim.
+
+    Ly do ton tai, do tren kho that (9.818 ban ghi, 254 danh muc): doc thang tu
+    SQLite moi lan goi mat 0,6-0,95s. Voi mot o tim kiem goi sau moi phim thi
+    do la khong dung duoc - trong khi chinh du lieu ay chi la vai tram dong,
+    nam gon trong bo nho va khop het duoi 1ms.
+
+    Vong doi cache: nap luc khoi dong, `refresh()` sau moi lan crawl hoac dung
+    chi muc xong. KHONG tu het han theo thoi gian - du lieu chi doi khi co mot
+    job chay xong, va tang goi biet dieu do chinh xac hon bat ky khoang thoi
+    gian doan truoc nao.
+    """
+
+    def __init__(self, crawl_store: CrawlStore, category_store: CategoryStore):
+        self._crawl = crawl_store
+        self._categories = category_store
+        self._category_rows: list[tuple[str, str, int]] = []
+        self._product_counts: dict[str, int] = {}
+        self._product_names: list[tuple[str, str]] = []
+        self.refresh()
+
+    def refresh(self) -> None:
+        stored = self._crawl.category_counts()
+        indexed = [
+            (domain, name, 0)
+            for domain, _url, name in self._categories.category_names()
+            if name
+        ]
+        self._category_rows = stored + indexed
+        self._product_counts = self._crawl.product_counts()
+        self._product_names = self._crawl.product_names()
+
+    def suggest(self, keyword: str, *, limit: int = 8) -> Suggestions:
+        return suggest(
+            keyword,
+            categories=self._category_rows,
+            product_counts=self._product_counts,
+            product_names=self._product_names,
+            limit=limit,
+        )
+
+
+def suggestions(
+    keyword: str,
+    crawl_store: CrawlStore,
+    category_store: CategoryStore,
+    *,
+    limit: int = 8,
+) -> Suggestions:
+    """Goi y khi dang go, nap tu CA HAI nguon danh muc - duong MOT PHAT.
+
+    Doc kho moi lan goi, nen chi dung cho CLI/test. O tim kiem that phai dung
+    `SuggestionIndex`.
+
+
+    Hai nguon khong thay the nhau:
+
+        chi muc tang 0.5   biet ca danh muc CHUA crawl, nhung phai duyet trang
+                           danh muc cua doi thu moi co
+        cot `category_1`   chi biet cai da crawl, nhung co san va mien phi
+
+    Danh muc chi co trong chi muc vao voi so 0 - hien ra la "chua crawl", dung
+    voi su that, va do chinh la dong nguoi dung can bam de tao job. Ten trung
+    nhau giua hai nguon duoc `suggest()` gop lai nen khong nhan doi dong nao.
+    """
+    stored = crawl_store.category_counts()
+    indexed = [
+        (domain, name, 0)
+        for domain, _url, name in category_store.category_names()
+        if name
+    ]
+    return suggest(
+        keyword,
+        categories=stored + indexed,
+        product_counts=crawl_store.product_counts(),
+        product_names=crawl_store.product_names(),
+        limit=limit,
+    )
+
+
+__all__ = ["DomainScope", "ResolvedScope", "SuggestionIndex", "resolve", "suggestions"]

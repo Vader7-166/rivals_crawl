@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crawl đối thủ</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>Crawl đối thủ</h1>
+  <nav>
+    <button data-man="tim" class="dang-mo">Tìm &amp; crawl</button>
+    <button data-man="domain">Đối thủ</button>
+    <button data-man="job">Job</button>
+    <button data-man="so-sanh">So sánh phiên bản</button>
+    <button data-man="tim-site">Tìm site đối thủ</button>
+  </nav>
+</header>
+
+<!-- Màn 1: tìm kiếm + gợi ý (8.2) -->
+<main id="man-tim" class="man">
+  <div class="o-tim">
+    <input id="tu-khoa" type="search" autocomplete="off" spellcheck="false"
+           placeholder="Gõ tên nhãn hiệu, danh mục hoặc tên sản phẩm — ví dụ: led, downlight, kingled">
+    <div id="goi-y" class="goi-y" hidden></div>
+  </div>
+
+  <p id="loai-pham-vi" class="loai" hidden></p>
+
+  <!-- Màn 2: xác nhận phạm vi (8.3). Tick bỏ chỗ khớp trượt TRƯỚC khi tiêu
+       30–70 phút. Lựa chọn KHÔNG được lưu lại giữa hai lần tìm. -->
+  <section id="pham-vi" hidden>
+    <div class="tong">
+      <span><b id="tong-so">0</b> sản phẩm</span>
+      <span class="da-co">đã có <b id="tong-co">0</b></span>
+      <span class="con-thieu">còn thiếu <b id="tong-thieu">0</b></span>
+    </div>
+    <div id="danh-sach-domain"></div>
+    <div class="nut">
+      <button id="nut-crawl" class="chinh">Crawl phần còn thiếu</button>
+      <button id="nut-xuat">Tải Excel phần đang có</button>
+    </div>
+    <p id="bao-xuat" class="ghi-chu" hidden></p>
+  </section>
+</main>
+
+<!-- Màn 3: tiến độ job (8.4) -->
+<main id="man-job" class="man" hidden>
+  <div id="job-dang-chay" hidden>
+    <h2>Job <span id="job-id"></span> — <span id="job-trang-thai"></span></h2>
+    <div class="thanh"><div id="thanh-tien-do"></div></div>
+    <p><b id="job-da-lam">0</b> / <span id="job-tong">0</span> sản phẩm</p>
+    <p class="ghi-chu">Đang xử lý: <span id="job-url">—</span></p>
+    <p id="job-ly-do" class="ghi-chu" hidden></p>
+    <button id="nut-huy">Huỷ job</button>
+  </div>
+  <h3>Các job gần đây</h3>
+  <table id="bang-job"><thead><tr>
+    <th>#</th><th>Từ khoá</th><th>Trạng thái</th><th>Tiến độ</th><th>Lý do dừng</th>
+  </tr></thead><tbody></tbody></table>
+</main>
+
+<!-- Màn 4: đối thủ (8.5) -->
+<main id="man-domain" class="man" hidden>
+  <div id="the-domain" class="the-domain"></div>
+  <section id="san-pham-domain" hidden>
+    <h2 id="ten-domain"></h2>
+    <label>Trạng thái
+      <select id="loc-trang-thai">
+        <option value="">tất cả</option>
+        <option value="ok">ok</option>
+        <option value="partial-missing-fields">thiếu ô</option>
+        <option value="error">lỗi</option>
+        <option value="not-a-product">không phải sản phẩm</option>
+      </select>
+    </label>
+    <label><input type="checkbox" id="loc-xu-ly-tay"> chỉ cần xử lý tay</label>
+    <p id="dem-san-pham" class="ghi-chu"></p>
+    <table id="bang-san-pham"><thead><tr>
+      <th>Tên sản phẩm</th><th>Mã</th><th>category 1</th><th>Giá</th>
+      <th>Trạng thái</th><th>Lý do cần xử lý tay</th>
+    </tr></thead><tbody></tbody></table>
+  </section>
+</main>
+
+<!-- Màn 5: so sánh phiên bản (8.6) -->
+<main id="man-so-sanh" class="man" hidden>
+  <div class="chon">
+    <label>Đối thủ <select id="ss-domain"></select></label>
+    <label>Bản cũ <select id="ss-truoc"></select></label>
+    <label>Bản mới <select id="ss-sau"></select></label>
+    <button id="nut-so-sanh">So sánh</button>
+  </div>
+  <p id="ss-thong-diep" class="ghi-chu" hidden></p>
+  <table id="bang-so-sanh"><thead><tr>
+    <th>Cột</th><th>Vá được</th><th>Làm hỏng</th><th>Đổi khác</th>
+  </tr></thead><tbody></tbody></table>
+  <section id="ss-danh-sach" hidden>
+    <h3 id="ss-tieu-de"></h3>
+    <div id="ss-o"></div>
+  </section>
+</main>
+
+<!-- Màn 6: tìm site đối thủ bằng bộ máy tìm kiếm -->
+<main id="man-tim-site" class="man" hidden>
+  <div class="chon">
+    <label>Từ khoá (để trống = dựng từ danh mục trong kho)
+      <input id="ts-tu-khoa" type="text" placeholder="đèn led âm trần, đèn đường led">
+    </label>
+    <label>Hoặc tìm lại site của nhãn
+      <input id="ts-nhan" type="text" placeholder="Duhal">
+    </label>
+    <label>Top <input id="ts-top" type="number" value="3" min="1" max="10" style="width:4rem"></label>
+    <button id="nut-tim-site" class="chinh">Tìm</button>
+  </div>
+  <p class="ghi-chu">
+    Bước này gọi ra ngoài (bộ máy tìm kiếm + trang chủ từng ứng viên) nên mất
+    vài chục giây. Không domain nào được thêm tự động — đây là danh sách để đọc
+    và quyết định.
+  </p>
+  <p id="ts-trang-thai" class="ghi-chu" hidden></p>
+  <div id="ts-ket-qua"></div>
+  <div id="ts-da-loai"></div>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

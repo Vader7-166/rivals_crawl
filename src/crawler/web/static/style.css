@@ -1,0 +1,144 @@
+/* Giao diện: HTML + CSS + JS thuần, không build step (design.md mục 4b).
+   Sửa file rồi bấm F5 — không dựng lại image, không Node, không bundler. */
+
+:root {
+  --nen: #fbfbfa;
+  --muc: #1a1a17;
+  --nhat: #6b6b63;
+  --vien: #dfdfd8;
+  --the: #fff;
+  --nhan: #2f6f4f;   /* đã có / xong */
+  --thieu: #a8553a;  /* còn thiếu / hỏng */
+  --chay: #2b5f8f;   /* đang chạy */
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 0 4rem;
+  background: var(--nen);
+  color: var(--muc);
+  font: 15px/1.55 ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+header {
+  padding: 1.2rem max(1rem, 4vw) 0;
+  border-bottom: 1px solid var(--vien);
+  background: var(--the);
+}
+h1 { margin: 0 0 .8rem; font-size: 1.25rem; letter-spacing: -.01em; }
+h2 { font-size: 1.05rem; margin: 1.4rem 0 .6rem; }
+h3 { font-size: .95rem; margin: 1.4rem 0 .5rem; color: var(--nhat); }
+
+nav { display: flex; gap: .3rem; }
+nav button {
+  border: 0; border-bottom: 2px solid transparent; background: none;
+  padding: .5rem .8rem; font: inherit; color: var(--nhat); cursor: pointer;
+}
+nav button.dang-mo { color: var(--muc); border-bottom-color: var(--muc); }
+
+.man { padding: 1.5rem max(1rem, 4vw); max-width: 1100px; }
+
+/* -- ô tìm kiếm + gợi ý -------------------------------------------------- */
+
+.o-tim { position: relative; max-width: 640px; }
+#tu-khoa {
+  width: 100%; padding: .7rem .9rem; font: inherit;
+  border: 1px solid var(--vien); border-radius: 8px; background: var(--the);
+}
+#tu-khoa:focus { outline: 2px solid var(--chay); outline-offset: -1px; }
+
+/* Gợi ý tách NHÓM THEO LOẠI: gõ "led" thì nhãn hiệu và danh mục nằm hai khối
+   riêng, vì đó là hai phạm vi crawl khác hẳn nhau. */
+.goi-y {
+  position: absolute; z-index: 10; left: 0; right: 0; top: calc(100% + 4px);
+  background: var(--the); border: 1px solid var(--vien); border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.08); max-height: 60vh; overflow-y: auto;
+}
+.goi-y .nhom {
+  padding: .35rem .9rem; font-size: .72rem; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--nhat); background: #f6f6f3;
+}
+.goi-y .dong {
+  display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;
+  padding: .45rem .9rem; cursor: pointer;
+}
+.goi-y .dong:hover, .goi-y .dong.chon { background: #eef3f7; }
+.goi-y .dem { color: var(--nhat); font-size: .85em; white-space: nowrap; }
+
+.loai { color: var(--nhat); }
+.loai button {
+  margin-left: .4rem; border: 1px solid var(--vien); background: var(--the);
+  border-radius: 999px; padding: .1rem .6rem; font: inherit; font-size: .85em;
+  cursor: pointer;
+}
+
+/* -- phạm vi ------------------------------------------------------------- */
+
+.tong { display: flex; gap: 1.2rem; margin: 1rem 0; font-size: 1.05rem; }
+.da-co b { color: var(--nhan); }
+.con-thieu b { color: var(--thieu); }
+
+.domain {
+  background: var(--the); border: 1px solid var(--vien); border-radius: 8px;
+  padding: .8rem 1rem; margin-bottom: .6rem;
+}
+.domain > header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 0; border: 0; background: none; gap: 1rem;
+}
+.domain .ten { font-weight: 600; }
+.domain .so { color: var(--nhat); font-size: .9em; }
+.domain ul { list-style: none; margin: .6rem 0 0; padding: 0; }
+.domain li { display: flex; gap: .5rem; align-items: baseline; padding: .15rem 0; }
+.domain li span { color: var(--nhat); font-size: .85em; }
+.canh-bao { color: var(--thieu); font-size: .9em; }
+
+.nut { display: flex; gap: .6rem; margin-top: 1rem; }
+button.chinh {
+  background: var(--muc); color: var(--the); border: 0; border-radius: 6px;
+  padding: .55rem 1rem; font: inherit; cursor: pointer;
+}
+button { border: 1px solid var(--vien); background: var(--the); border-radius: 6px;
+  padding: .55rem 1rem; font: inherit; cursor: pointer; }
+button:disabled { opacity: .5; cursor: default; }
+
+.ghi-chu { color: var(--nhat); font-size: .9em; }
+
+/* -- tiến độ ------------------------------------------------------------- */
+
+.thanh { height: 8px; background: var(--vien); border-radius: 999px; overflow: hidden; }
+#thanh-tien-do { height: 100%; width: 0; background: var(--chay); transition: width .3s; }
+
+/* -- bảng ---------------------------------------------------------------- */
+
+table { border-collapse: collapse; width: 100%; margin-top: .6rem; font-size: .92rem; }
+th, td { text-align: left; padding: .4rem .6rem; border-bottom: 1px solid var(--vien); }
+th { color: var(--nhat); font-weight: 600; font-size: .85em; }
+td.so, th.so { text-align: right; font-variant-numeric: tabular-nums; }
+tbody tr:hover { background: #f4f4f1; }
+.bam { color: var(--chay); cursor: pointer; text-decoration: underline; }
+
+.the-domain { display: grid; gap: .6rem; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+.the-domain .the {
+  background: var(--the); border: 1px solid var(--vien); border-radius: 8px;
+  padding: .8rem 1rem; cursor: pointer;
+}
+.the-domain .the:hover { border-color: var(--chay); }
+
+.chon { display: flex; gap: 1rem; flex-wrap: wrap; align-items: end; }
+label { display: block; font-size: .9em; color: var(--nhat); }
+select { font: inherit; padding: .4rem; border: 1px solid var(--vien); border-radius: 6px; }
+
+.o-doi {
+  background: var(--the); border: 1px solid var(--vien); border-radius: 8px;
+  padding: .7rem .9rem; margin-bottom: .5rem;
+}
+.o-doi a { color: var(--chay); }
+.o-doi pre {
+  margin: .3rem 0 0; white-space: pre-wrap; word-break: break-word;
+  font-size: .85em; background: #f6f6f3; padding: .5rem; border-radius: 4px;
+}
+.o-doi .truoc { border-left: 3px solid var(--thieu); }
+.o-doi .sau { border-left: 3px solid var(--nhan); }
